@@ -48,6 +48,7 @@ dependencies {
     implementation(Dependencies.androidXAppCompat)
     implementation(Dependencies.coroutines)
     implementation(Dependencies.material)
+    implementation(Accompanist.animations)
 
     implementation(Compose.activity)
     implementation(Compose.ui)
@@ -59,7 +60,8 @@ dependencies {
     androidTestImplementation(ComposeTest.uiTestJunit4)
     debugImplementation(ComposeTest.uiTestManifest)
 
-    implementation(platform(Firebase.firebaseBom))
+    implementation(platform(Firebase.bom))
+    implementation((Firebase.firestore))
 
     implementation(Hilt.android)
     kapt(Hilt.compiler)
