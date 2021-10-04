@@ -7,19 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.core.model.ProgressBarState
-import com.rsicarelli.homehunt.core.model.UiEvent
-import com.rsicarelli.homehunt.core.model.UiEvent.*
+import com.rsicarelli.homehunt.core.model.UiEvent.MessageToUser
+import com.rsicarelli.homehunt.core.model.UiEvent.Navigate
 import com.rsicarelli.homehunt.core.model.UiText
 import com.rsicarelli.homehunt.domain.usecase.SignInUseCase
 import com.rsicarelli.homehunt.domain.usecase.SignInUseCase.Request
 import com.rsicarelli.homehunt.presentation.login.LoginEvents.Login
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -53,7 +49,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun State<LoginState>.toggleLoading(progressBarState: ProgressBarState) {
-        _state.value = this.value.copy(uiEvent = Loading(progressBarState))
+        _state.value = this.value.copy(progressBarState = progressBarState)
     }
 
     private fun State<LoginState>.navigate(navigate: Navigate) {

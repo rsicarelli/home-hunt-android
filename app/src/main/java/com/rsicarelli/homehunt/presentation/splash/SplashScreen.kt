@@ -13,20 +13,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.rsicarelli.homehunt.R
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.withContext
+import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.rsicarelli.homehunt.core.model.UiEvent
 
 @Composable
 fun SplashScreen(
-    dispatcher: CoroutineDispatcher = Dispatchers.Main,
-    onPopBackStack: () -> Unit = {},
-    onNavigate: (String) -> Unit = {},
-    viewModel: SplashViewModel = hiltViewModel()
+    scaffoldDelegate: ScaffoldDelegate,
+    state: SplashState,
+    events: (SplashEvents) -> Unit
 ) {
+    when (state.uiEvent) {
+        is UiEvent.MessageToUser -> scaffoldDelegate.showMessageToUser(state.uiEvent.uiText)
+        is UiEvent.Navigate -> scaffoldDelegate.navigateSingleTop(state.uiEvent)
+        UiEvent.NavigateUp -> scaffoldDelegate.navigateUp()
+    }
+
     val scale = remember {
         Animatable(0f)
     }
@@ -34,24 +36,18 @@ fun SplashScreen(
         OvershootInterpolator(2f)
     }
     LaunchedEffect(key1 = true) {
-        withContext(dispatcher) {
-            scale.animateTo(
-                targetValue = 0.5f,
-                animationSpec = tween(
-                    durationMillis = 500,
-                    easing = {
-                        overshootInterpolator.getInterpolation(it)
-                    }
-                )
+        scale.animateTo(
+            targetValue = 0.5f,
+            animationSpec = tween(
+                durationMillis = 500,
+                easing = {
+                    overshootInterpolator.getInterpolation(it)
+                }
             )
-        }
+        )
+        events(SplashEvents.AnimationEnded)
     }
-    LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collectLatest { event ->
-            onPopBackStack()
-            onNavigate(event.route)
-        }
-    }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

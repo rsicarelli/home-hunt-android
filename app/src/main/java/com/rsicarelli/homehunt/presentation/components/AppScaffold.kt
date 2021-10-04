@@ -19,16 +19,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.rsicarelli.homehunt.core.model.ProgressBarState
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
-import com.rsicarelli.homehunt.core.model.UiEvent
-import com.rsicarelli.homehunt.core.util.asString
 import com.rsicarelli.homehunt.ui.navigation.BottomNavItem
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HintGray
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @Composable
 fun AppScaffold(
@@ -94,33 +89,38 @@ fun AppScaffold(
 
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
-        var uiEvent by remember { mutableStateOf<UiEvent>(UiEvent.Idle) }
-        val scaffoldDelegate by remember { mutableStateOf(ScaffoldDelegate(coroutineScope)) }
-
-        LaunchedEffect(key1 = "ScaffoldDelegate", block = {
-            scaffoldDelegate.uiEvents.collectLatest { uiEvent = it }
-        })
+//        val uiEventQueue by remember { mutableStateOf<Queue<UiEvent>>(Queue(mutableListOf())) }
+        val scaffoldDelegate by remember {
+            mutableStateOf(
+                ScaffoldDelegate(
+                    coroutineScope,
+                    state,
+                    navController,
+                    context
+                )
+            )
+        }
 
         content(scaffoldDelegate)
 
-        when (uiEvent) {
-            is UiEvent.MessageToUser -> {
-                coroutineScope.launch {
-                    state.snackbarHostState.showSnackbar(
-                        message = (uiEvent as UiEvent.MessageToUser).uiText.asString(context),
-                        duration = SnackbarDuration.Short
-                    )
-                }
-            }
-            is UiEvent.Navigate -> navController.navigate((uiEvent as UiEvent.Navigate).route)
-            is UiEvent.NavigateUp -> navController.navigateUp()
-            is UiEvent.Loading -> {
-                if ((uiEvent as UiEvent.Loading).progressBarState is ProgressBarState.Loading) {
-                    return@Scaffold CircularIndeterminateProgressBar()
-                }
-            }
-            UiEvent.Idle -> print("Ignoring UiEvent")
-        }
+//        if (scaffoldDelegate.uiEventQueue.isNotEmpty()) {
+//            scaffoldDelegate.uiEventQueue.peek()?.let { uiEvent ->
+//                when (uiEvent) {
+//                    is UiEvent.MessageToUser -> {
+//                        coroutineScope.launch {
+//                            state.snackbarHostState.showSnackbar(
+//                                message = (uiEvent as UiEvent.MessageToUser).uiText.asString(context),
+//                                duration = SnackbarDuration.Short
+//                            )
+//                        }
+//                    }
+//                    is UiEvent.Navigate -> navController.navigate((uiEvent as UiEvent.Navigate).route)
+//                    is UiEvent.NavigateUp -> navController.navigateUp()
+//                    is UiEvent.Loading -> return@Scaffold CircularIndeterminateProgressBar(uiEvent.progressBarState)
+//                    UiEvent.Idle -> print("Ignoring UiEvent")
+//                }
+//            }
+//        }
     }
 }
 

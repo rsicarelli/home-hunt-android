@@ -22,6 +22,7 @@ import com.rsicarelli.homehunt.presentation.home.HomeScreen
 import com.rsicarelli.homehunt.presentation.login.LoginScreen
 import com.rsicarelli.homehunt.presentation.login.LoginViewModel
 import com.rsicarelli.homehunt.presentation.splash.SplashScreen
+import com.rsicarelli.homehunt.presentation.splash.SplashViewModel
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -80,9 +81,11 @@ class MainActivity : ComponentActivity() {
                                 }
 
                                 composable(Screen.SplashScreen.route) {
+                                    val viewModel: SplashViewModel = hiltViewModel()
                                     SplashScreen(
-                                        onPopBackStack = navController::popBackStack,
-                                        onNavigate = navController::navigate
+                                        scaffoldDelegate = scaffoldDelegate,
+                                        state = viewModel.state.value,
+                                        events = viewModel::onEvent
                                     )
                                 }
                             }

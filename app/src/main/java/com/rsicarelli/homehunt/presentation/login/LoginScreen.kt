@@ -18,8 +18,10 @@ import androidx.compose.ui.unit.dp
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
+import com.rsicarelli.homehunt.core.model.isLoading
 import com.rsicarelli.homehunt.core.util.extractAuthCredentials
 import com.rsicarelli.homehunt.core.util.getGoogleSignInOptions
+import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.login.LoginEvents.Error
 import com.rsicarelli.homehunt.presentation.login.LoginEvents.Login
 import com.rsicarelli.homehunt.ui.theme.SpaceLarge
@@ -31,7 +33,11 @@ fun LoginScreen(
     state: LoginState,
     events: (LoginEvents) -> Unit
 ) {
-    scaffoldDelegate.handleUiState(state.uiEvent)
+    when (state.uiEvent) {
+        is UiEvent.MessageToUser -> scaffoldDelegate.showMessageToUser(state.uiEvent.uiText)
+        is UiEvent.Navigate -> scaffoldDelegate.navigateSingleTop(state.uiEvent)
+        UiEvent.NavigateUp -> scaffoldDelegate.navigateUp()
+    }
 
     Column(
         Modifier.fillMaxSize(),
@@ -43,8 +49,11 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(SpaceLarge))
         Spacer(modifier = Modifier.height(SpaceLarge))
 
-        if (state.uiEvent !is UiEvent.Loading)
+        if (!state.progressBarState.isLoading()) {
             GoogleSignInOption(events)
+        } else {
+            CircularIndeterminateProgressBar(state.progressBarState)
+        }
     }
 }
 

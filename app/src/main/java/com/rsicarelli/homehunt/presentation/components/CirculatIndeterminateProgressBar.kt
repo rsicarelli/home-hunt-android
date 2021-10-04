@@ -8,9 +8,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.rsicarelli.homehunt.core.model.ProgressBarState
+import com.rsicarelli.homehunt.core.model.isLoading
 
 @Composable
-fun CircularIndeterminateProgressBar() {
+fun CircularIndeterminateProgressBar(progressBarState: ProgressBarState) {
+    if (!progressBarState.isLoading()) return
+
     Row(
         modifier = Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,
