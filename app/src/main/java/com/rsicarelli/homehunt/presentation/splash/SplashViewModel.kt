@@ -20,7 +20,7 @@ class SplashViewModel @Inject constructor(
     init {
         viewModelScope.launch {
 
-            delay(5000)
+            delay(100)
             _eventFlow.emit(Screen.LoginScreen)
 //            when (authenticateUseCase()) {
 //                is Resource.Success -> {

@@ -62,6 +62,8 @@ dependencies {
 
     implementation(platform(Firebase.bom))
     implementation((Firebase.firestore))
+    implementation(Firebase.auth)
+    implementation(Firebase.playServicesAuth)
 
     implementation(Hilt.android)
     kapt(Hilt.compiler)

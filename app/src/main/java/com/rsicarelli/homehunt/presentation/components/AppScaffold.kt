@@ -8,7 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -16,12 +16,18 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.rsicarelli.homehunt.core.model.ProgressBarState
+import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.rsicarelli.homehunt.core.model.UiEvent
+import com.rsicarelli.homehunt.core.util.asString
 import com.rsicarelli.homehunt.ui.navigation.BottomNavItem
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HintGray
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun AppScaffold(
@@ -37,7 +43,7 @@ fun AppScaffold(
         )
     ),
     onFabClick: () -> Unit = {},
-    content: @Composable () -> Unit
+    content: @Composable (ScaffoldDelegate) -> Unit
 ) {
     Scaffold(
         bottomBar = {
@@ -50,7 +56,7 @@ fun AppScaffold(
                 ) {
                     BottomNavigation {
                         bottomNavItems.forEachIndexed { _, bottomNavItem ->
-                            StandardBottomNavItem(
+                            AppBottomNavItem(
                                 icon = bottomNavItem.icon,
                                 contentDescription = bottomNavItem.contentDescription,
                                 selected = bottomNavItem.route == navController.currentDestination?.route,
@@ -84,13 +90,38 @@ fun AppScaffold(
         floatingActionButtonPosition = FabPosition.Center,
         modifier = modifier
     ) {
-        content()
+
+        val context = LocalContext.current
+        var progressBarState by remember { mutableStateOf<ProgressBarState>(ProgressBarState.Idle) }
+        val scaffoldDelegate by remember { mutableStateOf(ScaffoldDelegate()) }
+
+        LaunchedEffect(key1 = "ScaffoldDelegate", block = {
+            scaffoldDelegate.uiEvents.collectLatest { uiEvent ->
+                when (uiEvent) {
+                    is UiEvent.MessageToUser -> {
+                        state.snackbarHostState.showSnackbar(
+                            message = uiEvent.uiText.asString(context)
+                        )
+                    }
+                    is UiEvent.Navigate -> navController.navigate(uiEvent.route)
+                    is UiEvent.NavigateUp -> navController.navigateUp()
+                    is UiEvent.Loading -> progressBarState = uiEvent.progressBarState
+                    UiEvent.Idle -> print("Ignoring UiEvent")
+                }
+            }
+        })
+
+        content(scaffoldDelegate)
+
+        if (progressBarState is ProgressBarState.Loading) {
+            CircularIndeterminateProgressBar()
+        }
     }
 }
 
 @Composable
 @Throws(IllegalArgumentException::class)
-fun RowScope.StandardBottomNavItem(
+fun RowScope.AppBottomNavItem(
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     contentDescription: String? = null,

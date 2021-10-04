@@ -12,13 +12,15 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.compose.composable
 import com.rsicarelli.homehunt.presentation.components.AppScaffold
 import com.rsicarelli.homehunt.presentation.home.HomeScreen
 import com.rsicarelli.homehunt.presentation.login.LoginScreen
+import com.rsicarelli.homehunt.presentation.login.LoginViewModel
 import com.rsicarelli.homehunt.presentation.splash.SplashScreen
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
@@ -55,16 +57,18 @@ class MainActivity : ComponentActivity() {
                             onFabClick = {
                                 navController.navigate(Screen.Filter.route)
                             }
-                        ) {
+                        ) { scaffoldDelegate ->
                             NavHost(
                                 navController = navController,
                                 startDestination = Screen.SplashScreen.route,
                                 modifier = Modifier.fillMaxSize()
                             ) {
                                 composable(Screen.LoginScreen.route) {
+                                    val viewModel: LoginViewModel = hiltViewModel()
                                     LoginScreen(
-                                        onNavigate = navController::navigate,
-                                        scaffoldState = scaffoldState
+                                        scaffoldDelegate = scaffoldDelegate,
+                                        state = viewModel.state.value,
+                                        events = viewModel::onEvent
                                     )
                                 }
 
