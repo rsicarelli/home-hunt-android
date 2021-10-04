@@ -89,7 +89,6 @@ fun AppScaffold(
 
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
-//        val uiEventQueue by remember { mutableStateOf<Queue<UiEvent>>(Queue(mutableListOf())) }
         val scaffoldDelegate by remember {
             mutableStateOf(
                 ScaffoldDelegate(
@@ -102,25 +101,6 @@ fun AppScaffold(
         }
 
         content(scaffoldDelegate)
-
-//        if (scaffoldDelegate.uiEventQueue.isNotEmpty()) {
-//            scaffoldDelegate.uiEventQueue.peek()?.let { uiEvent ->
-//                when (uiEvent) {
-//                    is UiEvent.MessageToUser -> {
-//                        coroutineScope.launch {
-//                            state.snackbarHostState.showSnackbar(
-//                                message = (uiEvent as UiEvent.MessageToUser).uiText.asString(context),
-//                                duration = SnackbarDuration.Short
-//                            )
-//                        }
-//                    }
-//                    is UiEvent.Navigate -> navController.navigate((uiEvent as UiEvent.Navigate).route)
-//                    is UiEvent.NavigateUp -> navController.navigateUp()
-//                    is UiEvent.Loading -> return@Scaffold CircularIndeterminateProgressBar(uiEvent.progressBarState)
-//                    UiEvent.Idle -> print("Ignoring UiEvent")
-//                }
-//            }
-//        }
     }
 }
 

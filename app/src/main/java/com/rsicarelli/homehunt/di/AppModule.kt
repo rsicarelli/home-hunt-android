@@ -1,6 +1,7 @@
 package com.rsicarelli.homehunt.di
 
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
@@ -15,4 +16,8 @@ object AppModule {
     @Provides
     @Singleton
     fun providesFirebaseAuth() = Firebase.auth
+
+    @Provides
+    @Singleton
+    fun providesFirebaseFirestore() = Firebase.firestore
 }

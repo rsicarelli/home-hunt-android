@@ -17,8 +17,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import coil.ImageLoader
 import com.rsicarelli.homehunt.presentation.components.AppScaffold
 import com.rsicarelli.homehunt.presentation.home.HomeScreen
+import com.rsicarelli.homehunt.presentation.home.HomeViewModel
 import com.rsicarelli.homehunt.presentation.login.LoginScreen
 import com.rsicarelli.homehunt.presentation.login.LoginViewModel
 import com.rsicarelli.homehunt.presentation.splash.SplashScreen
@@ -26,15 +28,15 @@ import com.rsicarelli.homehunt.presentation.splash.SplashViewModel
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-//    // https://coil-kt.github.io/coil/getting_started/#image-loaders
-//    @Inject
-//    lateinit var imageLoader: ImageLoader
+    @Inject
+    lateinit var imageLoader: ImageLoader
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,9 +76,12 @@ class MainActivity : ComponentActivity() {
                                 }
 
                                 composable(Screen.HomeScreen.route) {
+                                    val viewModel: HomeViewModel = hiltViewModel()
                                     HomeScreen(
-                                        onNavigate = navController::navigate,
-                                        scaffoldState = scaffoldState
+                                        scaffoldDelegate = scaffoldDelegate,
+                                        state = viewModel.state.value,
+                                        events = viewModel::onEvent,
+                                        imageLoader = imageLoader
                                     )
                                 }
 

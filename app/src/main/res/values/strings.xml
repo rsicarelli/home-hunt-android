@@ -3,4 +3,5 @@
     <string name="error_unknown">Something wrong is not right</string>
     <string name="welcome">Welcome to HomeHunt app</string>
     <string name="do_login">Please do login to start using the app</string>
+    <string name="results">results</string>
 </resources>

@@ -50,6 +50,8 @@ dependencies {
     implementation(Dependencies.material)
     implementation(Accompanist.animations)
 
+    implementation(Coil.coil)
+
     implementation(Compose.activity)
     implementation(Compose.ui)
     implementation(Compose.material)
