@@ -13,16 +13,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.core.util.extractAuthCredentials
+import com.rsicarelli.homehunt.core.util.getGoogleSignInOptions
 import com.rsicarelli.homehunt.presentation.login.LoginEvents.Error
 import com.rsicarelli.homehunt.presentation.login.LoginEvents.Login
 import com.rsicarelli.homehunt.ui.theme.SpaceLarge
+import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 
 @Composable
 fun LoginScreen(
@@ -32,8 +33,50 @@ fun LoginScreen(
 ) {
     scaffoldDelegate.handleUiState(state.uiEvent)
 
+    Column(
+        Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Welcome()
+        BrandingSentence()
+
+        Spacer(modifier = Modifier.height(SpaceLarge))
+        Spacer(modifier = Modifier.height(SpaceLarge))
+
+        if (state.uiEvent !is UiEvent.Loading)
+            GoogleSignInOption(events)
+    }
+}
+
+@Composable
+private fun Welcome() {
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 50.dp, end = 20.dp, bottom = 20.dp, start = 20.dp),
+        text = stringResource(id = R.string.welcome),
+        textAlign = TextAlign.Center,
+        style = MaterialTheme.typography.h1,
+        color = Color.White
+    )
+}
+
+@Composable
+private fun BrandingSentence() {
+    Text(
+        text = stringResource(id = R.string.do_login),
+        textAlign = TextAlign.Center,
+        style = MaterialTheme.typography.subtitle1,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(SpaceMedium),
+        color = Color.White.copy(alpha = 0.5f)
+    )
+}
+
+@Composable
+private fun GoogleSignInOption(events: (LoginEvents) -> Unit) {
     val context = LocalContext.current
-    val token = stringResource(R.string.default_web_client_id)
 
     val launcher = rememberLauncherForActivityResult(StartActivityForResult()) { activityResult ->
         activityResult.extractAuthCredentials(
@@ -57,19 +100,9 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .height(50.dp),
             onClick = {
-                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(token)
-                    .requestEmail()
-                    .build()
-
-                val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                launcher.launch(googleSignInClient.signInIntent)
+                launcher.launch(context.getGoogleSignInOptions().signInIntent)
             },
             content = {
-                if (state.uiEvent is UiEvent.Loading) {
-                    return@OutlinedButton
-                }
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -94,6 +127,7 @@ fun LoginScreen(
                 )
             }
         )
-
     }
+
+
 }

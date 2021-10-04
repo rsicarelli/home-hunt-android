@@ -7,10 +7,13 @@ import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
+import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.UiText
 import com.rsicarelli.homehunt.presentation.login.LoginEvents
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -75,4 +78,15 @@ fun UiText.asString(context: Context): String {
         is UiText.DynamicString -> this.value
         is UiText.StringResource -> context.getString(this.id)
     }
+}
+
+fun Context.getGoogleSignInOptions(): GoogleSignInClient {
+    val token = this.resources.getString(R.string.default_web_client_id)
+
+    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestIdToken(token)
+        .requestEmail()
+        .build()
+
+    return GoogleSignIn.getClient(this, gso)
 }

@@ -28,6 +28,7 @@ import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HintGray
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun AppScaffold(
@@ -92,29 +93,33 @@ fun AppScaffold(
     ) {
 
         val context = LocalContext.current
-        var progressBarState by remember { mutableStateOf<ProgressBarState>(ProgressBarState.Idle) }
-        val scaffoldDelegate by remember { mutableStateOf(ScaffoldDelegate()) }
+        val coroutineScope = rememberCoroutineScope()
+        var uiEvent by remember { mutableStateOf<UiEvent>(UiEvent.Idle) }
+        val scaffoldDelegate by remember { mutableStateOf(ScaffoldDelegate(coroutineScope)) }
 
         LaunchedEffect(key1 = "ScaffoldDelegate", block = {
-            scaffoldDelegate.uiEvents.collectLatest { uiEvent ->
-                when (uiEvent) {
-                    is UiEvent.MessageToUser -> {
-                        state.snackbarHostState.showSnackbar(
-                            message = uiEvent.uiText.asString(context)
-                        )
-                    }
-                    is UiEvent.Navigate -> navController.navigate(uiEvent.route)
-                    is UiEvent.NavigateUp -> navController.navigateUp()
-                    is UiEvent.Loading -> progressBarState = uiEvent.progressBarState
-                    UiEvent.Idle -> print("Ignoring UiEvent")
-                }
-            }
+            scaffoldDelegate.uiEvents.collectLatest { uiEvent = it }
         })
 
         content(scaffoldDelegate)
 
-        if (progressBarState is ProgressBarState.Loading) {
-            CircularIndeterminateProgressBar()
+        when (uiEvent) {
+            is UiEvent.MessageToUser -> {
+                coroutineScope.launch {
+                    state.snackbarHostState.showSnackbar(
+                        message = (uiEvent as UiEvent.MessageToUser).uiText.asString(context),
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+            is UiEvent.Navigate -> navController.navigate((uiEvent as UiEvent.Navigate).route)
+            is UiEvent.NavigateUp -> navController.navigateUp()
+            is UiEvent.Loading -> {
+                if ((uiEvent as UiEvent.Loading).progressBarState is ProgressBarState.Loading) {
+                    return@Scaffold CircularIndeterminateProgressBar()
+                }
+            }
+            UiEvent.Idle -> print("Ignoring UiEvent")
         }
     }
 }
