@@ -57,9 +57,6 @@ class MainActivity : ComponentActivity() {
                             ),
                             state = scaffoldState,
                             modifier = Modifier.fillMaxSize(),
-                            onFabClick = {
-                                navController.navigate(Screen.Filter.route)
-                            }
                         ) { scaffoldDelegate ->
                             NavHost(
                                 navController = navController,

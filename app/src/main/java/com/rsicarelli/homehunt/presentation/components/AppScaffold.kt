@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -34,11 +35,10 @@ fun AppScaffold(
     bottomNavItems: List<BottomNavItem> = listOf(
         BottomNavItem(
             route = Screen.HomeScreen.route,
-            icon = Icons.Outlined.Home,
+            icon = Icons.Rounded.Home,
             contentDescription = "Home"
         )
     ),
-    onFabClick: () -> Unit = {},
     content: @Composable (ScaffoldDelegate) -> Unit
 ) {
     Scaffold(
@@ -69,21 +69,6 @@ fun AppScaffold(
             }
         },
         scaffoldState = state,
-        floatingActionButton = {
-            if (showBottomBar) {
-                FloatingActionButton(
-                    backgroundColor = MaterialTheme.colors.primary,
-                    onClick = onFabClick
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Refresh,
-                        contentDescription = "Filter"
-                    )
-                }
-            }
-        },
-        isFloatingActionButtonDocked = true,
-        floatingActionButtonPosition = FabPosition.Center,
         modifier = modifier
     ) {
 
