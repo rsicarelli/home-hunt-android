@@ -30,14 +30,14 @@ class FilterPropertiesUseCase(
 
                 it.surface in range
             }.filter {
-                if (filter.dormCount.isNotEmpty()) {
-                    it.dormCount in filter.dormCount
+                if (filter.dormSelection.isNotEmpty()) {
+                    it.dormCount in filter.dormSelection
                 } else {
                     true
                 }
             }.filter {
-                if (filter.bathCount.isNotEmpty()) {
-                    it.bathCount in filter.bathCount
+                if (filter.bathSelection.isNotEmpty()) {
+                    it.bathCount in filter.bathSelection
                 } else {
                     true
                 }

@@ -35,6 +35,7 @@ import com.rsicarelli.homehunt.core.util.toCurrency
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.components.IconText
+import com.rsicarelli.homehunt.presentation.components.OnLifecycleEvent
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
@@ -49,7 +50,9 @@ fun HomeScreen(
     imageLoader: ImageLoader
 ) {
 
-    OnLifecycleEvent(events)
+    OnLifecycleEvent { event ->
+        events(HomeEvents.LifecycleEvent(event))
+    }
 
     EmptyProperties(state.emptyResults)
 
@@ -308,21 +311,4 @@ fun PropertyListItem(
 //        }
     }
 
-}
-
-@Composable
-fun OnLifecycleEvent(onEvent: (HomeEvents) -> Unit) {
-    val lifecycleOwner = rememberUpdatedState(LocalLifecycleOwner.current)
-
-    DisposableEffect(lifecycleOwner.value) {
-        val lifecycle = lifecycleOwner.value.lifecycle
-        val observer = LifecycleEventObserver { _, event ->
-            onEvent(HomeEvents.LifecycleEvent(event))
-        }
-
-        lifecycle.addObserver(observer)
-        onDispose {
-            lifecycle.removeObserver(observer)
-        }
-    }
 }

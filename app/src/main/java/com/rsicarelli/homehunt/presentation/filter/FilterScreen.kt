@@ -7,14 +7,15 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.presentation.components.ChipGroup
 import com.rsicarelli.homehunt.presentation.components.CustomRangeSlider
+import com.rsicarelli.homehunt.presentation.components.OnLifecycleEvent
 import com.rsicarelli.homehunt.ui.theme.*
 
 val priceRange = mapOf(
@@ -52,6 +53,13 @@ fun FilterScreen(
     state: FilterState,
     events: (FilterEvents) -> Unit
 ) {
+
+    if (state.uiEvent == UiEvent.NavigateUp) scaffoldDelegate.navigateUp()
+
+    OnLifecycleEvent { event ->
+        events(FilterEvents.LifecycleEvent(event))
+    }
+
     IconButton(
         modifier = Modifier.padding(top = SpaceMedium, start = SpaceSmall),
         onClick = { scaffoldDelegate.navigateUp() }) {
@@ -94,7 +102,7 @@ fun FilterScreen(
                     backgroundColor = rally_green_500,
                     contentColor = MaterialTheme.colors.background
                 ),
-                onClick = { }) {
+                onClick = { events(FilterEvents.SaveFilter) }) {
                 Text(
                     text = "See ${state.previewResultCount} results",
                     style = MaterialTheme.typography.button.copy(fontSize = 16.sp)

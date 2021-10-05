@@ -32,8 +32,8 @@ fun CustomRangeSlider(
     value: ClosedFloatingPointRange<Float>,
     onValueChange: (ClosedFloatingPointRange<Float>) -> Unit
 ) {
-    var (changeValue, setChangeValue) = remember { mutableStateOf(0.0f..999.0f) }
-    val (sliderValue, setSliderValue) = remember { mutableStateOf(value) }
+    var (changeValue, setChangeValue) = remember { mutableStateOf(value) }
+//    val (sliderValue, setSliderValue) = remember { mutableStateOf(value) }
     val drawPadding = with(LocalDensity.current) { SpaceMedium.toPx() }
     val lineHeightPx = with(LocalDensity.current) { SpaceSmall.toPx() }
     val textPaint = Paint().apply {
@@ -71,7 +71,7 @@ fun CustomRangeSlider(
 
         RangeSlider(
             modifier = Modifier.fillMaxWidth(),
-            values = sliderValue,
+            values = value,
             valueRange = values.values.first().toFloat()..values.values.last().toFloat(),
             steps = values.size.minus(2),
             onValueChangeFinished = {
@@ -79,7 +79,6 @@ fun CustomRangeSlider(
             },
             onValueChange = {
                 setChangeValue(it)
-                setSliderValue(it)
             })
     }
 }

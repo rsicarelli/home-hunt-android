@@ -3,8 +3,8 @@ package com.rsicarelli.homehunt.domain.model
 data class Filter(
     val priceRange: Pair<Double, Double>,
     val surfaceRange: Pair<Int, Int>,
-    val dormCount: List<Int>,
-    val bathCount: List<Int>
+    val dormSelection: List<Int>,
+    val bathSelection: List<Int>
 ) {
     val maxDormCount = 5
     val maxBathCount = 5
