@@ -9,77 +9,84 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.rsicarelli.homehunt.R
 
-private val QuickSand = FontFamily(
-    Font(R.font.quicksand_light, FontWeight.W300),
-    Font(R.font.quicksand_regular, FontWeight.W400),
-    Font(R.font.quicksand_medium, FontWeight.W500),
-    Font(R.font.quicksand_bold, FontWeight.W600)
+private val Eczar = FontFamily(
+    Font(R.font.eczar_regular, FontWeight.W400),
+    Font(R.font.eczar_medium, FontWeight.W500),
+    Font(R.font.eczar_semi_bold, FontWeight.W600),
+    Font(R.font.eczar_bold, FontWeight.W700),
+    Font(R.font.eczar_extra_bold, FontWeight.W800)
+)
+
+private val RobotoCondensed = FontFamily(
+    Font(R.font.roboto_condensed_light, FontWeight.W300),
+    Font(R.font.roboto_condensed_regular, FontWeight.W400),
+    Font(R.font.roboto_condensed_bold, FontWeight.W700),
 )
 
 val QuickSandTypography = Typography(
     h1 = TextStyle(
-        fontFamily = QuickSand,
-        fontWeight = FontWeight.W500,
-        fontSize = 32.sp,
+        fontFamily = Eczar,
+        fontWeight = FontWeight.W400,
+        fontSize = 108.sp,
     ),
     h2 = TextStyle(
-        fontFamily = QuickSand,
-        fontWeight = FontWeight.W500,
-        fontSize = 26.sp,
+        fontFamily = Eczar,
+        fontWeight = FontWeight.W400,
+        fontSize = 68.sp,
     ),
     h3 = TextStyle(
-        fontFamily = QuickSand,
+        fontFamily = Eczar,
         fontWeight = FontWeight.W500,
-        fontSize = 22.sp,
+        fontSize = 54.sp,
     ),
     h4 = TextStyle(
-        fontFamily = QuickSand,
-        fontWeight = FontWeight.W400,
-        fontSize = 20.sp,
+        fontFamily = Eczar,
+        fontWeight = FontWeight.W500,
+        fontSize = 38.sp,
     ),
     h5 = TextStyle(
-        fontFamily = QuickSand,
+        fontFamily = Eczar,
+        fontWeight = FontWeight.W500,
+        fontSize = 27.sp,
+    ),
+    h6 = TextStyle(
+        fontFamily = Eczar,
+        fontWeight = FontWeight.W500,
+        fontSize = 23.sp,
+    ),
+    subtitle1 = TextStyle(
+        fontFamily = Eczar,
         fontWeight = FontWeight.W400,
         fontSize = 18.sp,
     ),
-    h6 = TextStyle(
-        fontFamily = QuickSand,
-        fontWeight = FontWeight.W400,
+    subtitle2 = TextStyle(
+        fontFamily = Eczar,
+        fontWeight = FontWeight.W500,
         fontSize = 16.sp,
     ),
-    subtitle1 = TextStyle(
-        fontFamily = QuickSand,
-        fontWeight = FontWeight.W500,
-        fontSize = 15.sp,
-    ),
-    subtitle2 = TextStyle(
-        fontFamily = QuickSand,
-        fontWeight = FontWeight.W400,
-        fontSize = 14.sp,
-    ),
     body1 = TextStyle(
-        fontFamily = QuickSand,
-        fontWeight = FontWeight.Normal,
+        fontFamily = RobotoCondensed,
+        fontWeight = FontWeight.W400,
         fontSize = 16.sp
     ),
     body2 = TextStyle(
-        fontFamily = QuickSand,
+        fontFamily = RobotoCondensed,
+        fontWeight = FontWeight.W400,
         fontSize = 14.sp
     ),
     button = TextStyle(
-        fontFamily = QuickSand,
+        fontFamily = RobotoCondensed,
         fontWeight = FontWeight.W400,
-        fontSize = 16.sp,
-        color = Color.White
+        fontSize = 14.sp,
     ),
     caption = TextStyle(
-        fontFamily = QuickSand,
-        fontWeight = FontWeight.Normal,
-        fontSize = 13.sp
+        fontFamily = RobotoCondensed,
+        fontWeight = FontWeight.W400,
+        fontSize = 12.sp
     ),
     overline = TextStyle(
-        fontFamily = QuickSand,
+        fontFamily = RobotoCondensed,
         fontWeight = FontWeight.W400,
-        fontSize = 13.sp
+        fontSize = 10.sp
     )
 )

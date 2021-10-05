@@ -1,35 +1,48 @@
 package com.rsicarelli.homehunt.presentation.home
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.animation.*
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import androidx.lifecycle.LifecycleEventObserver
 import coil.ImageLoader
 import coil.compose.rememberImagePainter
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
-import com.rsicarelli.homehunt.domain.Property
+import com.rsicarelli.homehunt.core.util.toCurrency
+import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
+import com.rsicarelli.homehunt.presentation.components.IconText
+import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
+import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
+import kotlin.math.min
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     scaffoldDelegate: ScaffoldDelegate,
@@ -66,34 +79,57 @@ fun EmptyProperties(emptyResults: Boolean) {
     }
 }
 
+@ExperimentalFoundationApi
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PropertyList(properties: List<Property>, imageLoader: ImageLoader) {
     if (properties.isEmpty()) return
 
+    val scrollState = rememberLazyListState()
+
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(SpaceMedium)
     ) {
-        Column(
-        ) {
-            Text(
-                text = "${properties.size} ${stringResource(id = R.string.results)}",
-                style = MaterialTheme.typography.h2
-            )
-            AnimatedVisibility(visible = properties.isNotEmpty()) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = SpaceSmall)
-                ) {
-                    items(properties) { property ->
-                        PropertyListItem(
-                            property = property,
-                            onSelectProperty = { },
-                            imageLoader = imageLoader,
-                        )
-                    }
+        AnimatedVisibility(visible = properties.isNotEmpty()) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize(),
+                state = scrollState
+
+            ) {
+                stickyHeader { Spacer(modifier = Modifier.height(50.dp)) }
+                items(properties) { property ->
+                    PropertyListItem(
+                        property = property,
+                        onSelectProperty = { },
+                        imageLoader = imageLoader,
+                    )
                 }
+            }
+        }
+
+        val density = LocalDensity.current
+        AnimatedVisibility(
+            visible = !scrollState.isScrollInProgress,
+            enter =
+            slideInVertically(initialOffsetY = { with(density) { -50.dp.roundToPx() } })
+                    + expandVertically(expandFrom = Alignment.Top)
+                    + fadeIn(initialAlpha = 0.3f),
+            exit = slideOutVertically() + shrinkVertically() + fadeOut()
+        ) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp + SpaceSmall),
+                color = MaterialTheme.colors.background
+            ) {
+                Text(
+                    modifier = Modifier.padding(bottom = SpaceSmall),
+                    text = "${properties.size} ${stringResource(id = R.string.results)}",
+                    style = MaterialTheme.typography.h4
+                )
             }
         }
     }
@@ -108,65 +144,120 @@ fun PropertyListItem(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = SpaceSmall)
-            .background(MaterialTheme.colors.surface)
+            .padding(
+                top = SpaceMedium,
+                bottom = SpaceSmall
+            )
+            .clip(RoundedCornerShape(10.dp))
             .clickable {
                 onSelectProperty(property.reference)
             },
-        elevation = SpaceSmall
+        color = MaterialTheme.colors.surface,
+        elevation = 8.dp
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val painter = rememberImagePainter(
-                property.avatarUrl,
-                imageLoader = imageLoader,
-                builder = {
-                    placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
-                }
-            )
-            Image(
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Box(
                 modifier = Modifier
-                    .width(120.dp)
-                    .height(70.dp),
-                painter = painter,
-                contentDescription = property.title,
-                contentScale = ContentScale.Crop,
-            )
-            Column(
+                    .fillMaxWidth()
+            ) {
+                val painter = rememberImagePainter(
+                    property.avatarUrl,
+                    imageLoader = imageLoader,
+                    builder = {
+                        placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
+                    }
+                )
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)),
+                    painter = painter,
+                    contentDescription = property.title,
+                    contentScale = ContentScale.FillWidth,
+                )
+            }
+            Spacer(modifier = Modifier.height(SpaceSmall))
+
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth(.8f) // fill 80% of remaining width
-                    .padding(start = 12.dp)
+                    .fillMaxWidth()
+                    .padding(start = SpaceMedium, end = SpaceMedium),
+                verticalAlignment = Alignment.Bottom
             ) {
                 Text(
-                    modifier = Modifier
-                        .padding(bottom = 4.dp),
-                    text = property.title,
-                    style = MaterialTheme.typography.h4,
+                    text = "${property.price.toCurrency()}",
+                    style = MaterialTheme.typography.h5,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+                Spacer(modifier = Modifier.width(SpaceSmall))
                 Text(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(top = SpaceSmallest, start = SpaceSmallest),
                     text = property.location,
-                    style = MaterialTheme.typography.subtitle1,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.subtitle2,
+                    color = MaterialTheme.colors.primaryVariant
                 )
             }
-            Column(
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth() // Fill the rest of the width (100% - 80% = 20%)
-                    .padding(end = 12.dp),
-                horizontalAlignment = Alignment.End
+                    .fillMaxWidth()
+                    .padding(
+                        bottom = SpaceMedium,
+                        start = SpaceMedium,
+                        end = SpaceMedium,
+                        top = SpaceSmallest
+                    )
             ) {
-//
-//                Text(
-//                    text = "${proWR}%",
-//                    style = MaterialTheme.typography.caption,
-//                    color = if (proWR > 50) Color(0xFF009a34) else MaterialTheme.colors.error,
-//                )
+                IconText(text = "${property.dormCount}", leadingIcon = Icons.Rounded.Bed)
+                Spacer(modifier = Modifier.width(SpaceMedium))
+                IconText(text = "${property.bathCount}", leadingIcon = Icons.Rounded.Bathtub)
+                Spacer(modifier = Modifier.width(SpaceMedium))
+                IconText(text = "${property.surface}", leadingIcon = Icons.Rounded.AspectRatio)
             }
+
         }
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth(),
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxWidth(.8f) // fill 80% of remaining width
+//                    .padding(start = 12.dp)
+//            ) {
+//                Text(
+//                    modifier = Modifier
+//                        .padding(bottom = 4.dp),
+//                    text = property.title,
+//                    style = MaterialTheme.typography.h4,
+//                    maxLines = 1,
+//                    overflow = TextOverflow.Ellipsis
+//                )
+//                Text(
+//                    text = property.location,
+//                    style = MaterialTheme.typography.subtitle1,
+//                )
+//            }
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxWidth() // Fill the rest of the width (100% - 80% = 20%)
+//                    .padding(end = 12.dp),
+//                horizontalAlignment = Alignment.End
+//            ) {
+////
+////                Text(
+////                    text = "${proWR}%",
+////                    style = MaterialTheme.typography.caption,
+////                    color = if (proWR > 50) Color(0xFF009a34) else MaterialTheme.colors.error,
+////                )
+//            }
+//        }
     }
 
 }

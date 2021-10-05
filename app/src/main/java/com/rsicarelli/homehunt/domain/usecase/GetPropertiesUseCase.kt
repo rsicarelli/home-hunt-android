@@ -2,7 +2,7 @@ package com.rsicarelli.homehunt.domain.usecase
 
 import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.core.model.ProgressBarState
-import com.rsicarelli.homehunt.domain.Property
+import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.repository.PropertyRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*

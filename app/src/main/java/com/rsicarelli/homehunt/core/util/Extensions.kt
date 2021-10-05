@@ -18,6 +18,8 @@ import com.rsicarelli.homehunt.core.model.UiText
 import com.rsicarelli.homehunt.presentation.login.LoginEvents
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
+import java.text.NumberFormat
+import java.util.*
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.coroutines.resumeWithException
 
@@ -89,4 +91,10 @@ fun Context.getGoogleSignInOptions(): GoogleSignInClient {
         .build()
 
     return GoogleSignIn.getClient(this, gso)
+}
+
+fun Double.toCurrency(): String? {
+    val numberFormat = NumberFormat.getCurrencyInstance(Locale.ITALY)
+    numberFormat.maximumFractionDigits = 0;
+    return numberFormat.format(this)
 }

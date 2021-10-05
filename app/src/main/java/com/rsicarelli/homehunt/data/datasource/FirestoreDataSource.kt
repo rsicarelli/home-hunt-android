@@ -1,18 +1,14 @@
 package com.rsicarelli.homehunt.data
 
-import androidx.compose.animation.core.snap
 import com.google.firebase.firestore.FirebaseFirestore
 import com.rsicarelli.homehunt.data.FirestoreDataSourceImpl.FirestoreMap.PROPERTY_COLLECTION
-import com.rsicarelli.homehunt.domain.Property
-import com.rsicarelli.homehunt.domain.toProperty
-import kotlinx.coroutines.Dispatchers
+import com.rsicarelli.homehunt.domain.model.Property
+import com.rsicarelli.homehunt.domain.model.toProperty
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 
 interface FirestoreDataSource {
     suspend fun new(): Flow<List<Property>>

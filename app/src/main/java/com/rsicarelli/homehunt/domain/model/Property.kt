@@ -1,5 +1,6 @@
-package com.rsicarelli.homehunt.domain
+package com.rsicarelli.homehunt.domain.model
 
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.google.common.annotations.VisibleForTesting
 
 data class Property(
@@ -85,7 +86,7 @@ fun Map<String, Any?>.toProperty() =
         dormCount = asNullableInt(Mapper.DORM_COUNT),
         description = asString(Mapper.DESCRIPTION),
         bathCount = asNullableInt(Mapper.BATH_COUNT),
-        avatarUrl = asString(Mapper.AVATAR_URL),
+        avatarUrl = asString(Mapper.AVATAR_URL).replaceAfter("jpg", "").replace("thumb?src=/", ""),
         tag = asNullableString(Mapper.TAG, default = Property.Tag.EMPTY.identifier),
         propertyUrl = asString(Mapper.PROPERTY_URL),
         videoUrl = asNullableString(Mapper.VIDEO_URL),

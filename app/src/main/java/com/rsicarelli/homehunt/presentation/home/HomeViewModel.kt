@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.core.model.ProgressBarState
-import com.rsicarelli.homehunt.domain.Property
+import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.usecase.GetPropertiesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -26,18 +26,20 @@ class HomeViewModel @Inject constructor(
 
     fun onEvent(events: HomeEvents) {
         when (events) {
-            is HomeEvents.LifecycleEvent -> {
-                if (events.event == Lifecycle.Event.ON_RESUME) {
-                    viewModelScope.launch {
-                        getProperties().onEach { dataState ->
-                            println(dataState)
-                            when (dataState) {
-                                is DataState.Data -> state.updateProperties(dataState.data!!)
-                                is DataState.Loading -> state.toggleLoading(dataState.progressBarState)
-                            }
-                        }.launchIn(viewModelScope)
+            is HomeEvents.LifecycleEvent -> getProperties(events)
+        }
+    }
+
+    private fun getProperties(events: HomeEvents.LifecycleEvent) {
+        if (events.event == Lifecycle.Event.ON_RESUME) {
+            viewModelScope.launch {
+                getProperties().onEach { dataState ->
+                    println(dataState)
+                    when (dataState) {
+                        is DataState.Data -> state.updateProperties(dataState.data!!)
+                        is DataState.Loading -> state.toggleLoading(dataState.progressBarState)
                     }
-                }
+                }.launchIn(viewModelScope)
             }
         }
     }

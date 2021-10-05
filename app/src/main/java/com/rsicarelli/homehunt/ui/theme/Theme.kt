@@ -9,18 +9,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-    primary = Blue300,
-    primaryVariant = Blue700,
-    onPrimary = Color.White,
-    secondary = Color.Black,
-    secondaryVariant = Teal300,
-    onSecondary = Color.White,
-    error = RedErrorLight,
-    onError = RedErrorDark,
-    background = Color.Black,
-    onBackground = Color.White,
-    surface = Black1,
-    onSurface = Color.White,
+    primary = Primary,
+    primaryVariant = PrimaryVariant,
+    onPrimary = OnSecondary,
+    secondary = Secondary,
+    secondaryVariant = SecondaryVariant,
+    onSecondary = OnSecondary,
+    error = Error,
+    onError = OnError,
+    background = Background,
+    onBackground = OnBackground,
+    surface = Surface,
+    onSurface = OnSurface,
 )
 
 @SuppressLint("ConflictingOnColor")

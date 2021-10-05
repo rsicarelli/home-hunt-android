@@ -12,6 +12,10 @@ object Compose {
 
     private const val hiltNavigationComposeVersion = "1.0.0-alpha03"
     const val hiltNavigation = "androidx.hilt:hilt-navigation-compose:$hiltNavigationComposeVersion"
+
+    const val materialIconsExtended =
+        "androidx.compose.material:material-icons-extended:$composeVersion"
+
 }
 
 object ComposeTest {
