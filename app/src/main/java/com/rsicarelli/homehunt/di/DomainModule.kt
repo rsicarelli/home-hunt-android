@@ -4,9 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.rsicarelli.homehunt.data.repository.UserRepositoryImpl
 import com.rsicarelli.homehunt.domain.repository.PropertyRepository
 import com.rsicarelli.homehunt.domain.repository.UserRepository
-import com.rsicarelli.homehunt.domain.usecase.GetPropertiesUseCase
-import com.rsicarelli.homehunt.domain.usecase.IsLoggedInUseCase
-import com.rsicarelli.homehunt.domain.usecase.SignInUseCase
+import com.rsicarelli.homehunt.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,4 +28,17 @@ object DomainModule {
     @Singleton
     fun providesGetPropertiesUseCase(propertiesRepository: PropertyRepository) =
         GetPropertiesUseCase(propertiesRepository)
+
+    @Provides
+    @Singleton
+    fun providesFilterPropertiesUseCase() = FilterPropertiesUseCase()
+
+    @Provides
+    @Singleton
+    fun providesPreviewFilterResultUseCase(
+        propertyRepository: PropertyRepository,
+        filterPropertiesUseCase: FilterPropertiesUseCase
+    ) =
+        PreviewFilterResultUseCase(propertyRepository, filterPropertiesUseCase)
+
 }

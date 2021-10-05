@@ -17,11 +17,32 @@ import com.rsicarelli.homehunt.presentation.components.ChipGroup
 import com.rsicarelli.homehunt.presentation.components.CustomRangeSlider
 import com.rsicarelli.homehunt.ui.theme.*
 
+val priceRange = mapOf(
+    "700" to 700.0,
+    "800" to 800.0,
+    "900" to 900.0,
+    "1000" to 1000.0,
+    "1100" to 1100.0,
+    "1200" to 1200.0,
+    "1300" to 1300.0,
+    "1400" to 1400.0,
+    "1500" to 1500.0,
+    "1600 +" to 1600.0
+)
 
-val priceRange =
-    listOf("700", "800", "900", "1000", "1100", "1200", "1300", "1400", "1500", "1600 +")
-val surfaceRange =
-    listOf("80m²", "90m²", "100m²", "110m²", "120m²", "130m²", "140m²", "150m²", "160m²", "180m² +")
+val surfaceRange = mapOf(
+    "80m²" to 80.0,
+    "90m²" to 90.0,
+    "100m²" to 100.0,
+    "110m²" to 110.0,
+    "120m²" to 120.0,
+    "130m²" to 130.0,
+    "140m²" to 140.0,
+    "150m²" to 150.0,
+    "160m²" to 160.0,
+    "180m² +" to 180.0
+)
+
 val countRange = listOf(1, 2, 3, 4, 5)
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -74,7 +95,10 @@ fun FilterScreen(
                     contentColor = MaterialTheme.colors.background
                 ),
                 onClick = { }) {
-                Text(text = "See ### results",style = MaterialTheme.typography.button.copy(fontSize = 16.sp))
+                Text(
+                    text = "See ${state.previewResultCount} results",
+                    style = MaterialTheme.typography.button.copy(fontSize = 16.sp)
+                )
             }
         }
 

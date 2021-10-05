@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
                         ) { scaffoldDelegate ->
                             NavHost(
                                 navController = navController,
-                                startDestination = Screen.SplashScreen.route,
+                                startDestination = Screen.HomeScreen.route, //Test only
                                 modifier = Modifier.fillMaxSize()
                             ) {
                                 composable(Screen.LoginScreen.route) {

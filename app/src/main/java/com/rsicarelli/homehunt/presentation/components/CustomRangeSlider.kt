@@ -28,10 +28,11 @@ import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CustomRangeSlider(
-    values: List<String>,
+    values: Map<String, Double>,
     value: ClosedFloatingPointRange<Float>,
     onValueChange: (ClosedFloatingPointRange<Float>) -> Unit
 ) {
+    var (changeValue, setChangeValue) = remember { mutableStateOf(0.0f..999.0f) }
     val (sliderValue, setSliderValue) = remember { mutableStateOf(value) }
     val drawPadding = with(LocalDensity.current) { SpaceMedium.toPx() }
     val lineHeightPx = with(LocalDensity.current) { SpaceSmall.toPx() }
@@ -51,7 +52,7 @@ fun CustomRangeSlider(
         ) {
             val yStart = 0f
             val distance = (size.width.minus(2 * drawPadding)).div(values.size.minus(1))
-            values.forEachIndexed { index, step ->
+            values.keys.forEachIndexed { index, step ->
                 drawLine(
                     color = Color.DarkGray,
                     start = Offset(x = drawPadding + index.times(distance), y = yStart),
@@ -67,14 +68,18 @@ fun CustomRangeSlider(
                 }
             }
         }
+
         RangeSlider(
             modifier = Modifier.fillMaxWidth(),
             values = sliderValue,
-            valueRange = 0f..values.size.minus(1).toFloat(),
+            valueRange = values.values.first().toFloat()..values.values.last().toFloat(),
             steps = values.size.minus(2),
+            onValueChangeFinished = {
+                onValueChange(changeValue)
+            },
             onValueChange = {
+                setChangeValue(it)
                 setSliderValue(it)
-                onValueChange(it)
             })
     }
 }

@@ -1,6 +1,5 @@
 package com.rsicarelli.homehunt.domain.model
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.google.common.annotations.VisibleForTesting
 
 data class Property(
@@ -8,7 +7,7 @@ data class Property(
     val price: Double,
     val title: String,
     val location: String,
-    val surface: String?,
+    val surface: Int,
     val dormCount: Int?,
     val description: String,
     val bathCount: Int?,
@@ -82,7 +81,7 @@ fun Map<String, Any?>.toProperty() =
         price = asDouble(Mapper.PRICE),
         title = asString(Mapper.TITLE),
         location = asString(Mapper.LOCATION),
-        surface = asNullableString(Mapper.SURFACE),
+        surface = asInt(Mapper.SURFACE),
         dormCount = asNullableInt(Mapper.DORM_COUNT),
         description = asString(Mapper.DESCRIPTION),
         bathCount = asNullableInt(Mapper.BATH_COUNT),
@@ -136,5 +135,7 @@ private fun Map<String, Any?>.asDouble(token: String) = this[token] as Double
 private fun Map<String, Any?>.asNullableDouble(token: String) = this[token] as Double?
 private fun Map<String, Any?>.asNullableInt(token: String, default: Int? = null) =
     (this[token] as Long?)?.toInt() ?: default
+
+private fun Map<String, Any?>.asInt(token: String) = (this[token] as Long).toInt()
 
 private fun Map<String, Any?>.asStringList(token: String) = this[token] as List<String?>

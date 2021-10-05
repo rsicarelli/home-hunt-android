@@ -98,3 +98,5 @@ fun Double.toCurrency(): String? {
     numberFormat.maximumFractionDigits = 0;
     return numberFormat.format(this)
 }
+
+fun String.convertToInt() = this.replace(Regex("[^0-9]"), "").toInt()
