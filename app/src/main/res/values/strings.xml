@@ -4,4 +4,8 @@
     <string name="welcome">Welcome to HomeHunt app</string>
     <string name="do_login">Please do login to start using the app</string>
     <string name="results">results</string>
+    <string name="price">Price</string>
+    <string name="surface">Surface</string>
+    <string name="dorm_count">Dorms</string>
+    <string name="bath_count">Baths</string>
 </resources>

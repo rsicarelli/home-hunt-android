@@ -76,7 +76,7 @@ val QuickSandTypography = Typography(
     ),
     button = TextStyle(
         fontFamily = RobotoCondensed,
-        fontWeight = FontWeight.W400,
+        fontWeight = FontWeight.W700,
         fontSize = 14.sp,
     ),
     caption = TextStyle(
