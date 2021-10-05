@@ -4,16 +4,14 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.FloatingActionButtonDefaults.elevation
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AspectRatio
-import androidx.compose.material.icons.rounded.Bathtub
-import androidx.compose.material.icons.rounded.Bed
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberUpdatedState
@@ -32,13 +30,16 @@ import coil.ImageLoader
 import coil.compose.rememberImagePainter
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.core.util.toCurrency
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.components.IconText
+import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
+import com.rsicarelli.homehunt.ui.theme.rally_blue_700
 
 @Composable
 fun HomeScreen(
@@ -52,7 +53,7 @@ fun HomeScreen(
 
     EmptyProperties(state.emptyResults)
 
-    PropertyList(properties = state.properties, imageLoader = imageLoader)
+    PropertyList(properties = state.properties, imageLoader = imageLoader, scaffoldDelegate)
 
     CircularIndeterminateProgressBar(state.progressBarState)
 }
@@ -78,7 +79,11 @@ fun EmptyProperties(emptyResults: Boolean) {
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
-fun PropertyList(properties: List<Property>, imageLoader: ImageLoader) {
+fun PropertyList(
+    properties: List<Property>,
+    imageLoader: ImageLoader,
+    scaffoldDelegate: ScaffoldDelegate
+) {
     if (properties.isEmpty()) return
 
     val scrollState = rememberLazyListState()
@@ -88,48 +93,95 @@ fun PropertyList(properties: List<Property>, imageLoader: ImageLoader) {
             .fillMaxSize()
             .padding(SpaceMedium)
     ) {
-        AnimatedVisibility(visible = properties.isNotEmpty()) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(),
-                state = scrollState
-
-            ) {
-                stickyHeader { Spacer(modifier = Modifier.height(50.dp)) }
-                items(properties) { property ->
-                    PropertyListItem(
-                        property = property,
-                        onSelectProperty = { },
-                        imageLoader = imageLoader,
-                    )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 40.dp),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            AnimatedVisibility(visible = properties.isNotEmpty()) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    state = scrollState
+                ) {
+                    stickyHeader { Spacer(modifier = Modifier.height(50.dp)) }
+                    items(properties) { property ->
+                        PropertyListItem(
+                            property = property,
+                            onSelectProperty = { },
+                            imageLoader = imageLoader,
+                        )
+                    }
                 }
+            }
+
+            FilterFab(scrollState = scrollState) {
+                scaffoldDelegate.navigate(UiEvent.Navigate(Screen.Filter.route))
             }
         }
 
-        val density = LocalDensity.current
-        AnimatedVisibility(
-            visible = !scrollState.isScrollInProgress,
-            enter =
-            slideInVertically(initialOffsetY = { with(density) { -50.dp.roundToPx() } })
-                    + expandVertically(expandFrom = Alignment.Top)
-                    + fadeIn(initialAlpha = 0.3f),
-            exit = slideOutVertically() + shrinkVertically() + fadeOut()
+        ResultsHeader(scrollState, properties.size)
+
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+private fun ResultsHeader(
+    scrollState: LazyListState,
+    resultCount: Int
+) {
+    val density = LocalDensity.current
+
+    AnimatedVisibility(
+        visible = !scrollState.isScrollInProgress,
+        enter =
+        slideInVertically(initialOffsetY = { with(density) { -50.dp.roundToPx() } })
+                + expandVertically(expandFrom = Alignment.Top)
+                + fadeIn(initialAlpha = 0.3f),
+        exit = slideOutVertically() + shrinkVertically() + fadeOut()
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp + SpaceSmall),
+            color = MaterialTheme.colors.background
         ) {
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp + SpaceSmall),
-                color = MaterialTheme.colors.background
-            ) {
-                Text(
-                    modifier = Modifier.padding(bottom = SpaceSmall),
-                    text = "${properties.size} ${stringResource(id = R.string.results)}",
-                    style = MaterialTheme.typography.h4
-                )
-            }
+            Text(
+                modifier = Modifier.padding(bottom = SpaceSmall),
+                text = "$resultCount ${stringResource(id = R.string.results)}",
+                style = MaterialTheme.typography.h4
+            )
         }
     }
 }
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun FilterFab(scrollState: LazyListState, onClick: () -> Unit) {
+    AnimatedVisibility(
+        visible = !scrollState.isScrollInProgress,
+        enter = slideInVertically() + expandVertically(
+            expandFrom = Alignment.Bottom
+        ) + fadeIn(initialAlpha = 0.3f),
+        exit = slideOutVertically() + shrinkVertically() + fadeOut()
+    ) {
+        Box(modifier = Modifier.padding(bottom = SpaceSmall)) {
+            FloatingActionButton(
+                onClick = onClick,
+                elevation = elevation(10.dp),
+                backgroundColor = rally_blue_700
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.FilterAlt,
+                    contentDescription = "Filter"
+                )
+            }
+        }
+
+    }
+}
+
 
 @Composable
 fun PropertyListItem(

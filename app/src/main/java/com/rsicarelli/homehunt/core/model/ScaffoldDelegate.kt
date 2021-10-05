@@ -32,6 +32,10 @@ class ScaffoldDelegate(
         }
     }
 
+    fun navigate(uiEvent: UiEvent.Navigate) {
+        navController.navigate(uiEvent.route)
+    }
+
     fun navigateUp() {
         navController.navigateUp()
     }

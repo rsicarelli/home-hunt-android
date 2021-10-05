@@ -19,6 +19,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import com.rsicarelli.homehunt.presentation.components.AppScaffold
+import com.rsicarelli.homehunt.presentation.filter.FilterScreen
+import com.rsicarelli.homehunt.presentation.filter.FilterViewModel
 import com.rsicarelli.homehunt.presentation.home.HomeScreen
 import com.rsicarelli.homehunt.presentation.home.HomeViewModel
 import com.rsicarelli.homehunt.presentation.login.LoginScreen
@@ -85,6 +87,15 @@ class MainActivity : ComponentActivity() {
                                 composable(Screen.SplashScreen.route) {
                                     val viewModel: SplashViewModel = hiltViewModel()
                                     SplashScreen(
+                                        scaffoldDelegate = scaffoldDelegate,
+                                        state = viewModel.state.value,
+                                        events = viewModel::onEvent
+                                    )
+                                }
+
+                                composable(Screen.Filter.route) {
+                                    val viewModel: FilterViewModel = hiltViewModel()
+                                    FilterScreen(
                                         scaffoldDelegate = scaffoldDelegate,
                                         state = viewModel.state.value,
                                         events = viewModel::onEvent
