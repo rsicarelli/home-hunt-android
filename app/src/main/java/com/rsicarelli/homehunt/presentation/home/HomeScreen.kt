@@ -11,23 +11,22 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.icons.rounded.AspectRatio
+import androidx.compose.material.icons.rounded.Bathtub
+import androidx.compose.material.icons.rounded.Bed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import androidx.lifecycle.LifecycleEventObserver
 import coil.ImageLoader
 import coil.compose.rememberImagePainter
@@ -40,9 +39,7 @@ import com.rsicarelli.homehunt.presentation.components.IconText
 import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
-import kotlin.math.min
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     scaffoldDelegate: ScaffoldDelegate,
@@ -79,8 +76,7 @@ fun EmptyProperties(emptyResults: Boolean) {
     }
 }
 
-@ExperimentalFoundationApi
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun PropertyList(properties: List<Property>, imageLoader: ImageLoader) {
     if (properties.isEmpty()) return
