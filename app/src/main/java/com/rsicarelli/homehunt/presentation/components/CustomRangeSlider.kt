@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.RangeSlider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -32,8 +30,6 @@ fun CustomRangeSlider(
     value: ClosedFloatingPointRange<Float>,
     onValueChange: (ClosedFloatingPointRange<Float>) -> Unit
 ) {
-    var (changeValue, setChangeValue) = remember { mutableStateOf(value) }
-//    val (sliderValue, setSliderValue) = remember { mutableStateOf(value) }
     val drawPadding = with(LocalDensity.current) { SpaceMedium.toPx() }
     val lineHeightPx = with(LocalDensity.current) { SpaceSmall.toPx() }
     val textPaint = Paint().apply {
@@ -74,11 +70,8 @@ fun CustomRangeSlider(
             values = value,
             valueRange = values.values.first().toFloat()..values.values.last().toFloat(),
             steps = values.size.minus(2),
-            onValueChangeFinished = {
-                onValueChange(changeValue)
-            },
             onValueChange = {
-                setChangeValue(it)
+                onValueChange(it)
             })
     }
 }
