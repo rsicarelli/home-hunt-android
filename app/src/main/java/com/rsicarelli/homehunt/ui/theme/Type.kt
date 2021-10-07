@@ -9,7 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.rsicarelli.homehunt.R
 
-private val Eczar = FontFamily(
+val Eczar = FontFamily(
     Font(R.font.eczar_regular, FontWeight.W400),
     Font(R.font.eczar_medium, FontWeight.W500),
     Font(R.font.eczar_semi_bold, FontWeight.W600),
