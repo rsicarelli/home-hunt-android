@@ -8,8 +8,12 @@
         <entry key="app/src/main/res/drawable/asl_drawer.xml" value="0.2675925925925926" />
         <entry key="app/src/main/res/drawable/avd_drawer_close.xml" value="0.2675925925925926" />
         <entry key="app/src/main/res/drawable/avd_drawer_open.xml" value="0.2675925925925926" />
+        <entry key="app/src/main/res/drawable/ic_round_bathtub_24.xml" value="0.227" />
         <entry key="app/src/main/res/drawable/ic_round_close_24.xml" value="0.2675925925925926" />
+        <entry key="app/src/main/res/drawable/ic_round_fullscreen_exit_24.xml" value="0.227" />
         <entry key="app/src/main/res/drawable/ic_round_menu_24.xml" value="0.2675925925925926" />
+        <entry key="app/src/main/res/drawable/ic_round_single_bed_24.xml" value="0.227" />
+        <entry key="app/src/main/res/drawable/round_filter_alt_24.xml" value="0.227" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.190625" />
         <entry key="app/src/main/res/layout/test_view.xml" value="0.19322916666666667" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2708333333333333" />

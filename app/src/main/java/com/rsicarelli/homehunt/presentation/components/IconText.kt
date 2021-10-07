@@ -1,5 +1,7 @@
 package com.rsicarelli.homehunt.presentation.components
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.IntegerRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
@@ -9,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
@@ -18,14 +21,12 @@ fun IconText(
     text: String,
     textStyle: TextStyle = MaterialTheme.typography.body1,
     paddingLeadingIconEnd: Dp = SpaceSmallest,
-    leadingIcon: ImageVector? = null,
+    @DrawableRes leadingIcon: Int,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (leadingIcon != null) {
-            Icon(imageVector = leadingIcon, contentDescription = text)
-        }
+        Icon(painter = painterResource(id = leadingIcon), contentDescription = text)
         Text(
             modifier = Modifier.padding(start = paddingLeadingIconEnd),
             text = text,

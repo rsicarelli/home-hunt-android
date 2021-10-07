@@ -10,8 +10,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.FloatingActionButtonDefaults.elevation
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +30,6 @@ import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.components.IconText
 import com.rsicarelli.homehunt.presentation.components.OnLifecycleEvent
-import com.rsicarelli.homehunt.ui.icons.FilterAlt
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
@@ -185,7 +182,7 @@ fun FilterFab(scrollState: LazyListState, onClick: () -> Unit) {
                 backgroundColor = rally_blue_700
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.FilterAlt,
+                    painter = painterResource(id = R.drawable.ic_round_filter),
                     contentDescription = "Filter"
                 )
             }
@@ -273,11 +270,20 @@ fun PropertyListItem(
                         top = SpaceSmallest
                     )
             ) {
-                IconText(text = "${property.dormCount}", leadingIcon = Icons.Rounded.Build)
+                IconText(
+                    text = "${property.dormCount}",
+                    leadingIcon = R.drawable.ic_round_double_bed
+                )
                 Spacer(modifier = Modifier.width(SpaceMedium))
-                IconText(text = "${property.bathCount}", leadingIcon = Icons.Rounded.AccountBox)
+                IconText(
+                    text = "${property.bathCount}",
+                    leadingIcon = R.drawable.ic_round_shower
+                )
                 Spacer(modifier = Modifier.width(SpaceMedium))
-                IconText(text = "${property.surface}", leadingIcon = Icons.Rounded.AccountCircle)
+                IconText(
+                    text = "${property.surface}",
+                    leadingIcon = R.drawable.ic_round_ruler
+                )
             }
 
         }
