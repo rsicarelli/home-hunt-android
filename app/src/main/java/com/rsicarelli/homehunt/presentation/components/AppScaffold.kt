@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,8 +26,9 @@ import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 
 @Composable
 fun AppScaffold(
-    navController: NavController,
     modifier: Modifier = Modifier,
+    navController: NavController,
+    scaffoldDelegate: ScaffoldDelegate,
     showBottomBar: Boolean = true,
     state: ScaffoldState,
     bottomNavItems: List<BottomNavItem> = listOf(
@@ -71,19 +70,6 @@ fun AppScaffold(
         scaffoldState = state,
         modifier = modifier
     ) {
-
-        val context = LocalContext.current
-        val coroutineScope = rememberCoroutineScope()
-        val scaffoldDelegate by remember {
-            mutableStateOf(
-                ScaffoldDelegate(
-                    coroutineScope,
-                    state,
-                    navController,
-                    context
-                )
-            )
-        }
 
         content(scaffoldDelegate)
     }

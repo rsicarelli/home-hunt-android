@@ -4,6 +4,7 @@ buildscript {
         mavenCentral()
         google()
     }
+
     dependencies {
         classpath(Build.androidBuildTools)
         classpath(Build.kotlinGradlePlugin)

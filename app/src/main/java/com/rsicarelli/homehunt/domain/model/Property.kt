@@ -18,7 +18,7 @@ data class Property(
     val fullDescription: String?,
     val locationDescription: String?,
     val characteristics: List<String?>,
-    val photoGalleryUrls: List<String?>,
+    val photoGalleryUrls: List<String>,
     val lat: Double?,
     val lng: Double?,
     val pdfUrl: String?,
@@ -138,4 +138,4 @@ private fun Map<String, Any?>.asNullableInt(token: String, default: Int? = null)
 
 private fun Map<String, Any?>.asInt(token: String) = (this[token] as Long).toInt()
 
-private fun Map<String, Any?>.asStringList(token: String) = this[token] as List<String?>
+private fun Map<String, Any?>.asStringList(token: String) = this[token] as List<String>

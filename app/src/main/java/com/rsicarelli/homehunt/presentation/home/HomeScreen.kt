@@ -13,19 +13,15 @@ import androidx.compose.material.FloatingActionButtonDefaults.elevation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleEventObserver
 import coil.ImageLoader
 import coil.compose.rememberImagePainter
 import com.rsicarelli.homehunt.R
@@ -36,12 +32,14 @@ import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.components.IconText
 import com.rsicarelli.homehunt.presentation.components.OnLifecycleEvent
+import com.rsicarelli.homehunt.ui.icons.FilterAlt
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
 import com.rsicarelli.homehunt.ui.theme.rally_blue_700
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
     scaffoldDelegate: ScaffoldDelegate,
@@ -50,6 +48,17 @@ fun HomeScreen(
     imageLoader: ImageLoader
 ) {
 
+    HomeContent(events, state, imageLoader, scaffoldDelegate)
+
+}
+
+@Composable
+private fun HomeContent(
+    events: (HomeEvents) -> Unit,
+    state: HomeState,
+    imageLoader: ImageLoader,
+    scaffoldDelegate: ScaffoldDelegate
+) {
     OnLifecycleEvent { event ->
         events(HomeEvents.LifecycleEvent(event))
     }
@@ -111,7 +120,7 @@ fun PropertyList(
                     items(properties) { property ->
                         PropertyListItem(
                             property = property,
-                            onSelectProperty = { },
+                            onSelectProperty = { scaffoldDelegate.launchPhotoDetailsGallery(it) },
                             imageLoader = imageLoader,
                         )
                     }
@@ -189,7 +198,7 @@ fun FilterFab(scrollState: LazyListState, onClick: () -> Unit) {
 @Composable
 fun PropertyListItem(
     property: Property,
-    onSelectProperty: (String) -> Unit,
+    onSelectProperty: (Property) -> Unit,
     imageLoader: ImageLoader
 ) {
     Surface(
@@ -201,7 +210,7 @@ fun PropertyListItem(
             )
             .clip(RoundedCornerShape(10.dp))
             .clickable {
-                onSelectProperty(property.reference)
+                onSelectProperty(property)
             },
         color = MaterialTheme.colors.surface,
         elevation = 8.dp
@@ -264,11 +273,11 @@ fun PropertyListItem(
                         top = SpaceSmallest
                     )
             ) {
-                IconText(text = "${property.dormCount}", leadingIcon = Icons.Rounded.Bed)
+                IconText(text = "${property.dormCount}", leadingIcon = Icons.Rounded.Build)
                 Spacer(modifier = Modifier.width(SpaceMedium))
-                IconText(text = "${property.bathCount}", leadingIcon = Icons.Rounded.Bathtub)
+                IconText(text = "${property.bathCount}", leadingIcon = Icons.Rounded.AccountBox)
                 Spacer(modifier = Modifier.width(SpaceMedium))
-                IconText(text = "${property.surface}", leadingIcon = Icons.Rounded.AspectRatio)
+                IconText(text = "${property.surface}", leadingIcon = Icons.Rounded.AccountCircle)
             }
 
         }

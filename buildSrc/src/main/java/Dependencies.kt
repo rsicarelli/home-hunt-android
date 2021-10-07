@@ -10,6 +10,13 @@ object Dependencies {
 
     private const val materialVersion = "1.5.0-alpha04"
     const val material = "com.google.android.material:material:$materialVersion"
+
+    private const val touchImageViewVersion = "3.1.1"
+    const val touchImageView = "com.github.MikeOrtiz:TouchImageView:$touchImageViewVersion"
+
+    private const val heulerVersion = "5.0.0"
+    const val heuler = "app.futured.hauler:hauler:$heulerVersion"
+    const val heulerDataBinding = "app.futured.hauler:databinding:$heulerVersion"
 }
 
 object Plugins {
@@ -18,7 +25,7 @@ object Plugins {
 }
 
 object Build {
-    private const val androidBuildToolsVersion = "7.1.0-alpha03"
+    private const val androidBuildToolsVersion = "7.1.0-alpha13"
     const val androidBuildTools = "com.android.tools.build:gradle:$androidBuildToolsVersion"
 
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"

@@ -16,4 +16,6 @@ sealed class Screen(val route: String, val arguments: List<NamedNavArgument>) {
     )
 
     object Filter : Screen("filter_screen", emptyList())
+
+    object PropertyDetail : Screen("property_details_screen", emptyList())
 }

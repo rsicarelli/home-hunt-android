@@ -10,14 +10,19 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
+import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.presentation.components.AppScaffold
 import com.rsicarelli.homehunt.presentation.filter.FilterScreen
 import com.rsicarelli.homehunt.presentation.filter.FilterViewModel
@@ -25,6 +30,7 @@ import com.rsicarelli.homehunt.presentation.home.HomeScreen
 import com.rsicarelli.homehunt.presentation.home.HomeViewModel
 import com.rsicarelli.homehunt.presentation.login.LoginScreen
 import com.rsicarelli.homehunt.presentation.login.LoginViewModel
+import com.rsicarelli.homehunt.presentation.propertyDetail.PropertyDetailScreen
 import com.rsicarelli.homehunt.presentation.splash.SplashScreen
 import com.rsicarelli.homehunt.presentation.splash.SplashViewModel
 import com.rsicarelli.homehunt.ui.navigation.Screen
@@ -52,12 +58,25 @@ class MainActivity : ComponentActivity() {
                         val navController = rememberNavController()
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val scaffoldState = rememberScaffoldState()
+                        val context = LocalContext.current
+                        val coroutineScope = rememberCoroutineScope()
+                        val scaffoldDelegate by remember {
+                            mutableStateOf(
+                                ScaffoldDelegate(
+                                    coroutineScope,
+                                    scaffoldState,
+                                    navController,
+                                    context
+                                )
+                            )
+                        }
                         AppScaffold(
                             navController = navController,
                             showBottomBar = navBackStackEntry?.destination?.route in listOf(
                                 Screen.HomeScreen.route,
                             ),
                             state = scaffoldState,
+                            scaffoldDelegate = scaffoldDelegate,
                             modifier = Modifier.fillMaxSize(),
                         ) { scaffoldDelegate ->
                             NavHost(
@@ -71,6 +90,12 @@ class MainActivity : ComponentActivity() {
                                         scaffoldDelegate = scaffoldDelegate,
                                         state = viewModel.state.value,
                                         events = viewModel::onEvent
+                                    )
+                                }
+
+                                composable(Screen.PropertyDetail.route) {
+                                    PropertyDetailScreen(
+                                        imageLoader
                                     )
                                 }
 

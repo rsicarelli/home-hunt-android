@@ -1,5 +1,3 @@
-import org.gradle.internal.impldep.org.fusesource.jansi.AnsiRenderer.test
-
 plugins {
     id("com.android.application")
     id("kotlin-kapt")
@@ -38,6 +36,7 @@ android {
 
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 
     composeOptions {
@@ -46,11 +45,8 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.androidXCore)
-    implementation(Dependencies.androidXAppCompat)
-    implementation(Dependencies.coroutines)
-    implementation(Dependencies.material)
     implementation(Accompanist.animations)
+    implementation(Accompanist.pager)
 
     implementation(Coil.coil)
 
@@ -60,10 +56,17 @@ dependencies {
     implementation(Compose.tooling)
     implementation(Compose.navigation)
     implementation(Compose.hiltNavigation)
-    implementation(Compose.materialIconsExtended)
 
     androidTestImplementation(ComposeTest.uiTestJunit4)
     debugImplementation(ComposeTest.uiTestManifest)
+
+    implementation(Dependencies.androidXCore)
+    implementation(Dependencies.androidXAppCompat)
+    implementation(Dependencies.coroutines)
+    implementation(Dependencies.material)
+    implementation(Dependencies.touchImageView)
+    implementation(Dependencies.heuler)
+    implementation(Dependencies.heulerDataBinding)
 
     implementation(platform(Firebase.bom))
     implementation((Firebase.firestore))
