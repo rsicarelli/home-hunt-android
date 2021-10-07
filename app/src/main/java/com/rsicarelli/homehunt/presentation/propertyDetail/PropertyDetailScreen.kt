@@ -195,8 +195,8 @@ fun PropertyHeader(
 
             Text(
                 modifier = Modifier.constrainAs(price) {
-                    top.linkTo(title.bottom, margin = (-SpaceSmallest))
-                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(parent.end,  margin = (-SpaceMedium))
                     start.linkTo(barrier, SpaceMedium)
                 },
                 text = "${property.price.toCurrency()}",
