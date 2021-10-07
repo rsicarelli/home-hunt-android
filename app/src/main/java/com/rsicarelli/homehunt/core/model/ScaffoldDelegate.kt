@@ -6,10 +6,9 @@ import androidx.compose.material.SnackbarDuration
 import androidx.navigation.NavController
 import com.rsicarelli.homehunt.core.util.asString
 import com.rsicarelli.homehunt.domain.model.Property
-import com.rsicarelli.homehunt.presentation.gallery.launchPhotoGalleryActivity
+import com.rsicarelli.homehunt.presentation.resources.launchPhotoGalleryActivity
+import com.rsicarelli.homehunt.presentation.resources.launchVideoPlayerActivity
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class ScaffoldDelegate(
@@ -48,6 +47,9 @@ class ScaffoldDelegate(
 
     fun launchPhotoDetailsGallery(property: Property) {
         launchPhotoGalleryActivity(context, property)
+    }
 
+    fun launchVideoPlayer(videoUrl: String) {
+        launchVideoPlayerActivity(context, videoUrl)
     }
 }

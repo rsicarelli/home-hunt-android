@@ -1,26 +1,26 @@
 package com.rsicarelli.homehunt.presentation.propertyDetail
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
@@ -32,9 +32,11 @@ import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.util.toCurrency
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.IconText
-import com.rsicarelli.homehunt.presentation.login.LoginEvents
-import com.rsicarelli.homehunt.presentation.login.LoginState
-import com.rsicarelli.homehunt.ui.theme.*
+import com.rsicarelli.homehunt.ui.theme.SpaceMedium
+import com.rsicarelli.homehunt.ui.theme.SpaceSmall
+import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
+import com.rsicarelli.homehunt.ui.theme.rally_blue
+
 
 val defaultProperty = Property(
     reference = "a reference",
@@ -87,7 +89,8 @@ fun PropertyDetailScreen(
 @OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
 @Composable
 private fun PropertyDetailContent(
-    imageLoader: ImageLoader, scaffoldDelegate: ScaffoldDelegate,
+    imageLoader: ImageLoader,
+    scaffoldDelegate: ScaffoldDelegate,
     state: PropertyDetailState,
     events: (PropertyDetailEvents) -> Unit
 ) {
@@ -106,7 +109,9 @@ private fun PropertyDetailContent(
                     GalleryCarousel(property.photoGalleryUrls, imageLoader) {
                         scaffoldDelegate.launchPhotoDetailsGallery(property)
                     }
-                    Header(modifier, property)
+                    Header(modifier, property) {
+                        scaffoldDelegate.launchVideoPlayer(it)
+                    }
 
                 }
             }
@@ -117,7 +122,8 @@ private fun PropertyDetailContent(
 @Composable
 fun Header(
     modifier: Modifier,
-    property: Property
+    property: Property,
+    onPlayVideoClick: (String) -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
@@ -133,38 +139,88 @@ fun Header(
             leadingIcon = R.drawable.ic_round_location
         )
         Spacer(modifier = Modifier.height(SpaceSmall))
-        Row(modifier = Modifier.fillMaxWidth()) {
-            IconText(
-                text = property.dormCount.toString(),
-                textStyle = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primaryVariant),
-                leadingIcon = R.drawable.ic_round_double_bed
+
+        ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
+            val (specs, price, video, watchSubtitle) = createRefs()
+
+            Row(modifier = Modifier
+                .constrainAs(specs) {
+                    top.linkTo(parent.top)
+                }) {
+                IconText(
+                    text = property.dormCount.toString(),
+                    textStyle = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primaryVariant),
+                    leadingIcon = R.drawable.ic_round_double_bed
+                )
+                Spacer(modifier = Modifier.width(SpaceSmall))
+                IconText(
+                    text = property.bathCount.toString(),
+                    textStyle = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primaryVariant),
+                    leadingIcon = R.drawable.ic_round_shower
+                )
+                Spacer(modifier = Modifier.width(SpaceSmall))
+                IconText(
+                    text = "${property.surface} m²",
+                    textStyle = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primaryVariant),
+                    leadingIcon = R.drawable.ic_round_ruler
+                )
+            }
+
+            Text(
+                modifier = Modifier.constrainAs(price) {
+                    top.linkTo(specs.bottom, SpaceSmallest)
+                },
+                text = "${property.price.toCurrency()}",
+                style = MaterialTheme.typography.h5.copy(color = rally_blue),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
-            Spacer(modifier = Modifier.width(SpaceSmall))
-            IconText(
-                text = property.bathCount.toString(),
-                textStyle = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primaryVariant),
-                leadingIcon = R.drawable.ic_round_shower
-            )
-            Spacer(modifier = Modifier.width(SpaceSmall))
-            IconText(
-                text = "${property.surface} m²",
-                textStyle = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primaryVariant),
-                leadingIcon = R.drawable.ic_round_ruler
-            )
+
+            property.videoUrl?.let {
+                Column(
+                    modifier = Modifier
+                        .constrainAs(video) {
+                            end.linkTo(parent.end, margin = SpaceMedium)
+                        }
+                        .clickable {
+                            onPlayVideoClick(property.videoUrl)
+                        }
+                        .width(90.dp)
+                        .padding(SpaceSmallest),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .border(
+                                BorderStroke(
+                                    1.dp,
+                                    MaterialTheme.colors.primaryVariant
+                                ), RoundedCornerShape(16.dp)
+                            )
+                            .height(48.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_round_play),
+                            contentDescription = "content description"
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(SpaceSmallest))
+                    Text(
+                        text = stringResource(id = R.string.video_available),
+                        style = MaterialTheme.typography.caption
+                    )
+                }
+            }
         }
-        Spacer(modifier = Modifier.height(SpaceSmallest))
-        Text(
-            text = "${property.price.toCurrency()}",
-            style = MaterialTheme.typography.h5.copy(color = rally_blue),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+
     }
 }
 
 @OptIn(
     ExperimentalPagerApi::class, ExperimentalCoilApi::class,
-    androidx.compose.material.ExperimentalMaterialApi::class
+    ExperimentalMaterialApi::class
 )
 @Composable
 private fun GalleryCarousel(
@@ -172,24 +228,35 @@ private fun GalleryCarousel(
     imageLoader: ImageLoader,
     onClick: () -> Unit,
 ) {
-    HorizontalPager(count = photoGallery.size) { page ->
-        Surface(onClick = onClick) {
-            val painter = rememberImagePainter(
-                photoGallery[page],
-                imageLoader = imageLoader,
-                builder = {
-                    placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
-                }
-            )
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                painter = painter,
-                contentDescription = null,
-                contentScale = ContentScale.FillWidth,
-            )
-        }
+    HorizontalPager(photoGallery.size) { page ->
+        PhotoItem(onClick, photoGallery, page, imageLoader)
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class, ExperimentalCoilApi::class)
+@Composable
+private fun PhotoItem(
+    onClick: () -> Unit,
+    photoGallery: List<String>,
+    page: Int,
+    imageLoader: ImageLoader
+) {
+    Surface(onClick = onClick) {
+        val painter = rememberImagePainter(
+            photoGallery[page],
+            imageLoader = imageLoader,
+            builder = {
+                placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
+            }
+        )
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp),
+            painter = painter,
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth,
+        )
     }
 }
 

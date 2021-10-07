@@ -24,8 +24,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.gallery.PhotoGalleryActivity"
-            android:theme="@style/Theme.HomeHunt" />
+            android:name=".presentation.resources.PhotoGalleryActivity"
+            android:theme="@style/Theme.HomeHunt.NoActionBar" />
+
+        <activity
+            android:name=".presentation.resources.VideoPlayerActivity"
+            android:theme="@style/Theme.HomeHunt.NoActionBar" />
     </application>
 
 </manifest>

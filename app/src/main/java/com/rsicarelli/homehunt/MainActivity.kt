@@ -93,8 +93,8 @@ class MainActivity : ComponentActivity() {
                                 }
 
                                 composable(
-                                    Screen.PropertyDetail.route + "/{referenceId}",
-                                    arguments = Screen.PropertyDetail.arguments
+                                    Screen.PropertyDetailScreen.route + "/{referenceId}",
+                                    arguments = Screen.PropertyDetailScreen.arguments
                                 ) {
                                     PropertyDetailScreen(
                                         imageLoader,

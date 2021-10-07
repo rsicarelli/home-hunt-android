@@ -1,4 +1,4 @@
-package com.rsicarelli.homehunt.presentation.gallery
+package com.rsicarelli.homehunt.presentation.resources
 
 import android.annotation.SuppressLint
 import android.content.Context

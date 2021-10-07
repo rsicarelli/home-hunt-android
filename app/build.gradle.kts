@@ -56,6 +56,7 @@ dependencies {
     implementation(Compose.tooling)
     implementation(Compose.navigation)
     implementation(Compose.hiltNavigation)
+    implementation(Compose.constraintLayout)
 
     androidTestImplementation(ComposeTest.uiTestJunit4)
     debugImplementation(ComposeTest.uiTestManifest)

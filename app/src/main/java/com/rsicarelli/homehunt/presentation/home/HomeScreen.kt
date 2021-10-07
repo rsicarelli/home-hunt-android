@@ -118,7 +118,7 @@ fun PropertyList(
                     items(properties) { property ->
                         PropertyListItem(
                             property = property,
-                            onSelectProperty = { scaffoldDelegate.navigate("${Screen.PropertyDetail.route}/${it.reference}") },
+                            onSelectProperty = { scaffoldDelegate.navigate("${Screen.PropertyDetailScreen.route}/${"AV1803021-1"}") },
                             imageLoader = imageLoader,
                         )
                     }
