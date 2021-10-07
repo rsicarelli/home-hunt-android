@@ -18,17 +18,19 @@ import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
 
 @Composable
 fun IconText(
+    modifier: Modifier = Modifier,
     text: String,
     textStyle: TextStyle = MaterialTheme.typography.body1,
     paddingLeadingIconEnd: Dp = SpaceSmallest,
     @DrawableRes leadingIcon: Int,
 ) {
     Row(
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(painter = painterResource(id = leadingIcon), contentDescription = text)
         Text(
-            modifier = Modifier.padding(start = paddingLeadingIconEnd),
+            modifier = modifier.padding(start = paddingLeadingIconEnd),
             text = text,
             style = textStyle
         )

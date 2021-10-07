@@ -9,4 +9,5 @@
     <string name="dorm_count">Dorms</string>
     <string name="bath_count">Baths</string>
     <string name="video_available">Watch the video</string>
+    <string name="about_this_property">About this property</string>
 </resources>

@@ -1,8 +1,5 @@
 package com.rsicarelli.homehunt.presentation.propertyDetail
 
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,15 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
@@ -31,6 +25,7 @@ import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.util.toCurrency
 import com.rsicarelli.homehunt.domain.model.Property
+import com.rsicarelli.homehunt.presentation.components.ExpandableText
 import com.rsicarelli.homehunt.presentation.components.IconText
 import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
@@ -96,8 +91,7 @@ private fun PropertyDetailContent(
 ) {
     state.property?.let { property ->
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             item {
                 Column(
@@ -109,10 +103,10 @@ private fun PropertyDetailContent(
                     GalleryCarousel(property.photoGalleryUrls, imageLoader) {
                         scaffoldDelegate.launchPhotoDetailsGallery(property)
                     }
-                    Header(modifier, property) {
+                    PropertyHeader(modifier, property) {
                         scaffoldDelegate.launchVideoPlayer(it)
                     }
-
+                    PropertyDetails(modifier, property)
                 }
             }
         }
@@ -120,32 +114,51 @@ private fun PropertyDetailContent(
 }
 
 @Composable
-fun Header(
+fun PropertyDetails(modifier: Modifier, property: Property) {
+    property.fullDescription?.let {
+        Column(modifier) {
+            Text(
+                text = stringResource(id = R.string.about_this_property),
+                style = MaterialTheme.typography.h6
+            )
+            Spacer(modifier = Modifier.height(SpaceSmall))
+            ExpandableText(text = property.fullDescription)
+        }
+    }
+}
+
+@Composable
+fun PropertyHeader(
     modifier: Modifier,
     property: Property,
     onPlayVideoClick: (String) -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = property.title,
-            style = MaterialTheme.typography.h6.copy(lineHeight = 24.sp),
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
-        Spacer(modifier = Modifier.height(SpaceSmallest))
-        IconText(
-            text = property.location,
-            textStyle = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primaryVariant),
-            leadingIcon = R.drawable.ic_round_location
-        )
-        Spacer(modifier = Modifier.height(SpaceSmall))
-
         ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
-            val (specs, price, video, watchSubtitle) = createRefs()
+            val (specs, price, video, title, location) = createRefs()
+
+            Text(
+                modifier = Modifier.constrainAs(title) {
+                    top.linkTo(parent.top)
+                },
+                text = property.title,
+                style = MaterialTheme.typography.h6.copy(lineHeight = 24.sp),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            IconText(
+                modifier = Modifier.constrainAs(location) {
+                    top.linkTo(title.bottom, SpaceSmallest)
+                },
+                text = property.location,
+                textStyle = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primaryVariant),
+                leadingIcon = R.drawable.ic_round_location,
+            )
 
             Row(modifier = Modifier
                 .constrainAs(specs) {
-                    top.linkTo(parent.top)
+                    top.linkTo(location.bottom, SpaceSmallest)
                 }) {
                 IconText(
                     text = property.dormCount.toString(),
@@ -180,6 +193,7 @@ fun Header(
                 Column(
                     modifier = Modifier
                         .constrainAs(video) {
+                            top.linkTo(title.bottom, SpaceSmallest)
                             end.linkTo(parent.end, margin = SpaceMedium)
                         }
                         .clickable {
@@ -209,7 +223,7 @@ fun Header(
                     Spacer(modifier = Modifier.height(SpaceSmallest))
                     Text(
                         text = stringResource(id = R.string.video_available),
-                        style = MaterialTheme.typography.caption
+                        style = MaterialTheme.typography.body2
                     )
                 }
             }
@@ -218,10 +232,7 @@ fun Header(
     }
 }
 
-@OptIn(
-    ExperimentalPagerApi::class, ExperimentalCoilApi::class,
-    ExperimentalMaterialApi::class
-)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun GalleryCarousel(
     photoGallery: List<String>,

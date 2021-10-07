@@ -66,5 +66,5 @@ val rally_purple_50 = Color(0xFFD5BCF5)
 
 val rally_blue = Color(0xFF72DEFF)
 val rally_blue_700 = Color(0xFF0C68FA)
-val rally_blue_200 = Color(0xFF63D6FE)
+val Blue_200 = Color(0xFF63D6FE)
 val rally_blue_100 = Color(0xFFA4EFFF)
