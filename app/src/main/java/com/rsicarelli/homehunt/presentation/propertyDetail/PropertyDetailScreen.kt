@@ -3,11 +3,15 @@ package com.rsicarelli.homehunt.presentation.propertyDetail
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,10 +31,7 @@ import com.rsicarelli.homehunt.core.util.toCurrency
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.ExpandableText
 import com.rsicarelli.homehunt.presentation.components.IconText
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
-import com.rsicarelli.homehunt.ui.theme.SpaceSmall
-import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
-import com.rsicarelli.homehunt.ui.theme.rally_blue
+import com.rsicarelli.homehunt.ui.theme.*
 
 
 val defaultProperty = Property(
@@ -81,7 +82,10 @@ fun PropertyDetailScreen(
     PropertyDetailContent(imageLoader, scaffoldDelegate, viewModel.state.value, viewModel::onEvent)
 }
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
+@OptIn(
+    ExperimentalPagerApi::class, ExperimentalCoilApi::class,
+    ExperimentalMaterialApi::class
+)
 @Composable
 private fun PropertyDetailContent(
     imageLoader: ImageLoader,
@@ -94,19 +98,28 @@ private fun PropertyDetailContent(
             modifier = Modifier.fillMaxSize()
         ) {
             item {
+                GalleryCarousel(
+                    photoGallery = property.photoGalleryUrls,
+                    imageLoader = imageLoader,
+                    hasVideo = property.videoUrl != null,
+                    onOpenGallery = {
+                        scaffoldDelegate.launchPhotoDetailsGallery(property)
+                    }, onPlayVideo = {
+                        scaffoldDelegate.launchVideoPlayer(property.videoUrl!!)
+                    }
+                )
+            }
+            item {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colors.background)
+                        .padding(SpaceMedium)
                 ) {
-                    val modifier = Modifier.padding(SpaceMedium)
-                    GalleryCarousel(property.photoGalleryUrls, imageLoader) {
-                        scaffoldDelegate.launchPhotoDetailsGallery(property)
-                    }
-                    PropertyHeader(modifier, property) {
+                    PropertyHeader(property) {
                         scaffoldDelegate.launchVideoPlayer(it)
                     }
-                    PropertyDetails(modifier, property)
+                    PropertyDetails(property)
                 }
             }
         }
@@ -114,9 +127,10 @@ private fun PropertyDetailContent(
 }
 
 @Composable
-fun PropertyDetails(modifier: Modifier, property: Property) {
+fun PropertyDetails(property: Property) {
     property.fullDescription?.let {
-        Column(modifier) {
+        Column(Modifier.fillMaxWidth()) {
+            Spacer(modifier = Modifier.height(SpaceMedium))
             Text(
                 text = stringResource(id = R.string.about_this_property),
                 style = MaterialTheme.typography.h6
@@ -129,13 +143,13 @@ fun PropertyDetails(modifier: Modifier, property: Property) {
 
 @Composable
 fun PropertyHeader(
-    modifier: Modifier,
     property: Property,
     onPlayVideoClick: (String) -> Unit
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
-            val (specs, price, video, title, location) = createRefs()
+            val (specs, price, title, location) = createRefs()
+            val barrier = createEndBarrier(location, specs)
 
             Text(
                 modifier = Modifier.constrainAs(title) {
@@ -181,93 +195,93 @@ fun PropertyHeader(
 
             Text(
                 modifier = Modifier.constrainAs(price) {
-                    top.linkTo(specs.bottom, SpaceSmallest)
+                    top.linkTo(title.bottom, margin = (-SpaceSmallest))
+                    end.linkTo(parent.end)
+                    start.linkTo(barrier, SpaceMedium)
                 },
                 text = "${property.price.toCurrency()}",
-                style = MaterialTheme.typography.h5.copy(color = rally_blue),
+                style = MaterialTheme.typography.h4.copy(color = rally_blue),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-
-            property.videoUrl?.let {
-                Column(
-                    modifier = Modifier
-                        .constrainAs(video) {
-                            top.linkTo(title.bottom, SpaceSmallest)
-                            end.linkTo(parent.end, margin = SpaceMedium)
-                        }
-                        .clickable {
-                            onPlayVideoClick(property.videoUrl)
-                        }
-                        .width(90.dp)
-                        .padding(SpaceSmallest),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .border(
-                                BorderStroke(
-                                    1.dp,
-                                    MaterialTheme.colors.primaryVariant
-                                ), RoundedCornerShape(16.dp)
-                            )
-                            .height(48.dp)
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_round_play),
-                            contentDescription = "content description"
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(SpaceSmallest))
-                    Text(
-                        text = stringResource(id = R.string.video_available),
-                        style = MaterialTheme.typography.body2
-                    )
-                }
-            }
         }
 
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@ExperimentalMaterialApi
+@OptIn(ExperimentalPagerApi::class, coil.annotation.ExperimentalCoilApi::class)
 @Composable
 private fun GalleryCarousel(
     photoGallery: List<String>,
     imageLoader: ImageLoader,
-    onClick: () -> Unit,
+    hasVideo: Boolean,
+    onOpenGallery: () -> Unit,
+    onPlayVideo: () -> Unit,
 ) {
     HorizontalPager(photoGallery.size) { page ->
-        PhotoItem(onClick, photoGallery, page, imageLoader)
-    }
-}
+        Box(
+            modifier = Modifier.clickable { onOpenGallery() },
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            val painter = rememberImagePainter(
+                photoGallery[page],
+                imageLoader = imageLoader,
+                builder = {
+                    placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
+                }
+            )
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                painter = painter,
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+            )
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalCoilApi::class)
-@Composable
-private fun PhotoItem(
-    onClick: () -> Unit,
-    photoGallery: List<String>,
-    page: Int,
-    imageLoader: ImageLoader
-) {
-    Surface(onClick = onClick) {
-        val painter = rememberImagePainter(
-            photoGallery[page],
-            imageLoader = imageLoader,
-            builder = {
-                placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
+            Row(
+                modifier = Modifier
+                    .padding(SpaceSmall)
+            ) {
+                if (page == 0 && hasVideo) {
+                    OutlinedButton(
+                        modifier = Modifier.height(36.dp),
+                        onClick = onPlayVideo,
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            backgroundColor = MaterialTheme.colors.background.copy(alpha = 0.8f),
+                        ),
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_round_play),
+                            contentDescription = stringResource(id = R.string.video_available)
+                        )
+                        Text(
+                            text = stringResource(id = R.string.video_available)
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(SpaceSmall))
+                Box(
+                    modifier = Modifier
+                        .height(36.dp)
+                        .background(
+                            MaterialTheme.colors.background.copy(alpha = 0.8f),
+                            RoundedCornerShape(10.dp)
+                        )
+                        .padding(start = SpaceMedium, end = SpaceMedium),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        style = MaterialTheme.typography.button,
+                        text = "${currentPage + 1} of ${photoGallery.size}"
+                    )
+                }
+
             }
-        )
-        Image(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp),
-            painter = painter,
-            contentDescription = null,
-            contentScale = ContentScale.FillWidth,
-        )
+
+        }
     }
 }
 
