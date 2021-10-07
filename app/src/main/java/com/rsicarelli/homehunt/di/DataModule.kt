@@ -3,8 +3,8 @@ package com.rsicarelli.homehunt.di
 import android.content.SharedPreferences
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.rsicarelli.homehunt.data.FirestoreDataSource
-import com.rsicarelli.homehunt.data.FirestoreDataSourceImpl
+import com.rsicarelli.homehunt.data.datasource.FirestoreDataSource
+import com.rsicarelli.homehunt.data.datasource.FirestoreDataSourceImpl
 import com.rsicarelli.homehunt.data.datasource.FilterLocalDataSource
 import com.rsicarelli.homehunt.data.datasource.FilterLocalDataSourceImpl
 import com.rsicarelli.homehunt.data.repository.PropertyRepositoryImpl

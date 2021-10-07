@@ -5,4 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface PropertyRepository {
     suspend fun getAll(): Flow<List<Property>>
+    suspend fun getBy(referenceId: String): Flow<Property>
 }

@@ -2,32 +2,30 @@ package com.rsicarelli.homehunt.presentation.propertyDetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.pager.HorizontalPager
+import com.rsicarelli.homehunt.R
+import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.domain.model.Property
-import com.rsicarelli.homehunt.presentation.propertyDetail.components.Pager
+import com.rsicarelli.homehunt.presentation.login.LoginEvents
+import com.rsicarelli.homehunt.presentation.login.LoginState
 
 val defaultProperty = Property(
     reference = "a reference",
@@ -69,188 +67,65 @@ val defaultProperty = Property(
 )
 
 @Composable
-fun PropertyDetailScreen(imageLoader: ImageLoader) {
-    PropertyDetailContent(imageLoader)
-}
-
-@OptIn(ExperimentalPagerApi::class)
-@Composable
-private fun PropertyDetailContent(imageLoader: ImageLoader) {
-    val pagerState = rememberPagerState()
-
-    val (lastPage, setLastPage) = remember { mutableStateOf(0) }
-
-    Pager(
-        items = defaultProperty.photoGalleryUrls,
-        modifier = Modifier
-            .fillMaxSize()
-        ,
-        itemSpacing = 0.dp,
-        contentFactory = { item ->
-            Box(modifier = Modifier.fillMaxSize()){
-                val painter = rememberImagePainter(
-                    item,
-                    imageLoader = imageLoader,
-                    builder = {
-                        placeholder(if (isSystemInDarkTheme()) com.rsicarelli.homehunt.R.drawable.black_background else com.rsicarelli.homehunt.R.drawable.white_background)
-                    }
-                )
-
-                ZoomableImage2(
-                    painter = painter,
-                    isRotation = false,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-            }
-
-        }
-    )
-
-}
-
-
-@Composable
-fun ZoomableImage2(
-    modifier: Modifier = Modifier,
-    painter: Painter,
-    maxScale: Float = .30f,
-    minScale: Float = 3f,
-    contentScale: ContentScale = ContentScale.Fit,
-    isRotation: Boolean = false,
-    isZoomable: Boolean = true
+fun PropertyDetailScreen(
+    imageLoader: ImageLoader,
+    scaffoldDelegate: ScaffoldDelegate,
+    viewModel: PropertyDetailViewModel = hiltViewModel()
 ) {
-    val scale = remember { mutableStateOf(1f) }
-    val rotationState = remember { mutableStateOf(1f) }
-    val offsetX = remember { mutableStateOf(1f) }
-    val offsetY = remember { mutableStateOf(1f) }
+    PropertyDetailContent(imageLoader, scaffoldDelegate, viewModel.state.value, viewModel::onEvent)
+}
 
-    Box(
-        modifier = Modifier
-            .clip(RectangleShape)
-            .background(Color.Transparent)
-            .pointerInput(Unit) {
-                if (isZoomable) {
-                    forEachGesture {
-                        awaitPointerEventScope {
-                            awaitFirstDown()
-                            do {
-                                val event = awaitPointerEvent()
-                                scale.value *= event.calculateZoom()
-                                if (scale.value > 1) {
-                                    val offset = event.calculatePan()
-                                    offsetX.value += offset.x
-                                    offsetY.value += offset.y
-                                    rotationState.value += event.calculateRotation()
-                                } else {
-                                    scale.value = 1f
-                                    offsetX.value = 1f
-                                    offsetY.value = 1f
-                                }
-                            } while (event.changes.any { it.pressed })
-                        }
+@OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
+@Composable
+private fun PropertyDetailContent(
+    imageLoader: ImageLoader, scaffoldDelegate: ScaffoldDelegate,
+    state: PropertyDetailState,
+    events: (PropertyDetailEvents) -> Unit
+) {
+    state.property?.let { property ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colors.background)
+                ) {
+                    GalleryCarousel(property.photoGalleryUrls, imageLoader) {
+                        scaffoldDelegate.launchPhotoDetailsGallery(property)
                     }
                 }
             }
+        }
+    }
+}
 
-    ) {
+@OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
+@Composable
+private fun GalleryCarousel(
+    photoGallery: List<String>,
+    imageLoader: ImageLoader,
+    onClick: () -> Unit,
+) {
+// Display 10 items
+    HorizontalPager(count = photoGallery.size) { page ->
+        val painter = rememberImagePainter(
+            photoGallery[page],
+            imageLoader = imageLoader,
+            builder = {
+                placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
+            }
+        )
         Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp),
             painter = painter,
             contentDescription = null,
-            contentScale = contentScale,
-            modifier = modifier
-                .align(Alignment.Center)
-                .graphicsLayer {
-                    if (isZoomable) {
-                        scaleX = maxOf(maxScale, minOf(minScale, scale.value))
-                        scaleY = maxOf(maxScale, minOf(minScale, scale.value))
-                        if (isRotation) {
-                            rotationZ = rotationState.value
-                        }
-                        translationX = offsetX.value
-                        translationY = offsetY.value
-                    }
-                }
+            contentScale = ContentScale.FillWidth,
         )
     }
 }
 
-/**
- * Creates a [PagerSnapState] that is remembered across compositions.
- */
-@Composable
-fun rememberPagerSnapState(): PagerSnapState {
-    return remember {
-        PagerSnapState()
-    }
-}
-
-/**
- * This class maintains the state of the pager snap.
- */
-class PagerSnapState {
-
-    val isSwiping = mutableStateOf(false)
-
-    val firstVisibleItemIndex = mutableStateOf(0)
-
-    val offsetInfo = mutableStateOf(0)
-
-    internal fun updateScrollToItemPosition(itemPos: LazyListItemInfo?) {
-        if (itemPos != null) {
-            this.offsetInfo.value = itemPos.offset
-            this.firstVisibleItemIndex.value = itemPos.index
-        }
-    }
-
-    internal suspend fun scrollItemToSnapPosition(listState: LazyListState, position: Int) {
-        listState.animateScrollToItem(position)
-    }
-}
-
-/**
- * [PagerSnapNestedScrollConnection] reacts to the scroll left to right and vice-versa.
- */
-class PagerSnapNestedScrollConnection(
-    private val state: PagerSnapState,
-    private val listState: LazyListState,
-    private val scrollTo: () -> Unit
-) : NestedScrollConnection {
-
-    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset =
-        when (source) {
-            NestedScrollSource.Drag -> onScroll()
-            else -> Offset.Zero
-        }
-
-    override fun onPostScroll(
-        consumed: Offset,
-        available: Offset,
-        source: NestedScrollSource
-    ): Offset = when (source) {
-        NestedScrollSource.Drag -> onScroll()
-        else -> Offset.Zero
-    }
-
-    private fun onScroll(): Offset {
-        state.isSwiping.value = true
-        return Offset.Zero
-    }
-
-    override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity = when {
-        state.isSwiping.value -> {
-
-            state.updateScrollToItemPosition(listState.layoutInfo.visibleItemsInfo.firstOrNull())
-
-            scrollTo()
-
-            Velocity.Zero
-        }
-        else -> {
-            Velocity.Zero
-        }
-    }.also {
-        state.isSwiping.value = false
-    }
-
-}

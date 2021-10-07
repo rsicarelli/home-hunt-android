@@ -1,4 +1,9 @@
 package com.rsicarelli.homehunt.presentation.propertyDetail
 
-class PropertyDetailState {
-}
+import com.rsicarelli.homehunt.core.model.ProgressBarState
+import com.rsicarelli.homehunt.domain.model.Property
+
+data class PropertyDetailState(
+    val property: Property? = null,
+    val progressBarState: ProgressBarState = ProgressBarState.Idle
+)

@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
@@ -117,7 +118,7 @@ fun PropertyList(
                     items(properties) { property ->
                         PropertyListItem(
                             property = property,
-                            onSelectProperty = { scaffoldDelegate.launchPhotoDetailsGallery(it) },
+                            onSelectProperty = { scaffoldDelegate.navigate("${Screen.PropertyDetail.route}/${it.reference}") },
                             imageLoader = imageLoader,
                         )
                     }
@@ -192,6 +193,7 @@ fun FilterFab(scrollState: LazyListState, onClick: () -> Unit) {
 }
 
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun PropertyListItem(
     property: Property,

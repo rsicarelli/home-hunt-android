@@ -28,7 +28,6 @@ import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 fun AppScaffold(
     modifier: Modifier = Modifier,
     navController: NavController,
-    scaffoldDelegate: ScaffoldDelegate,
     showBottomBar: Boolean = true,
     state: ScaffoldState,
     bottomNavItems: List<BottomNavItem> = listOf(
@@ -38,7 +37,7 @@ fun AppScaffold(
             contentDescription = "Home"
         )
     ),
-    content: @Composable (ScaffoldDelegate) -> Unit
+    content: @Composable () -> Unit
 ) {
     Scaffold(
         bottomBar = {
@@ -70,8 +69,7 @@ fun AppScaffold(
         scaffoldState = state,
         modifier = modifier
     ) {
-
-        content(scaffoldDelegate)
+        content()
     }
 }
 

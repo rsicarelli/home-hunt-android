@@ -38,6 +38,10 @@ class ScaffoldDelegate(
         navController.navigate(uiEvent.route)
     }
 
+    fun navigate(route: String) {
+        navController.navigate(route)
+    }
+
     fun navigateUp() {
         navController.navigateUp()
     }

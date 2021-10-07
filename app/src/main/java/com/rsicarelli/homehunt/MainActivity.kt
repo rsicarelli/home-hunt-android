@@ -76,9 +76,8 @@ class MainActivity : ComponentActivity() {
                                 Screen.HomeScreen.route,
                             ),
                             state = scaffoldState,
-                            scaffoldDelegate = scaffoldDelegate,
                             modifier = Modifier.fillMaxSize(),
-                        ) { scaffoldDelegate ->
+                        ) {
                             NavHost(
                                 navController = navController,
                                 startDestination = Screen.HomeScreen.route, //Test only
@@ -93,9 +92,13 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
 
-                                composable(Screen.PropertyDetail.route) {
+                                composable(
+                                    Screen.PropertyDetail.route + "/{referenceId}",
+                                    arguments = Screen.PropertyDetail.arguments
+                                ) {
                                     PropertyDetailScreen(
-                                        imageLoader
+                                        imageLoader,
+                                        scaffoldDelegate
                                     )
                                 }
 
