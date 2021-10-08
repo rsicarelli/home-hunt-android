@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,8 +33,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.util.toCurrency
@@ -63,7 +66,8 @@ private fun PropertyDetailContent(
 ) {
     state.property?.let { property ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
         ) {
             item {
                 GalleryCarousel(
@@ -93,6 +97,8 @@ private fun PropertyDetailContent(
                     titleRes = R.string.about_this_property,
                     content = property.fullDescription
                 )
+            }
+            item {
                 PropertyDetails(
                     titleRes = R.string.location_description,
                     content = property.locationDescription
@@ -349,10 +355,10 @@ private fun GalleryCarousel(
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp),
+                    .height(256.dp),
                 painter = painter,
                 contentDescription = null,
-                contentScale = ContentScale.FillWidth,
+                contentScale = ContentScale.Crop,
             )
 
             Row(

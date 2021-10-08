@@ -13,21 +13,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HomeHunt">
 
-
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="${GOOGLE_MAPS_API_KEY}"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${GOOGLE_MAPS_API_KEY}" />
 
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.HomeHunt.NoActionBar">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".presentation.resources.PhotoGalleryActivity"
             android:theme="@style/Theme.HomeHunt.NoActionBar" />

@@ -17,9 +17,11 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rsicarelli.homehunt.ui.navigation.BottomNavItem
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HintGray
+import com.rsicarelli.homehunt.ui.theme.Secondary
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 
 @Composable
@@ -37,6 +39,15 @@ fun AppScaffold(
     ),
     content: @Composable () -> Unit
 ) {
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = MaterialTheme.colors.isLight
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            Secondary.copy(alpha = 0.4f),
+            darkIcons = useDarkIcons
+        )
+    }
+
     Scaffold(
         bottomBar = {
             if (showBottomBar) {

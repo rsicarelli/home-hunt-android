@@ -11,9 +11,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.FloatingActionButtonDefaults.elevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -24,6 +26,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.google.accompanist.insets.statusBarsPadding
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
@@ -33,10 +37,7 @@ import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProg
 import com.rsicarelli.homehunt.presentation.components.IconText
 import com.rsicarelli.homehunt.presentation.components.OnLifecycleEvent
 import com.rsicarelli.homehunt.ui.navigation.Screen
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
-import com.rsicarelli.homehunt.ui.theme.SpaceSmall
-import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
-import com.rsicarelli.homehunt.ui.theme.rally_blue_700
+import com.rsicarelli.homehunt.ui.theme.*
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -101,6 +102,7 @@ fun PropertyList(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .statusBarsPadding()
             .padding(SpaceMedium)
     ) {
         Box(

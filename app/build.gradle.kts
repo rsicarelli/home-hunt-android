@@ -48,6 +48,8 @@ android {
 dependencies {
     implementation(Accompanist.animations)
     implementation(Accompanist.pager)
+    implementation(Accompanist.systemUiController)
+    implementation(Accompanist.insets)
 
     implementation(Coil.coil)
 

@@ -9,19 +9,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.presentation.components.AppScaffold
 import com.rsicarelli.homehunt.presentation.filter.FilterScreen
@@ -35,6 +36,7 @@ import com.rsicarelli.homehunt.presentation.splash.SplashScreen
 import com.rsicarelli.homehunt.presentation.splash.SplashViewModel
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
+import com.rsicarelli.homehunt.ui.theme.Secondary
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -46,11 +48,17 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var imageLoader: ImageLoader
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Turn off the decor fitting system windows, which means we need to through handling
+        // insets
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             HomeHuntTheme {
-                BoxWithConstraints {
+                ProvideWindowInsets {
                     Surface(
                         color = MaterialTheme.colors.background,
                         modifier = Modifier.fillMaxSize()
