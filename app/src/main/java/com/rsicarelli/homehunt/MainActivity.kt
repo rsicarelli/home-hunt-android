@@ -25,6 +25,7 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.presentation.components.AppScaffold
+import com.rsicarelli.homehunt.presentation.favourites.FavouritesScreen
 import com.rsicarelli.homehunt.presentation.filter.FilterScreen
 import com.rsicarelli.homehunt.presentation.filter.FilterViewModel
 import com.rsicarelli.homehunt.presentation.home.HomeScreen
@@ -82,6 +83,7 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             showBottomBar = navBackStackEntry?.destination?.route in listOf(
                                 Screen.Home.route,
+                                Screen.Favourites.route
                             ),
                             state = scaffoldState,
                             modifier = Modifier.fillMaxSize(),
@@ -123,6 +125,12 @@ class MainActivity : ComponentActivity() {
                                 composable(Screen.Filter.route) {
                                     FilterScreen(
                                         scaffoldDelegate = scaffoldDelegate,
+                                    )
+                                }
+                                composable(Screen.Favourites.route) {
+                                    FavouritesScreen(
+                                        scaffoldDelegate = scaffoldDelegate,
+                                        imageLoader = imageLoader
                                     )
                                 }
                             }

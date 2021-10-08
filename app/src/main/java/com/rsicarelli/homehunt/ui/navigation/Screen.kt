@@ -9,6 +9,7 @@ sealed class Screen(val route: String, val arguments: List<NamedNavArgument> = e
     object Login : Screen("login", arguments = emptyList())
 
     object Home : Screen(route = "home")
+    object Favourites : Screen(route = "favourites")
     object Filter : Screen("filter", emptyList())
 
     object PropertyDetail :

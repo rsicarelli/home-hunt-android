@@ -17,7 +17,6 @@ class GetAllPropertiesUseCase(
                     emit(DataState.Loading(ProgressBarState.Loading))
                 }
                 .collect {
-                    delay(200)
                     emit(DataState.Data(it))
                 }
         }

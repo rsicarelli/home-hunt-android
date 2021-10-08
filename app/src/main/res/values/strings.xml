@@ -16,4 +16,5 @@
     <string name="favourite">Favourite</string>
     <string name="unfavourite">Unfavourite</string>
     <string name="favourites">favourites</string>
+    <string name="home">Home</string>
 </resources>

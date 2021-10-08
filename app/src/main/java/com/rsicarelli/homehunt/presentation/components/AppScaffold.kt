@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,10 +15,15 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.ui.navigation.BottomNavItem
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HintGray
@@ -34,7 +40,12 @@ fun AppScaffold(
         BottomNavItem(
             route = Screen.Home.route,
             icon = Icons.Rounded.Home,
-            contentDescription = "Home"
+            contentDescription = stringResource(id = R.string.home)
+        ),
+        BottomNavItem(
+            route = Screen.Favourites.route,
+            icon = Icons.Rounded.Favorite,
+            contentDescription = stringResource(id = R.string.favourites)
         )
     ),
     content: @Composable () -> Unit
@@ -52,7 +63,7 @@ fun AppScaffold(
         bottomBar = {
             if (showBottomBar) {
                 BottomAppBar(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().systemBarsPadding(),
                     backgroundColor = MaterialTheme.colors.surface,
                     cutoutShape = CircleShape,
                     elevation = 5.dp
@@ -61,6 +72,7 @@ fun AppScaffold(
                         bottomNavItems.forEachIndexed { _, bottomNavItem ->
                             AppBottomNavItem(
                                 icon = bottomNavItem.icon,
+                                iconPainter = bottomNavItem.painter,
                                 contentDescription = bottomNavItem.contentDescription,
                                 selected = bottomNavItem.route == navController.currentDestination?.route,
                                 alertCount = bottomNavItem.alertCount,
@@ -87,6 +99,7 @@ fun AppScaffold(
 fun RowScope.AppBottomNavItem(
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
+    iconPainter: Painter? = null,
     contentDescription: String? = null,
     selected: Boolean = false,
     alertCount: Int? = null,
@@ -141,6 +154,13 @@ fun RowScope.AppBottomNavItem(
                 if (icon != null) {
                     Icon(
                         imageVector = icon,
+                        contentDescription = contentDescription,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    )
+                } else if (iconPainter != null) {
+                    Icon(
+                        painter = iconPainter,
                         contentDescription = contentDescription,
                         modifier = Modifier
                             .align(Alignment.Center)
