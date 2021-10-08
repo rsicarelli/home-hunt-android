@@ -10,6 +10,7 @@ import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.core.model.ProgressBarState
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.usecase.GetFilteredPropertiesUseCase
+import com.rsicarelli.homehunt.domain.usecase.ToggleFavouriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -21,16 +22,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getFilteredPropertiesUseCase: GetFilteredPropertiesUseCase
+    private val getFilteredPropertiesUseCase: GetFilteredPropertiesUseCase,
+    private val toggleFavourite: ToggleFavouriteUseCase,
 ) : ViewModel() {
 
     private var job: Job? = null
     private val _state: MutableState<HomeState> = mutableStateOf(HomeState())
     val state: State<HomeState> = _state
-
-    init {
-
-    }
 
     override fun onCleared() {
         job?.cancel()
@@ -40,12 +38,17 @@ class HomeViewModel @Inject constructor(
     fun onEvent(events: HomeEvents) {
         when (events) {
             is HomeEvents.LifecycleEvent -> getProperties(events)
+            is HomeEvents.ToggleFavourite -> toggleFavourite(
+                request = ToggleFavouriteUseCase.Request(
+                    events.reference,
+                    events.isFavourited
+                )
+            )
         }
     }
 
     private fun getProperties(events: HomeEvents.LifecycleEvent) {
-        if (events.
-            event == Lifecycle.Event.ON_RESUME) {
+        if (events.event == Lifecycle.Event.ON_RESUME) {
             viewModelScope.launch {
                 job =
                     getFilteredPropertiesUseCase().distinctUntilChanged().onEach { dataState ->
