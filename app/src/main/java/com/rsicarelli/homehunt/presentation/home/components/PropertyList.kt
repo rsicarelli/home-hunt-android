@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import com.google.accompanist.insets.statusBarsPadding
+import com.google.accompanist.insets.systemBarsPadding
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
@@ -46,6 +47,7 @@ fun PropertyList(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
+            .systemBarsPadding()
             .padding(SpaceMedium)
     ) {
         Box(
