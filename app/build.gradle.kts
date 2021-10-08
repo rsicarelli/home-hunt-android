@@ -65,7 +65,6 @@ dependencies {
     implementation(Dependencies.androidXCore)
     implementation(Dependencies.androidXAppCompat)
     implementation(Dependencies.coroutines)
-    implementation(Dependencies.material)
     implementation(Dependencies.touchImageView)
     implementation(Dependencies.heuler)
     implementation(Dependencies.heulerDataBinding)
@@ -75,6 +74,10 @@ dependencies {
     implementation((Firebase.firestore))
     implementation(Firebase.auth)
     implementation(Firebase.playServicesAuth)
+
+    implementation(Google.material)
+    implementation(Google.maps)
+    implementation(Google.mapsKtx)
 
     implementation(Hilt.android)
     kapt(Hilt.compiler)

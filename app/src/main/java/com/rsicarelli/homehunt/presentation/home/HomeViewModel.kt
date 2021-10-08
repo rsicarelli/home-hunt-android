@@ -61,12 +61,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateProperties(properties: List<Property>) {
-        val copy = state.value.copy(
+        _state.value = state.value.copy(
             properties = properties,
             emptyResults = properties.isEmpty(),
             progressBarState = ProgressBarState.Idle
         )
-        _state.value = copy
     }
 
     private fun State<HomeState>.toggleLoading(progressBarState: ProgressBarState) {

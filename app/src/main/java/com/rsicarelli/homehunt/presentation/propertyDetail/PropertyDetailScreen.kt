@@ -3,11 +3,13 @@ package com.rsicarelli.homehunt.presentation.propertyDetail
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,8 +29,11 @@ import com.rsicarelli.homehunt.core.util.toCurrency
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.ExpandableText
 import com.rsicarelli.homehunt.presentation.components.IconText
+import com.rsicarelli.homehunt.presentation.components.MapView
 import com.rsicarelli.homehunt.ui.theme.*
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.launch
 
 @Composable
 fun PropertyDetailScreen(
@@ -39,10 +44,7 @@ fun PropertyDetailScreen(
     PropertyDetailContent(imageLoader, scaffoldDelegate, viewModel.state.value, viewModel::onEvent)
 }
 
-@OptIn(
-    ExperimentalPagerApi::class, ExperimentalCoilApi::class,
-    ExperimentalMaterialApi::class
-)
+@OptIn(ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
 @Composable
 private fun PropertyDetailContent(
     imageLoader: ImageLoader,
@@ -52,7 +54,7 @@ private fun PropertyDetailContent(
 ) {
     state.property?.let { property ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             item {
                 GalleryCarousel(
@@ -67,15 +69,19 @@ private fun PropertyDetailContent(
                 )
             }
             item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colors.background)
-                        .padding(SpaceMedium)
-                ) {
-                    PropertyHeader(property)
-                    PropertyDetails(property)
-                }
+                PropertyHeader(property)
+            }
+            item {
+                PropertyMap(
+                    lat = property.lat,
+                    lng = property.lng,
+                    onMapClick = {
+                        //TODO
+                    }
+                )
+            }
+            item {
+                PropertyDetails(property)
             }
         }
     }
@@ -84,8 +90,11 @@ private fun PropertyDetailContent(
 @Composable
 fun PropertyDetails(property: Property) {
     property.fullDescription?.let {
-        Column(Modifier.fillMaxWidth()) {
-            Spacer(modifier = Modifier.height(SpaceMedium))
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(SpaceMedium)
+        ) {
             Text(
                 text = stringResource(id = R.string.about_this_property),
                 style = MaterialTheme.typography.h6
@@ -100,7 +109,11 @@ fun PropertyDetails(property: Property) {
 fun PropertyHeader(
     property: Property
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(SpaceMedium)
+    ) {
         ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
             val (specs, price, title, location) = createRefs()
             val barrier = createEndBarrier(location, specs)
@@ -239,3 +252,34 @@ private fun GalleryCarousel(
     }
 }
 
+
+@OptIn(ExperimentalCoilApi::class)
+@Composable
+private fun PropertyMap(
+    lat: Double?,
+    lng: Double?,
+    onMapClick: () -> Unit
+) {
+    if (lat == null || lng == null) return
+
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = SpaceMedium, end = SpaceMedium)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp)
+                .clip(RoundedCornerShape(10.dp))
+        ) {
+            MapView(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onMapClick() }, lat = lat, lng = lng, isLiteMode = true
+            )
+        }
+
+    }
+
+}
