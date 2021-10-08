@@ -17,14 +17,14 @@ data class Property(
     val videoUrl: String?,
     val fullDescription: String?,
     val locationDescription: String?,
-    val characteristics: List<String?>,
+    val characteristics: List<String>,
     val photoGalleryUrls: List<String>,
     val lat: Double?,
     val lng: Double?,
     val pdfUrl: String?,
     val origin: String,
     val viewedBy: List<String?>,
-    val favouriteBy: List<String?>,
+    val isFavourited: Boolean,
     val isActive: Boolean
 ) {
 
@@ -73,7 +73,7 @@ fun Property.toMap(): Map<String, Any?> =
         Mapper.LOCATION_DESCRIPTION to locationDescription,
         Mapper.ORIGIN to origin,
         Mapper.VIEWED_BY to viewedBy,
-        Mapper.FAVOURITE_BY to favouriteBy,
+        Mapper.IS_FAVOURITED to isFavourited,
         Mapper.IS_ACTIVE to isActive
     )
 
@@ -100,7 +100,7 @@ fun Map<String, Any?>.toProperty() =
         locationDescription = asNullableString(Mapper.LOCATION_DESCRIPTION),
         origin = asString(Mapper.ORIGIN),
         viewedBy = asStringList(Mapper.VIEWED_BY),
-        favouriteBy = asStringList(Mapper.FAVOURITE_BY),
+        isFavourited = asBoolean(Mapper.IS_FAVOURITED),
         isActive = asBoolean(Mapper.IS_ACTIVE)
     )
 
@@ -127,7 +127,7 @@ object Mapper {
     const val LOCATION_DESCRIPTION = "locationDescription"
     const val ORIGIN = "origin"
     const val VIEWED_BY = "viewedBy"
-    const val FAVOURITE_BY = "favouriteBy"
+    const val IS_FAVOURITED = "isFavourited"
     const val IS_ACTIVE = "isActive"
 }
 

@@ -1,19 +1,30 @@
 package com.rsicarelli.homehunt.presentation.propertyDetail
 
-import androidx.compose.foundation.*
+import android.content.Intent
+import android.net.Uri
+import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -27,13 +38,11 @@ import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.util.toCurrency
 import com.rsicarelli.homehunt.domain.model.Property
+import com.rsicarelli.homehunt.presentation.components.ChipVerticalGrid
 import com.rsicarelli.homehunt.presentation.components.ExpandableText
 import com.rsicarelli.homehunt.presentation.components.IconText
 import com.rsicarelli.homehunt.presentation.components.MapView
 import com.rsicarelli.homehunt.ui.theme.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.launch
 
 @Composable
 fun PropertyDetailScreen(
@@ -68,9 +77,8 @@ private fun PropertyDetailContent(
                     }
                 )
             }
-            item {
-                PropertyHeader(property)
-            }
+            item { PropertyHeader(property) }
+            item { PropertyFeatures(property.characteristics) }
             item {
                 PropertyMap(
                     lat = property.lat,
@@ -81,14 +89,133 @@ private fun PropertyDetailContent(
                 )
             }
             item {
-                PropertyDetails(property)
+                PropertyDetails(
+                    titleRes = R.string.about_this_property,
+                    content = property.fullDescription
+                )
+                PropertyDetails(
+                    titleRes = R.string.location_description,
+                    content = property.locationDescription
+                )
+            }
+            item {
+                PropertyFooter(
+                    property.reference,
+                    property.propertyUrl,
+                    property.pdfUrl
+                )
             }
         }
     }
 }
 
 @Composable
-fun PropertyDetails(property: Property) {
+fun PropertyFeatures(characteristics: List<String>) {
+    ChipVerticalGrid(
+        spacing = 7.dp,
+        modifier = Modifier
+            .padding(start = SpaceMedium, end = SpaceMedium, bottom = SpaceMedium)
+    ) {
+        characteristics.forEach { word ->
+            Surface(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp)),
+                color = MaterialTheme.colors.surface,
+                elevation = 8.dp
+            ) {
+                Text(
+                    word,
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier
+                        .background(Color.Unspecified)
+                        .padding(
+                            start = SpaceSmall,
+                            end = SpaceSmall,
+                            top = SpaceSmallest,
+                            bottom = SpaceSmallest
+                        )
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun PropertyFooter(reference: String, propertyUrl: String, pdfUrl: String?) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(SpaceMedium)
+    ) {
+
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(0.5.dp)
+                .background(
+                    MaterialTheme.colors.primary.copy(alpha = 0.3f),
+                    RoundedCornerShape(40.dp)
+                )
+        )
+
+        Spacer(modifier = Modifier.height(SpaceSmall))
+
+        SelectionContainer {
+            Text(reference, style = MaterialTheme.typography.overline.copy(fontSize = 14.sp))
+        }
+
+        Spacer(modifier = Modifier.height(SpaceSmall))
+
+        CustomClickableText(
+            propertyUrl = propertyUrl,
+            placeholder = R.string.see_on_web
+        )
+
+        pdfUrl?.let {
+            CustomClickableText(
+                propertyUrl = it,
+                placeholder = R.string.see_pdf
+            )
+        }
+    }
+}
+
+@Composable
+private fun CustomClickableText(
+    propertyUrl: String,
+    @StringRes placeholder: Int = R.string.see_on_web,
+) {
+    val annotatedText = buildAnnotatedString {
+        pushStringAnnotation(
+            tag = "URL",
+            annotation = propertyUrl
+        )
+        withStyle(
+            style = MaterialTheme.typography.overline.copy(
+                fontSize = 14.sp,
+                color = rally_blue_100
+            ).toSpanStyle()
+        ) {
+            append(stringResource(id = placeholder))
+        }
+        pop()
+    }
+
+    val context = LocalContext.current
+    ClickableText(
+        text = annotatedText,
+        onClick = { offset ->
+            annotatedText.getStringAnnotations(tag = "URL", start = offset, end = offset)
+                .firstOrNull()?.let { annotation ->
+                    val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(annotation.item))
+                    context.startActivity(webIntent)
+                }
+        }
+    )
+}
+
+@Composable
+fun PropertyLocationDetails(property: Property) {
     property.fullDescription?.let {
         Column(
             Modifier
@@ -101,6 +228,27 @@ fun PropertyDetails(property: Property) {
             )
             Spacer(modifier = Modifier.height(SpaceSmall))
             ExpandableText(text = property.fullDescription)
+        }
+    }
+}
+
+@Composable
+fun PropertyDetails(
+    @StringRes titleRes: Int,
+    content: String?,
+) {
+    content.takeIf { it != null && it.isNotEmpty() }?.let { text ->
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(SpaceMedium)
+        ) {
+            Text(
+                text = stringResource(id = titleRes),
+                style = MaterialTheme.typography.h6
+            )
+            Spacer(modifier = Modifier.height(SpaceSmall))
+            ExpandableText(text)
         }
     }
 }
@@ -260,7 +408,7 @@ private fun PropertyMap(
     lng: Double?,
     onMapClick: () -> Unit
 ) {
-    if (lat == null || lng == null) return
+    if (lat == null || lng == null || lat == 0.0 || lng == 0.0) return
 
     Surface(
         modifier = Modifier
@@ -281,5 +429,5 @@ private fun PropertyMap(
         }
 
     }
-
 }
+

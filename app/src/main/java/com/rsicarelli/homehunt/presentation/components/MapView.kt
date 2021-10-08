@@ -62,7 +62,7 @@ fun rememberMapViewWithLifecycle(isLiteMode: Boolean): MapView {
             .liteMode(isLiteMode)
         MapView(context, options).apply {
             id = R.id.map
-            isClickable = false
+//            isClickable = false
         }
     }
 

@@ -10,4 +10,7 @@
     <string name="bath_count">Baths</string>
     <string name="video_available">Watch video</string>
     <string name="about_this_property">About this property</string>
+    <string name="see_on_web">See original listing</string>
+    <string name="see_pdf">Open pdf file</string>
+    <string name="location_description">Location description</string>
 </resources>
