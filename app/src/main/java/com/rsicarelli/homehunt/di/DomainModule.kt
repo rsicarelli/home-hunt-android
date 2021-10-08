@@ -36,6 +36,11 @@ object DomainModule {
 
     @Provides
     @Singleton
+    fun providesToggleFavouriteUseCase(propertiesRepository: PropertyRepository) =
+        ToggleFavouriteUseCase(propertiesRepository)
+
+    @Provides
+    @Singleton
     fun providesFilterPropertiesUseCase() = FilterPropertiesUseCase()
 
     @Provides

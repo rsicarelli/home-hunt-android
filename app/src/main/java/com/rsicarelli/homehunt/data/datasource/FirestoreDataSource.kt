@@ -2,6 +2,7 @@ package com.rsicarelli.homehunt.data.datasource
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.rsicarelli.homehunt.data.datasource.FirestoreDataSourceImpl.FirestoreMap.PROPERTY_COLLECTION
+import com.rsicarelli.homehunt.domain.model.Mapper
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.model.toProperty
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -9,10 +10,13 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
+import timber.log.Timber
 
 interface FirestoreDataSource {
     suspend fun new(): Flow<List<Property>>
     suspend fun getById(referenceId: String): Flow<Property>
+    fun toggleFavourite(referenceId: String, isFavourited: Boolean)
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -64,11 +68,21 @@ class FirestoreDataSourceImpl(
 
                 snapshot?.data?.let {
                     trySend(it.toProperty())
-                    cancel("Done")
+//                    cancel("Done")
                 } ?: cancel("Could not locate property reference")
             }
 
             awaitClose { subscription.remove() }
+        }
+    }
+
+    override fun toggleFavourite(
+        referenceId: String,
+        isFavourited: Boolean
+    ) {
+        val document = db.collection(PROPERTY_COLLECTION).document(referenceId)
+        document.update(Mapper.IS_FAVOURITED, isFavourited).addOnSuccessListener {
+            Timber.d("Toggled favourite: $referenceId, $isFavourited")
         }
     }
 

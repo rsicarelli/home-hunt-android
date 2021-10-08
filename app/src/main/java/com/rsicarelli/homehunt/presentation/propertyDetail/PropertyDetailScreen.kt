@@ -75,17 +75,21 @@ private fun PropertyDetailContent(
     state.property?.let { property ->
         Box(modifier = Modifier.fillMaxSize()) {
             PropertyDetail(property, imageLoader, scaffoldDelegate)
-            PropertyTopBar(property.isFavourited)
+            PropertyTopBar(
+                onFavouriteClick = {
+                    events(PropertyDetailEvents.ToggleFavourite(property.reference, !property.isFavourited))
+                },
+                property.isFavourited
+            )
         }
     }
 }
 
 @Composable
 fun PropertyTopBar(
+    onFavouriteClick: () -> Unit,
     isFavourited: Boolean
 ) {
-    var teste by remember { mutableStateOf(false) }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -94,8 +98,8 @@ fun PropertyTopBar(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
-        IconButton(onClick = { teste = !teste }) {
-            if (teste) {
+        IconButton(onClick = onFavouriteClick) {
+            if (isFavourited) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_round_favorite),
                     contentDescription = stringResource(

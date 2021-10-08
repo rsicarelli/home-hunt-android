@@ -16,4 +16,8 @@ class PropertyRepositoryImpl @Inject constructor(
     override suspend fun getBy(referenceId: String): Flow<Property> {
         return firestoreDataSource.getById(referenceId)
     }
+
+    override fun toggleFavourite(referenceId: String, isFavourited: Boolean) {
+        return firestoreDataSource.toggleFavourite(referenceId, isFavourited)
+    }
 }

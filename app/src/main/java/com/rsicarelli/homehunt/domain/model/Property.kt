@@ -104,7 +104,6 @@ fun Map<String, Any?>.toProperty() =
         isActive = asBoolean(Mapper.IS_ACTIVE)
     )
 
-@VisibleForTesting
 object Mapper {
     const val REFERENCE = "reference"
     const val PRICE = "price"

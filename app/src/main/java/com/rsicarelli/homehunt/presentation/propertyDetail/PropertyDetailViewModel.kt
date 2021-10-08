@@ -10,6 +10,7 @@ import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.core.model.ProgressBarState
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.usecase.GetSinglePropertyUseCase
+import com.rsicarelli.homehunt.domain.usecase.ToggleFavouriteUseCase
 import com.rsicarelli.homehunt.presentation.home.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.coroutineScope
@@ -22,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PropertyDetailViewModel @Inject constructor(
     private val getSingleProperty: GetSinglePropertyUseCase,
-    private val savedStateHandle: SavedStateHandle,
+    private val toggleFavourite: ToggleFavouriteUseCase,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val _state: MutableState<PropertyDetailState> = mutableStateOf(PropertyDetailState())
     val state: State<PropertyDetailState> = _state
@@ -38,6 +40,12 @@ class PropertyDetailViewModel @Inject constructor(
     fun onEvent(event: PropertyDetailEvents) {
         when (event) {
             is PropertyDetailEvents.GetPropertyFromCache -> getPropertyFromCache(event.referenceId)
+            is PropertyDetailEvents.ToggleFavourite -> toggleFavourite(
+                request = ToggleFavouriteUseCase.Request(
+                    event.referenceId,
+                    event.isFavourited
+                )
+            )
         }
     }
 
