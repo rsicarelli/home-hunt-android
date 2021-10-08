@@ -12,6 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HomeHunt">
+
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="${GOOGLE_MAPS_API_KEY}"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -30,6 +35,8 @@
         <activity
             android:name=".presentation.resources.VideoPlayerActivity"
             android:theme="@style/Theme.HomeHunt.NoActionBar" />
+
+
     </application>
 
 </manifest>

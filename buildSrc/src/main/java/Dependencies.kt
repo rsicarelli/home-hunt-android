@@ -28,6 +28,7 @@ object Plugins {
 }
 
 object Build {
+
     private const val androidBuildToolsVersion = "7.1.0-alpha13"
     const val androidBuildTools = "com.android.tools.build:gradle:$androidBuildToolsVersion"
 
@@ -38,6 +39,10 @@ object Build {
     private const val googleServicesVersion = "4.3.10"
     const val googleServicesPlugin =
         "com.google.gms:google-services:$googleServicesVersion"
+
+    private const val googleSecretsVersion = "2.0.0"
+    const val googleSecretesPlugin =
+        "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:$googleSecretsVersion"
 }
 
 object Kotlin {

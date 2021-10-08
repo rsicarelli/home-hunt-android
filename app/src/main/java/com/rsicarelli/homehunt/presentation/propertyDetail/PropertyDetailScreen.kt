@@ -164,7 +164,7 @@ fun PropertyHeader(
 }
 
 @ExperimentalMaterialApi
-@OptIn(ExperimentalPagerApi::class, coil.annotation.ExperimentalCoilApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
 @Composable
 private fun GalleryCarousel(
     photoGallery: List<String>,
