@@ -9,15 +9,13 @@ import javax.inject.Inject
 class PropertyRepositoryImpl @Inject constructor(
     private val firestoreDataSource: FirestoreDataSource
 ) : PropertyRepository {
-    override suspend fun getAll(): Flow<List<Property>> {
-        return firestoreDataSource.new()
-    }
+    override suspend fun getAll(): Flow<List<Property>> = firestoreDataSource.new()
 
-    override suspend fun getBy(referenceId: String): Flow<Property> {
-        return firestoreDataSource.getById(referenceId)
-    }
+    override suspend fun getBy(referenceId: String): Flow<Property> =
+        firestoreDataSource.getById(referenceId)
 
-    override fun toggleFavourite(referenceId: String, isFavourited: Boolean) {
-        return firestoreDataSource.toggleFavourite(referenceId, isFavourited)
-    }
+    override fun toggleFavourite(referenceId: String, isFavourited: Boolean) =
+        firestoreDataSource.toggleFavourite(referenceId, isFavourited)
+
+    override suspend fun getFavourites(): Flow<List<Property>> = firestoreDataSource.getFavourites()
 }

@@ -1,54 +1,51 @@
-package com.rsicarelli.homehunt.presentation.home
+package com.rsicarelli.homehunt.presentation.favourites
 
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
-import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.components.EmptyContent
-import com.rsicarelli.homehunt.presentation.components.OnLifecycleEvent
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
 
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
-fun HomeScreen(
+fun FavouritesScreen(
     scaffoldDelegate: ScaffoldDelegate,
-    viewModel: HomeViewModel = hiltViewModel(),
+    viewModel: FavouritesViewModel = hiltViewModel(),
     imageLoader: ImageLoader
 ) {
-    HomeContent(viewModel::onEvent, viewModel.state.value, imageLoader, scaffoldDelegate)
+    FavouritesContent(
+        scaffoldDelegate = scaffoldDelegate,
+        imageLoader = imageLoader,
+        events = viewModel::onEvent,
+        state = viewModel.state.value
+    )
 }
 
 @Composable
-private fun HomeContent(
-    events: (HomeEvents) -> Unit,
-    state: HomeState,
+private fun FavouritesContent(
+    events: (FavouritesEvents) -> Unit,
+    state: FavouritesState,
     imageLoader: ImageLoader,
     scaffoldDelegate: ScaffoldDelegate
 ) {
-    OnLifecycleEvent { event ->
-        events(HomeEvents.LifecycleEvent(event))
-    }
 
     EmptyContent(state.emptyResults)
 
     PropertyList(
         properties = state.properties,
         imageLoader = imageLoader,
-        showFab = true,
-        headerPrefixRes = R.string.results,
+        showFab = false,
+        headerPrefixRes = R.string.favourites,
         scaffoldDelegate = scaffoldDelegate,
         onToggleFavourite = { property ->
             events(
-                HomeEvents.ToggleFavourite(
+                FavouritesEvents.ToggleFavourite(
                     property.reference,
                     !property.isFavourited
                 )
             )
         }
     )
-
-    CircularIndeterminateProgressBar(state.progressBarState)
 }

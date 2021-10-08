@@ -41,6 +41,11 @@ object DomainModule {
 
     @Provides
     @Singleton
+    fun providesGetFavouritedPropertiesUseCase(propertiesRepository: PropertyRepository) =
+        GetFavouritedPropertiesUseCase(propertiesRepository)
+
+    @Provides
+    @Singleton
     fun providesFilterPropertiesUseCase() = FilterPropertiesUseCase()
 
     @Provides

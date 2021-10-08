@@ -7,4 +7,5 @@ interface PropertyRepository {
     suspend fun getAll(): Flow<List<Property>>
     suspend fun getBy(referenceId: String): Flow<Property>
     fun toggleFavourite(referenceId: String, isFavourited: Boolean)
+    suspend fun getFavourites(): Flow<List<Property>>
 }

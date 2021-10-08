@@ -32,8 +32,6 @@ class PropertyDetailViewModel @Inject constructor(
     init {
         savedStateHandle.get<String>("referenceId")?.let { referenceId ->
             onEvent(PropertyDetailEvents.GetPropertyFromCache(referenceId))
-        } ?: {
-            //TODO Error
         }
     }
 
@@ -55,7 +53,6 @@ class PropertyDetailViewModel @Inject constructor(
                 println(dataState)
                 when (dataState) {
                     is DataState.Data -> state.updateProperty(dataState.data!!)
-                    is DataState.Loading -> state.toggleLoading(dataState.progressBarState)
                 }
             }.launchIn(viewModelScope)
         }
@@ -68,9 +65,6 @@ class PropertyDetailViewModel @Inject constructor(
         )
     }
 
-    private fun <T> State<T>.toggleLoading(progressBarState: ProgressBarState) {
-
-    }
 }
 
 
