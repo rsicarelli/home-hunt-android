@@ -58,7 +58,7 @@ private fun PropertyDetailContent(
                 GalleryCarousel(
                     photoGallery = property.photoGalleryUrls,
                     imageLoader = imageLoader,
-                    hasVideo = property.videoUrl != null,
+                    hasVideo = property.videoUrl != null && property.videoUrl.isNotEmpty(),
                     onOpenGallery = {
                         scaffoldDelegate.launchPhotoDetailsGallery(property)
                     }, onPlayVideo = {

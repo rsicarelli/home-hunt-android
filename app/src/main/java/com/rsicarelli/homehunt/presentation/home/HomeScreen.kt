@@ -220,7 +220,7 @@ fun PropertyListItem(
                     .fillMaxWidth()
             ) {
                 val painter = rememberImagePainter(
-                    property.avatarUrl,
+                    property.photoGalleryUrls.first(),
                     imageLoader = imageLoader,
                     builder = {
                         placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)

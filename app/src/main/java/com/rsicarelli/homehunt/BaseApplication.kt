@@ -10,7 +10,20 @@ class BaseApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.tag("HomeHunt")
-        Timber.plant(Timber.DebugTree())
+        Timber.plant(object : Timber.DebugTree() {
+
+            override fun log(priority: Int, tag: String?, message: String, t: Throwable?) =
+                super.log(priority, "HomeHunt_$tag", message, t)
+
+            override fun createStackElementTag(element: StackTraceElement): String {
+                return String.format(
+                    "%s:%s",
+                    element.methodName,
+                    super.createStackElementTag(element)
+                )
+            }
+        })
+
     }
 }
 

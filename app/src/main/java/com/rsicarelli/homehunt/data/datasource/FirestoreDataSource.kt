@@ -23,6 +23,8 @@ class FirestoreDataSourceImpl(
     override suspend fun new(): Flow<List<Property>> {
         return callbackFlow {
             val propertiesDocument = db.collection(PROPERTY_COLLECTION)
+                .whereNotEqualTo("tag", listOf("RENTED", "RESERVED"))
+                .whereEqualTo("isActive", true)
 
             val subscription = propertiesDocument.addSnapshotListener { snapshot, error ->
                 if (error != null) {
@@ -33,7 +35,7 @@ class FirestoreDataSourceImpl(
                     return@addSnapshotListener
                 }
 
-                snapshot?.documents?.map { it.data!!.toProperty() }
+                snapshot?.documents?.mapNotNull { it.data!!.toProperty() }
                     ?.filter { property ->
                         //TODO replace with userId
                         property.viewedBy.filter { it.equals("7iyzHmMDxEOa5jAgF9kI7tNImmq1") }

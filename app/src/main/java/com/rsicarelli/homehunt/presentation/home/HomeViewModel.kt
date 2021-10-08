@@ -44,8 +44,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getProperties(events: HomeEvents.LifecycleEvent) {
-        Timber.d("memes")
-        if (events.event == Lifecycle.Event.ON_RESUME) {
+        if (events.
+            event == Lifecycle.Event.ON_RESUME) {
             viewModelScope.launch {
                 job =
                     getFilteredPropertiesUseCase().distinctUntilChanged().onEach { dataState ->
