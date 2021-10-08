@@ -2,7 +2,6 @@ package com.rsicarelli.homehunt.presentation.propertyDetail
 
 import android.content.Intent
 import android.net.Uri
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,11 +13,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -36,7 +34,6 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.util.toCurrency
@@ -241,24 +238,6 @@ private fun CustomClickableText(
                 }
         }
     )
-}
-
-@Composable
-fun PropertyLocationDetails(property: Property) {
-    property.fullDescription?.let {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(SpaceMedium)
-        ) {
-            Text(
-                text = stringResource(id = R.string.about_this_property),
-                style = MaterialTheme.typography.h6
-            )
-            Spacer(modifier = Modifier.height(SpaceSmall))
-            ExpandableText(text = property.fullDescription)
-        }
-    }
 }
 
 @Composable

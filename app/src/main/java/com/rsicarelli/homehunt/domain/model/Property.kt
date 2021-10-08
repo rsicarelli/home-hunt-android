@@ -1,7 +1,5 @@
 package com.rsicarelli.homehunt.domain.model
 
-import com.google.common.annotations.VisibleForTesting
-
 data class Property(
     val reference: String,
     val price: Double,
