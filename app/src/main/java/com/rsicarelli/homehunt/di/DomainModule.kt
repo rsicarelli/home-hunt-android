@@ -26,8 +26,11 @@ object DomainModule {
 
     @Provides
     @Singleton
-    fun providesGetPropertiesUseCase(propertiesRepository: PropertyRepository) =
-        GetAllPropertiesUseCase(propertiesRepository)
+    fun providesGetPropertiesUseCase(
+        propertiesRepository: PropertyRepository,
+        userRepository: UserRepository
+    ) =
+        GetAllPropertiesUseCase(propertiesRepository, userRepository)
 
     @Provides
     @Singleton
@@ -38,6 +41,13 @@ object DomainModule {
     @Singleton
     fun providesToggleFavouriteUseCase(propertiesRepository: PropertyRepository) =
         ToggleFavouriteUseCase(propertiesRepository)
+
+    @Provides
+    @Singleton
+    fun providesMarkAsViewedUseCase(
+        propertiesRepository: PropertyRepository,
+        userRepository: UserRepository
+    ) = MarkAsViewedUseCase(propertiesRepository, userRepository)
 
     @Provides
     @Singleton
@@ -52,9 +62,9 @@ object DomainModule {
     @Singleton
     fun providesPreviewFilterResultUseCase(
         propertyRepository: PropertyRepository,
+        userRepository: UserRepository,
         filterPropertiesUseCase: FilterPropertiesUseCase
-    ) = PreviewFilterResultUseCase(propertyRepository, filterPropertiesUseCase)
-
+    ) = PreviewFilterResultUseCase(propertyRepository, userRepository, filterPropertiesUseCase)
 
     @Provides
     @Singleton

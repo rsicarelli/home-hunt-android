@@ -4,8 +4,9 @@ import com.rsicarelli.homehunt.domain.model.Property
 import kotlinx.coroutines.flow.Flow
 
 interface PropertyRepository {
-    suspend fun getAll(): Flow<List<Property>>
+    suspend fun getNewProperties(userId: String): Flow<List<Property>>
     suspend fun getBy(referenceId: String): Flow<Property>
-    fun toggleFavourite(referenceId: String, isFavourited: Boolean)
     suspend fun getFavourites(): Flow<List<Property>>
+    fun toggleFavourite(referenceId: String, isFavourited: Boolean)
+    fun markAsViewed(referenceId: String, userId: String)
 }

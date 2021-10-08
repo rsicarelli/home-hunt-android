@@ -4,15 +4,16 @@ import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.core.model.ProgressBarState
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.repository.PropertyRepository
-import kotlinx.coroutines.delay
+import com.rsicarelli.homehunt.domain.repository.UserRepository
 import kotlinx.coroutines.flow.*
 
 class GetAllPropertiesUseCase(
-    private val propertiesRepository: PropertyRepository
+    private val propertiesRepository: PropertyRepository,
+    private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(): Flow<DataState<List<Property>>> =
         flow<DataState<List<Property>>> {
-            propertiesRepository.getAll()
+            propertiesRepository.getNewProperties(userRepository.getUserId())
                 .onStart {
                     emit(DataState.Loading(ProgressBarState.Loading))
                 }

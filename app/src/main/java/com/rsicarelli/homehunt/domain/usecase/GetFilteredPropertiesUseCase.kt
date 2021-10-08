@@ -7,14 +7,14 @@ import kotlinx.coroutines.flow.*
 import timber.log.Timber
 
 class GetFilteredPropertiesUseCase(
-    private val getAllAllProperties: GetAllPropertiesUseCase,
+    private val getAllProperties: GetAllPropertiesUseCase,
     private val getFilterPreferences: GetFilterPreferencesUseCase,
     private val filterProperties: FilterPropertiesUseCase,
 ) {
 
     @OptIn(FlowPreview::class)
     suspend operator fun invoke(): Flow<DataState<List<Property>>> {
-        return getAllAllProperties()
+        return getAllProperties()
             .filter { it is DataState.Data }
             .mapNotNull { (it as DataState.Data).data }
             .onEach { Timber.d("Got properties ${it.size}") }

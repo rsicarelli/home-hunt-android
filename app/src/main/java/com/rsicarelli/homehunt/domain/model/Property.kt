@@ -48,33 +48,6 @@ fun String?.toTag() = this?.let {
     }
 } ?: Property.Tag.EMPTY
 
-fun Property.toMap(): Map<String, Any?> =
-    mapOf(
-        Mapper.REFERENCE to reference,
-        Mapper.PRICE to price,
-        Mapper.TITLE to title,
-        Mapper.LOCATION to location,
-        Mapper.SURFACE to surface,
-        Mapper.DORM_COUNT to dormCount,
-        Mapper.DESCRIPTION to description,
-        Mapper.BATH_COUNT to bathCount,
-        Mapper.AVATAR_URL to avatarUrl,
-        Mapper.TAG to tag.toTag(),
-        Mapper.PROPERTY_URL to propertyUrl,
-        Mapper.VIDEO_URL to videoUrl,
-        Mapper.FULL_DESCRIPTION to fullDescription,
-        Mapper.CHARACTERISTICS to characteristics,
-        Mapper.PHOTO_GALLERY_URLS to photoGalleryUrls,
-        Mapper.LAT to lat,
-        Mapper.LNG to lng,
-        Mapper.PDF_URL to pdfUrl,
-        Mapper.LOCATION_DESCRIPTION to locationDescription,
-        Mapper.ORIGIN to origin,
-        Mapper.VIEWED_BY to viewedBy,
-        Mapper.IS_FAVOURITED to isFavourited,
-        Mapper.IS_ACTIVE to isActive
-    )
-
 fun Map<String, Any?>.toProperty() =
     Property(
         reference = asString(Mapper.REFERENCE),
