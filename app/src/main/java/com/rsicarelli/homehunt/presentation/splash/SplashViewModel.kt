@@ -5,17 +5,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.core.model.UiEvent
-import com.rsicarelli.homehunt.core.model.UiText
 import com.rsicarelli.homehunt.domain.usecase.IsLoggedInUseCase
-import com.rsicarelli.homehunt.presentation.login.LoginEvents
-import com.rsicarelli.homehunt.presentation.login.LoginState
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -46,10 +39,10 @@ class SplashViewModel @Inject constructor(
     }
 
     private fun navigateToHome() {
-        _state.value = state.value.copy(uiEvent = UiEvent.Navigate(Screen.HomeScreen.route))
+        _state.value = state.value.copy(uiEvent = UiEvent.Navigate(Screen.Home.route))
     }
 
     private fun navigateToLogin() {
-        _state.value = state.value.copy(uiEvent = UiEvent.Navigate(Screen.LoginScreen.route))
+        _state.value = state.value.copy(uiEvent = UiEvent.Navigate(Screen.Login.route))
     }
 }

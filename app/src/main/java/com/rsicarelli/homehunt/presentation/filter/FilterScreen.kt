@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
@@ -50,11 +51,19 @@ val countRange = listOf(1, 2, 3, 4, 5)
 @Composable
 fun FilterScreen(
     scaffoldDelegate: ScaffoldDelegate,
-    state: FilterState,
-    events: (FilterEvents) -> Unit
+    viewModel: FilterViewModel = hiltViewModel()
 ) {
 
-    if (state.uiEvent == UiEvent.NavigateUp) scaffoldDelegate.navigateUp()
+    FilterContent(viewModel.state.value, scaffoldDelegate, viewModel::onEvent)
+}
+
+@Composable
+private fun FilterContent(
+    state: FilterState,
+    scaffoldDelegate: ScaffoldDelegate,
+    events: (FilterEvents) -> Unit
+) {
+    if (state.uiEvent is UiEvent.Navigate) scaffoldDelegate.navigateSingleTop(state.uiEvent)
 
     OnLifecycleEvent { event ->
         events(FilterEvents.LifecycleEvent(event))

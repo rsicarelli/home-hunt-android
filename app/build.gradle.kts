@@ -68,6 +68,7 @@ dependencies {
     implementation(Dependencies.touchImageView)
     implementation(Dependencies.heuler)
     implementation(Dependencies.heulerDataBinding)
+    implementation(Dependencies.timber)
 
     implementation(platform(Firebase.bom))
     implementation((Firebase.firestore))

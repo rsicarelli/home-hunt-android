@@ -17,6 +17,9 @@ object Dependencies {
     private const val heulerVersion = "5.0.0"
     const val heuler = "app.futured.hauler:hauler:$heulerVersion"
     const val heulerDataBinding = "app.futured.hauler:databinding:$heulerVersion"
+
+    private const val timberVersion = "5.0.1"
+    const val timber = "com.jakewharton.timber:timber:$timberVersion"
 }
 
 object Plugins {

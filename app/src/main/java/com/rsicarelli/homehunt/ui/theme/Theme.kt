@@ -6,7 +6,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
     primary = Primary,
@@ -25,18 +24,18 @@ private val DarkColorPalette = darkColors(
 
 @SuppressLint("ConflictingOnColor")
 private val LightColorPalette = lightColors(
-    primary = Blue600,
-    primaryVariant = Blue400,
-    onPrimary = Black1,
-    secondary = Color.White,
-    secondaryVariant = Teal300,
-    onSecondary = Color.Black,
-    error = RedErrorDark,
-    onError = RedErrorLight,
-    background = Grey1,
-    onBackground = Color.Black,
-    surface = Color.White,
-    onSurface = Black1,
+    primary = Primary,
+    primaryVariant = PrimaryVariant,
+    onPrimary = OnSecondary,
+    secondary = Secondary,
+    secondaryVariant = SecondaryVariant,
+    onSecondary = OnSecondary,
+    error = Error,
+    onError = OnError,
+    background = Background,
+    onBackground = OnBackground,
+    surface = Surface,
+    onSurface = OnSurface,
 )
 
 @Composable
@@ -49,7 +48,7 @@ fun HomeHuntTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
 
     MaterialTheme(
         colors = colors,
-        typography = QuickSandTypography,
+        typography = EczarTypography,
         shapes = AppShapes,
         content = content
     )

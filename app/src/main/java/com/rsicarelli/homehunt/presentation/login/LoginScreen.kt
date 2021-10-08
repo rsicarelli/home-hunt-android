@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
@@ -30,7 +31,15 @@ import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 @Composable
 fun LoginScreen(
     scaffoldDelegate: ScaffoldDelegate,
+    viewModel: LoginViewModel = hiltViewModel()
+) {
+    HomeContent(viewModel.state.value, scaffoldDelegate, viewModel::onEvent)
+}
+
+@Composable
+private fun HomeContent(
     state: LoginState,
+    scaffoldDelegate: ScaffoldDelegate,
     events: (LoginEvents) -> Unit
 ) {
     when (state.uiEvent) {
@@ -65,7 +74,7 @@ private fun Welcome() {
             .padding(top = 50.dp, end = 20.dp, bottom = 20.dp, start = 20.dp),
         text = stringResource(id = R.string.welcome),
         textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.h1,
+        style = MaterialTheme.typography.h4,
         color = Color.White
     )
 }

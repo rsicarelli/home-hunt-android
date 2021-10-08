@@ -40,7 +40,7 @@ class LoginViewModel @Inject constructor(
                 when (dataState) {
                     is DataState.Loading -> state.toggleLoading(dataState.progressBarState)
                     is DataState.Data -> {
-                        state.navigate(Navigate(Screen.HomeScreen.route))
+                        state.navigate(Navigate(Screen.Home.route))
                     }
                     is DataState.Error -> state.showError(dataState.messageToUser)
                 }

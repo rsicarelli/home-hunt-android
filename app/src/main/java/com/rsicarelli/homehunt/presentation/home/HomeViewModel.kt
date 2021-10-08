@@ -9,20 +9,33 @@ import androidx.lifecycle.viewModelScope
 import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.core.model.ProgressBarState
 import com.rsicarelli.homehunt.domain.model.Property
-import com.rsicarelli.homehunt.domain.usecase.GetPropertiesUseCase
+import com.rsicarelli.homehunt.domain.usecase.GetFilteredPropertiesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getProperties: GetPropertiesUseCase
+    private val getFilteredPropertiesUseCase: GetFilteredPropertiesUseCase
 ) : ViewModel() {
 
+    private var job: Job? = null
     private val _state: MutableState<HomeState> = mutableStateOf(HomeState())
     val state: State<HomeState> = _state
+
+    init {
+
+    }
+
+    override fun onCleared() {
+        job?.cancel()
+        super.onCleared()
+    }
 
     fun onEvent(events: HomeEvents) {
         when (events) {
@@ -31,25 +44,29 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getProperties(events: HomeEvents.LifecycleEvent) {
+        Timber.d("memes")
         if (events.event == Lifecycle.Event.ON_RESUME) {
             viewModelScope.launch {
-                getProperties().onEach { dataState ->
-                    println(dataState)
-                    when (dataState) {
-                        is DataState.Data -> state.updateProperties(dataState.data!!)
-                        is DataState.Loading -> state.toggleLoading(dataState.progressBarState)
-                    }
-                }.launchIn(viewModelScope)
+                job =
+                    getFilteredPropertiesUseCase().distinctUntilChanged().onEach { dataState ->
+                        println(dataState)
+                        when (dataState) {
+                            is DataState.Data -> updateProperties(dataState.data!!)
+                            is DataState.Loading -> state.toggleLoading(dataState.progressBarState)
+                            is DataState.Error -> Timber.e("Something wrong is not right")
+                        }
+                    }.launchIn(viewModelScope)
             }
         }
     }
 
-    private fun State<HomeState>.updateProperties(properties: List<Property>) {
-        _state.value = this.value.copy(
+    private fun updateProperties(properties: List<Property>) {
+        val copy = state.value.copy(
             properties = properties,
             emptyResults = properties.isEmpty(),
             progressBarState = ProgressBarState.Idle
         )
+        _state.value = copy
     }
 
     private fun State<HomeState>.toggleLoading(progressBarState: ProgressBarState) {

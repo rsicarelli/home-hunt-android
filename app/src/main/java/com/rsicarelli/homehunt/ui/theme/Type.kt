@@ -23,7 +23,7 @@ private val RobotoCondensed = FontFamily(
     Font(R.font.roboto_condensed_bold, FontWeight.W700),
 )
 
-val QuickSandTypography = Typography(
+val EczarTypography = Typography(
     h1 = TextStyle(
         fontFamily = Eczar,
         fontWeight = FontWeight.W400,

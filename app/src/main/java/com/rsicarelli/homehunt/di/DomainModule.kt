@@ -2,7 +2,6 @@ package com.rsicarelli.homehunt.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.rsicarelli.homehunt.data.datasource.FilterLocalDataSource
-import com.rsicarelli.homehunt.data.repository.UserRepositoryImpl
 import com.rsicarelli.homehunt.domain.repository.PropertyRepository
 import com.rsicarelli.homehunt.domain.repository.UserRepository
 import com.rsicarelli.homehunt.domain.usecase.*
@@ -28,7 +27,7 @@ object DomainModule {
     @Provides
     @Singleton
     fun providesGetPropertiesUseCase(propertiesRepository: PropertyRepository) =
-        GetPropertiesUseCase(propertiesRepository)
+        GetAllPropertiesUseCase(propertiesRepository)
 
     @Provides
     @Singleton
@@ -56,4 +55,15 @@ object DomainModule {
     @Singleton
     fun providesSaveFilterPreferencesUseCase(filterLocalDataSource: FilterLocalDataSource) =
         SaveFilterPreferencesUseCase(filterLocalDataSource)
+
+    @Provides
+    fun providesGetFilteredPropertiesUseCase(
+        getAllAllProperties: GetAllPropertiesUseCase,
+        getFilterPreferences: GetFilterPreferencesUseCase,
+        filterProperties: FilterPropertiesUseCase,
+    ) = GetFilteredPropertiesUseCase(
+        getAllAllProperties,
+        getFilterPreferences,
+        filterProperties
+    )
 }

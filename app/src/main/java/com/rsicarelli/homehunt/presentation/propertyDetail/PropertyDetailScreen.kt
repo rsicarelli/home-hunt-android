@@ -3,15 +3,11 @@ package com.rsicarelli.homehunt.presentation.propertyDetail
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -33,45 +29,6 @@ import com.rsicarelli.homehunt.presentation.components.ExpandableText
 import com.rsicarelli.homehunt.presentation.components.IconText
 import com.rsicarelli.homehunt.ui.theme.*
 
-
-val defaultProperty = Property(
-    reference = "a reference",
-    price = 100.0,
-    title = "a title",
-    location = "a location",
-    surface = 30,
-    dormCount = 2,
-    description = "a description",
-    bathCount = 2,
-    avatarUrl = "https://someimage.com",
-    tag = "EMPTY",
-    propertyUrl = "https://someurl.com",
-    videoUrl = "https://somevideo.com",
-    fullDescription = "a full description",
-    locationDescription = "a location description",
-    characteristics = listOf("foo", "bar"),
-    photoGalleryUrls = listOf(
-        "https://www.aproperties.es/media/properties/6713/6713_15904075335777.jpg",
-        "https://www.aproperties.es/media/properties/31800/31800_1632323417065.jpg",
-        "https://www.aproperties.es/media/properties/31800/31800_16323234170252.jpg",
-        "https://www.aproperties.es/media/properties/31800/31800_16323234170444.jpg",
-        "https://www.aproperties.es/media/properties/31800/31800_1632323417058.jpg",
-        "https://www.aproperties.es/media/properties/31800/31800_16323234170475.jpg",
-        "https://www.aproperties.es/media/properties/31800/31800_16323234170513.jpg",
-        "https://www.aproperties.es/media/properties/31800/31800_1632323417032.jpg",
-        "https://www.aproperties.es/media/properties/31800/31800_16323234170399.jpg",
-        "https://www.aproperties.es/media/properties/31800/31800_16323234170618.jpg",
-        "https://www.aproperties.es/media/properties/31800/31800_16323234170359.jpg",
-        "https://www.aproperties.es/media/properties/31800/31800_16323234170541.jpg",
-        "https://www.aproperties.es/media/properties/31800/31800_16323234170214.jpg",
-    ),
-    lat = 4.0,
-    lng = 2.0,
-    pdfUrl = "https://apdf.com",
-    origin = "",
-    viewedBy = emptyList(),
-    favouriteBy = emptyList()
-)
 
 @Composable
 fun PropertyDetailScreen(
@@ -116,9 +73,7 @@ private fun PropertyDetailContent(
                         .background(MaterialTheme.colors.background)
                         .padding(SpaceMedium)
                 ) {
-                    PropertyHeader(property) {
-                        scaffoldDelegate.launchVideoPlayer(it)
-                    }
+                    PropertyHeader(property)
                     PropertyDetails(property)
                 }
             }
@@ -143,8 +98,7 @@ fun PropertyDetails(property: Property) {
 
 @Composable
 fun PropertyHeader(
-    property: Property,
-    onPlayVideoClick: (String) -> Unit
+    property: Property
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
@@ -196,7 +150,7 @@ fun PropertyHeader(
             Text(
                 modifier = Modifier.constrainAs(price) {
                     bottom.linkTo(parent.bottom)
-                    end.linkTo(parent.end,  margin = (-SpaceMedium))
+                    end.linkTo(parent.end, margin = (-SpaceMedium))
                     start.linkTo(barrier, SpaceMedium)
                 },
                 text = "${property.price.toCurrency()}",

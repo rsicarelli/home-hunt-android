@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -41,12 +42,11 @@ import com.rsicarelli.homehunt.ui.theme.rally_blue_700
 @Composable
 fun HomeScreen(
     scaffoldDelegate: ScaffoldDelegate,
-    state: HomeState,
-    events: (HomeEvents) -> Unit,
+    viewModel: HomeViewModel = hiltViewModel(),
     imageLoader: ImageLoader
 ) {
 
-    HomeContent(events, state, imageLoader, scaffoldDelegate)
+    HomeContent(viewModel::onEvent, viewModel.state.value, imageLoader, scaffoldDelegate)
 
 }
 
@@ -118,7 +118,7 @@ fun PropertyList(
                     items(properties) { property ->
                         PropertyListItem(
                             property = property,
-                            onSelectProperty = { scaffoldDelegate.navigate("${Screen.PropertyDetailScreen.route}/${"AV1803021-1"}") },
+                            onSelectProperty = { scaffoldDelegate.navigate("${Screen.PropertyDetail.route}/${property.reference}") },
                             imageLoader = imageLoader,
                         )
                     }

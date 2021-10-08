@@ -73,28 +73,25 @@ class MainActivity : ComponentActivity() {
                         AppScaffold(
                             navController = navController,
                             showBottomBar = navBackStackEntry?.destination?.route in listOf(
-                                Screen.HomeScreen.route,
+                                Screen.Home.route,
                             ),
                             state = scaffoldState,
                             modifier = Modifier.fillMaxSize(),
                         ) {
                             NavHost(
                                 navController = navController,
-                                startDestination = Screen.HomeScreen.route, //Test only
+                                startDestination = Screen.Splash.route, //Test only
                                 modifier = Modifier.fillMaxSize()
                             ) {
-                                composable(Screen.LoginScreen.route) {
-                                    val viewModel: LoginViewModel = hiltViewModel()
+                                composable(Screen.Login.route) {
                                     LoginScreen(
                                         scaffoldDelegate = scaffoldDelegate,
-                                        state = viewModel.state.value,
-                                        events = viewModel::onEvent
                                     )
                                 }
 
                                 composable(
-                                    Screen.PropertyDetailScreen.route + "/{referenceId}",
-                                    arguments = Screen.PropertyDetailScreen.arguments
+                                    Screen.PropertyDetail.route + "/{referenceId}",
+                                    arguments = Screen.PropertyDetail.arguments
                                 ) {
                                     PropertyDetailScreen(
                                         imageLoader,
@@ -102,31 +99,22 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
 
-                                composable(Screen.HomeScreen.route) {
-                                    val viewModel: HomeViewModel = hiltViewModel()
+                                composable(Screen.Home.route) {
                                     HomeScreen(
                                         scaffoldDelegate = scaffoldDelegate,
-                                        state = viewModel.state.value,
-                                        events = viewModel::onEvent,
                                         imageLoader = imageLoader
                                     )
                                 }
 
-                                composable(Screen.SplashScreen.route) {
-                                    val viewModel: SplashViewModel = hiltViewModel()
+                                composable(Screen.Splash.route) {
                                     SplashScreen(
                                         scaffoldDelegate = scaffoldDelegate,
-                                        state = viewModel.state.value,
-                                        events = viewModel::onEvent
                                     )
                                 }
 
                                 composable(Screen.Filter.route) {
-                                    val viewModel: FilterViewModel = hiltViewModel()
                                     FilterScreen(
                                         scaffoldDelegate = scaffoldDelegate,
-                                        state = viewModel.state.value,
-                                        events = viewModel::onEvent
                                     )
                                 }
                             }

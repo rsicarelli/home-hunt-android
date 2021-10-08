@@ -5,15 +5,15 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 sealed class Screen(val route: String, val arguments: List<NamedNavArgument> = emptyList()) {
-    object SplashScreen : Screen("splash_screen", arguments = emptyList())
-    object LoginScreen : Screen("login_screen", arguments = emptyList())
+    object Splash : Screen("splash", arguments = emptyList())
+    object Login : Screen("login", arguments = emptyList())
 
-    object HomeScreen : Screen(route = "home_screen")
-    object Filter : Screen("filter_screen", emptyList())
+    object Home : Screen(route = "home")
+    object Filter : Screen("filter", emptyList())
 
-    object PropertyDetailScreen :
+    object PropertyDetail :
         Screen(
-            "property_details_screen",
+            "property_details",
             arguments = listOf(navArgument("referenceId") {
                 type = NavType.StringType
             })

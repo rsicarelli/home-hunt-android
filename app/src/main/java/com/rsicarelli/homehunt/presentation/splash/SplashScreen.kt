@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
@@ -20,7 +21,15 @@ import com.rsicarelli.homehunt.core.model.UiEvent
 @Composable
 fun SplashScreen(
     scaffoldDelegate: ScaffoldDelegate,
+    viewModel : SplashViewModel = hiltViewModel()
+) {
+    SplashContent(viewModel.state.value, scaffoldDelegate,viewModel::onEvent)
+}
+
+@Composable
+private fun SplashContent(
     state: SplashState,
+    scaffoldDelegate: ScaffoldDelegate,
     events: (SplashEvents) -> Unit
 ) {
     when (state.uiEvent) {

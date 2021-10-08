@@ -11,6 +11,7 @@ import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.domain.usecase.GetFilterPreferencesUseCase
 import com.rsicarelli.homehunt.domain.usecase.PreviewFilterResultUseCase
 import com.rsicarelli.homehunt.domain.usecase.SaveFilterPreferencesUseCase
+import com.rsicarelli.homehunt.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -55,7 +56,7 @@ class FilterViewModel @Inject constructor(
     private fun onSaveFilter() {
         viewModelScope.launch {
             saveFilter(SaveFilterPreferencesUseCase.Request(state.value.toFilter())).collect {
-                _state.value = state.value.copy(uiEvent = UiEvent.NavigateUp)
+                _state.value = state.value.copy(uiEvent = UiEvent.Navigate(Screen.Home.route))
             }
         }
     }
