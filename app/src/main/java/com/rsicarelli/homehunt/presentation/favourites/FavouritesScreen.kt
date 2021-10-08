@@ -1,12 +1,30 @@
 package com.rsicarelli.homehunt.presentation.favourites
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.rsicarelli.homehunt.domain.model.Property
+import com.rsicarelli.homehunt.domain.model.toTag
 import com.rsicarelli.homehunt.presentation.components.EmptyContent
+import com.rsicarelli.homehunt.presentation.components.Tag
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
+import com.rsicarelli.homehunt.ui.theme.*
 
 
 @Composable
@@ -46,6 +64,47 @@ private fun FavouritesContent(
                     !property.isFavourited
                 )
             )
+        },
+        extraContent = { property ->
+            ListingTags(property = property)
         }
     )
 }
+
+@Composable
+private fun ListingTags(property: Property) {
+    val color = rally_orange_300
+    val style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold)
+    val modifier = Modifier.padding(top = SpaceMedium)
+    val propertyTag = property.tag.toTag()
+
+    if (!property.isActive) {
+        Tag(
+            text = stringResource(id = R.string.inactive),
+            modifier = modifier,
+            style = style,
+            color = color
+        )
+    }
+
+    if (propertyTag is Property.Tag.RENTED) {
+        Spacer(modifier = Modifier.width(8.dp))
+        Tag(
+            text = stringResource(id = R.string.rented),
+            modifier = modifier,
+            style = style,
+            color = color
+        )
+    }
+
+    if (propertyTag is Property.Tag.RESERVED) {
+        Spacer(modifier = Modifier.width(8.dp))
+        Tag(
+            text = stringResource(id = R.string.reserved),
+            modifier = modifier,
+            style = style,
+            color = color
+        )
+    }
+}
+

@@ -164,25 +164,7 @@ fun PropertyFeatures(characteristics: List<String>) {
             .padding(start = SpaceMedium, end = SpaceMedium, bottom = SpaceMedium)
     ) {
         characteristics.forEach { word ->
-            Surface(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(10.dp)),
-                color = MaterialTheme.colors.surface,
-                elevation = 8.dp
-            ) {
-                Text(
-                    word,
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier
-                        .background(Color.Unspecified)
-                        .padding(
-                            start = SpaceSmall,
-                            end = SpaceSmall,
-                            top = SpaceSmallest,
-                            bottom = SpaceSmallest
-                        )
-                )
-            }
+            Tag(text = word)
         }
     }
 }

@@ -17,4 +17,7 @@
     <string name="unfavourite">Unfavourite</string>
     <string name="favourites">favourites</string>
     <string name="home">Home</string>
+    <string name="inactive">Inactive</string>
+    <string name="rented">Rented</string>
+    <string name="reserved">Reserved</string>
 </resources>

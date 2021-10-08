@@ -33,7 +33,8 @@ fun PropertyListItem(
     property: Property,
     onSelectProperty: (Property) -> Unit,
     onFavouriteClick: () -> Unit,
-    imageLoader: ImageLoader
+    imageLoader: ImageLoader,
+    extraContent: @Composable RowScope.(Property) -> Unit = {}
 ) {
     Surface(
         modifier = Modifier
@@ -71,13 +72,16 @@ fun PropertyListItem(
                     contentDescription = property.title,
                     contentScale = ContentScale.FillWidth,
                 )
-                Box(
-                    modifier = Modifier.padding(SpaceSmall)
-                ) {
-                    FavouritableIconButton(
-                        onFavouriteClick = onFavouriteClick,
-                        isFavourited = property.isFavourited
-                    )
+                Row {
+                    extraContent(property)
+                    Box(
+                        modifier = Modifier.padding(SpaceSmall)
+                    ) {
+                        FavouritableIconButton(
+                            onFavouriteClick = onFavouriteClick,
+                            isFavourited = property.isFavourited
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(SpaceSmall))

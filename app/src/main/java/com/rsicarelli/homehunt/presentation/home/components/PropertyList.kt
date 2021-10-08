@@ -35,7 +35,8 @@ fun PropertyList(
     scaffoldDelegate: ScaffoldDelegate,
     onToggleFavourite: (Property) -> Unit,
     showFab: Boolean,
-    @StringRes headerPrefixRes: Int
+    @StringRes headerPrefixRes: Int,
+    extraContent: @Composable RowScope.(Property) -> Unit = {}
 ) {
     if (properties.isEmpty()) return
 
@@ -61,6 +62,7 @@ fun PropertyList(
                     stickyHeader { Spacer(modifier = Modifier.height(50.dp)) }
                     items(properties) { property ->
                         PropertyListItem(
+                            extraContent = extraContent,
                             property = property,
                             onSelectProperty = { scaffoldDelegate.navigate("${Screen.PropertyDetail.route}/${property.reference}") },
                             imageLoader = imageLoader,
