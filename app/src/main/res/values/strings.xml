@@ -13,4 +13,6 @@
     <string name="see_on_web">See original listing</string>
     <string name="see_pdf">Open pdf file</string>
     <string name="location_description">Location description</string>
+    <string name="favourite">Favourite</string>
+    <string name="unfavourite">Unfavourite</string>
 </resources>

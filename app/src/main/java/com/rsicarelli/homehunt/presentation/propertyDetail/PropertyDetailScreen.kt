@@ -2,6 +2,7 @@ package com.rsicarelli.homehunt.presentation.propertyDetail
 
 import android.content.Intent
 import android.net.Uri
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,8 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,6 +47,14 @@ import com.rsicarelli.homehunt.presentation.components.IconText
 import com.rsicarelli.homehunt.presentation.components.MapView
 import com.rsicarelli.homehunt.ui.theme.*
 
+sealed class MenuAction(
+    @StringRes val label: Int,
+    @DrawableRes val icon: Int
+) {
+
+    object Favourite : MenuAction(R.string.favourite, R.drawable.ic_round_favorite)
+}
+
 @Composable
 fun PropertyDetailScreen(
     imageLoader: ImageLoader,
@@ -65,52 +73,110 @@ private fun PropertyDetailContent(
     events: (PropertyDetailEvents) -> Unit
 ) {
     state.property?.let { property ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
+        Box(modifier = Modifier.fillMaxSize()) {
+            PropertyDetail(property, imageLoader, scaffoldDelegate)
+            PropertyTopBar(property.isFavourited)
+        }
+    }
+}
+
+@Composable
+fun PropertyTopBar(
+    isFavourited: Boolean
+) {
+    var teste by remember { mutableStateOf(false) }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .statusBarsPadding()
+            .padding(SpaceMedium),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End
+    ) {
+        IconButton(onClick = { teste = !teste }) {
+            if (teste) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_round_favorite),
+                    contentDescription = stringResource(
+                        id = R.string.favourite
+                    )
+                )
+            } else {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_round_favorite_border),
+                    contentDescription = stringResource(
+                        id = R.string.unfavourite
+                    )
+                )
+            }
+
+        }
+
+    }
+    TopAppBar(
+        modifier = Modifier.fillMaxWidth(),
+        backgroundColor = Color.Transparent,
+        contentColor = Color.Unspecified,
+        elevation = 0.dp,
+
         ) {
-            item {
-                GalleryCarousel(
-                    photoGallery = property.photoGalleryUrls,
-                    imageLoader = imageLoader,
-                    hasVideo = property.videoUrl != null && property.videoUrl.isNotEmpty(),
-                    onOpenGallery = {
-                        scaffoldDelegate.launchPhotoDetailsGallery(property)
-                    }, onPlayVideo = {
-                        scaffoldDelegate.launchVideoPlayer(property.videoUrl!!)
-                    }
-                )
-            }
-            item { PropertyHeader(property) }
-            item { PropertyFeatures(property.characteristics) }
-            item {
-                PropertyMap(
-                    lat = property.lat,
-                    lng = property.lng,
-                    onMapClick = {
-                        //TODO
-                    }
-                )
-            }
-            item {
-                PropertyDetails(
-                    titleRes = R.string.about_this_property,
-                    content = property.fullDescription
-                )
-            }
-            item {
-                PropertyDetails(
-                    titleRes = R.string.location_description,
-                    content = property.locationDescription
-                )
-            }
-            item {
-                PropertyFooter(
-                    property.reference,
-                    property.propertyUrl,
-                    property.pdfUrl
-                )
-            }
+
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun PropertyDetail(
+    property: Property,
+    imageLoader: ImageLoader,
+    scaffoldDelegate: ScaffoldDelegate
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        item {
+            GalleryCarousel(
+                photoGallery = property.photoGalleryUrls,
+                imageLoader = imageLoader,
+                hasVideo = property.videoUrl != null && property.videoUrl.isNotEmpty(),
+                onOpenGallery = {
+                    scaffoldDelegate.launchPhotoDetailsGallery(property)
+                }, onPlayVideo = {
+                    scaffoldDelegate.launchVideoPlayer(property.videoUrl!!)
+                }
+            )
+        }
+        item { PropertyHeader(property) }
+        item { PropertyFeatures(property.characteristics) }
+        item {
+            PropertyMap(
+                lat = property.lat,
+                lng = property.lng,
+                onMapClick = {
+                    //TODO
+                }
+            )
+        }
+        item {
+            PropertyDetails(
+                titleRes = R.string.about_this_property,
+                content = property.fullDescription
+            )
+        }
+        item {
+            PropertyDetails(
+                titleRes = R.string.location_description,
+                content = property.locationDescription
+            )
+        }
+        item {
+            PropertyFooter(
+                property.reference,
+                property.propertyUrl,
+                property.pdfUrl
+            )
         }
     }
 }
