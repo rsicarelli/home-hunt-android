@@ -11,11 +11,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.FloatingActionButtonDefaults.elevation
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -27,13 +25,13 @@ import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.statusBarsPadding
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.core.util.toCurrency
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
+import com.rsicarelli.homehunt.presentation.components.FavouritableIconButton
 import com.rsicarelli.homehunt.presentation.components.IconText
 import com.rsicarelli.homehunt.presentation.components.OnLifecycleEvent
 import com.rsicarelli.homehunt.ui.navigation.Screen
@@ -64,7 +62,7 @@ private fun HomeContent(
 
     EmptyProperties(state.emptyResults)
 
-    PropertyList(properties = state.properties, imageLoader = imageLoader, scaffoldDelegate)
+    PropertyList(properties = state.properties, imageLoader = imageLoader, scaffoldDelegate, events)
 
     CircularIndeterminateProgressBar(state.progressBarState)
 }
@@ -93,7 +91,8 @@ fun EmptyProperties(emptyResults: Boolean) {
 fun PropertyList(
     properties: List<Property>,
     imageLoader: ImageLoader,
-    scaffoldDelegate: ScaffoldDelegate
+    scaffoldDelegate: ScaffoldDelegate,
+    events: (HomeEvents) -> Unit
 ) {
     if (properties.isEmpty()) return
 
@@ -122,6 +121,14 @@ fun PropertyList(
                             property = property,
                             onSelectProperty = { scaffoldDelegate.navigate("${Screen.PropertyDetail.route}/${property.reference}") },
                             imageLoader = imageLoader,
+                            onFavouriteClick = {
+                                events(
+                                    HomeEvents.ToggleFavourite(
+                                        property.reference,
+                                        !property.isFavourited
+                                    )
+                                )
+                            }
                         )
                     }
                 }
@@ -200,6 +207,7 @@ fun FilterFab(scrollState: LazyListState, onClick: () -> Unit) {
 fun PropertyListItem(
     property: Property,
     onSelectProperty: (Property) -> Unit,
+    onFavouriteClick: () -> Unit,
     imageLoader: ImageLoader
 ) {
     Surface(
@@ -219,7 +227,8 @@ fun PropertyListItem(
         Column(modifier = Modifier.fillMaxWidth()) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.TopEnd
             ) {
                 val painter = rememberImagePainter(
                     property.photoGalleryUrls.first(),
@@ -237,6 +246,14 @@ fun PropertyListItem(
                     contentDescription = property.title,
                     contentScale = ContentScale.FillWidth,
                 )
+                Box(
+                    modifier = Modifier.padding(SpaceSmall)
+                ) {
+                    FavouritableIconButton(
+                        onFavouriteClick = onFavouriteClick,
+                        isFavourited = property.isFavourited
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(SpaceSmall))
 

@@ -41,19 +41,8 @@ import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.util.toCurrency
 import com.rsicarelli.homehunt.domain.model.Property
-import com.rsicarelli.homehunt.presentation.components.ChipVerticalGrid
-import com.rsicarelli.homehunt.presentation.components.ExpandableText
-import com.rsicarelli.homehunt.presentation.components.IconText
-import com.rsicarelli.homehunt.presentation.components.MapView
+import com.rsicarelli.homehunt.presentation.components.*
 import com.rsicarelli.homehunt.ui.theme.*
-
-sealed class MenuAction(
-    @StringRes val label: Int,
-    @DrawableRes val icon: Int
-) {
-
-    object Favourite : MenuAction(R.string.favourite, R.drawable.ic_round_favorite)
-}
 
 @Composable
 fun PropertyDetailScreen(
@@ -77,7 +66,12 @@ private fun PropertyDetailContent(
             PropertyDetail(property, imageLoader, scaffoldDelegate)
             PropertyTopBar(
                 onFavouriteClick = {
-                    events(PropertyDetailEvents.ToggleFavourite(property.reference, !property.isFavourited))
+                    events(
+                        PropertyDetailEvents.ToggleFavourite(
+                            property.reference,
+                            !property.isFavourited
+                        )
+                    )
                 },
                 property.isFavourited
             )
@@ -98,35 +92,12 @@ fun PropertyTopBar(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
-        IconButton(onClick = onFavouriteClick) {
-            if (isFavourited) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_round_favorite),
-                    contentDescription = stringResource(
-                        id = R.string.favourite
-                    )
-                )
-            } else {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_round_favorite_border),
-                    contentDescription = stringResource(
-                        id = R.string.unfavourite
-                    )
-                )
-            }
-
-        }
-
+        FavouritableIconButton(
+            onFavouriteClick = onFavouriteClick,
+            isFavourited = isFavourited
+        )
     }
-    TopAppBar(
-        modifier = Modifier.fillMaxWidth(),
-        backgroundColor = Color.Transparent,
-        contentColor = Color.Unspecified,
-        elevation = 0.dp,
 
-        ) {
-
-    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
