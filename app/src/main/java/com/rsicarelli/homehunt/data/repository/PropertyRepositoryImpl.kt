@@ -10,7 +10,7 @@ class PropertyRepositoryImpl @Inject constructor(
     private val firestoreDataSource: FirestoreDataSource
 ) : PropertyRepository {
     override suspend fun getNewProperties(userId: String): Flow<List<Property>> =
-        firestoreDataSource.getNewProperties(userId)
+        firestoreDataSource.getActiveProperties(userId)
 
     override suspend fun getBy(referenceId: String): Flow<Property> =
         firestoreDataSource.getById(referenceId)

@@ -1,7 +1,7 @@
 package com.rsicarelli.homehunt.domain.usecase
 
 import com.rsicarelli.homehunt.core.model.DataState
-import com.rsicarelli.homehunt.domain.model.Filter
+import com.rsicarelli.homehunt.domain.model.SearchOption
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.repository.PropertyRepository
 import com.rsicarelli.homehunt.domain.repository.UserRepository
@@ -21,13 +21,13 @@ class PreviewFilterResultUseCase(
         propertyRepository.getNewProperties(userRepository.getUserId()).flatMapConcat {
             filterPropertiesUseCase.invoke(
                 FilterPropertiesUseCase.Request(
-                    filter = request.filter,
+                    searchOption = request.searchOption,
                     properties = it
                 )
             )
         }.flowOn(Dispatchers.IO)
 
     data class Request(
-        val filter: Filter
+        val searchOption: SearchOption
     )
 }

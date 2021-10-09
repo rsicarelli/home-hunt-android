@@ -30,7 +30,7 @@ class GetFilteredPropertiesUseCase(
                 filterProperties.invoke(
                     FilterPropertiesUseCase.Request(
                         properties = listAndFilter.first,
-                        filter = listAndFilter.second
+                        searchOption = listAndFilter.second
                     )
                 )
             }

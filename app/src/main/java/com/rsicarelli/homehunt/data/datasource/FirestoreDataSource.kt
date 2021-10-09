@@ -4,10 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.rsicarelli.homehunt.data.datasource.FirestoreDataSourceImpl.FirestoreMap.PROPERTY_COLLECTION
 import com.rsicarelli.homehunt.domain.model.Mapper
 import com.rsicarelli.homehunt.domain.model.Property
-import com.rsicarelli.homehunt.domain.model.Property.Tag.RENTED
-import com.rsicarelli.homehunt.domain.model.Property.Tag.RESERVED
 import com.rsicarelli.homehunt.domain.model.toProperty
-import com.rsicarelli.homehunt.domain.model.toTag
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
@@ -16,7 +13,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import timber.log.Timber
 
 interface FirestoreDataSource {
-    suspend fun getNewProperties(userId: String): Flow<List<Property>>
+    suspend fun getActiveProperties(userId: String): Flow<List<Property>>
     suspend fun getById(referenceId: String): Flow<Property>
     suspend fun getFavourites(): Flow<List<Property>>
     fun toggleFavourite(referenceId: String, isFavourited: Boolean)
@@ -28,7 +25,7 @@ class FirestoreDataSourceImpl(
     private val db: FirebaseFirestore
 ) : FirestoreDataSource {
 
-    override suspend fun getNewProperties(userId: String): Flow<List<Property>> {
+    override suspend fun getActiveProperties(userId: String): Flow<List<Property>> {
         return callbackFlow {
             val propertiesDocument = db.collection(PROPERTY_COLLECTION)
                 .whereEqualTo(Mapper.IS_ACTIVE, true)
@@ -42,17 +39,11 @@ class FirestoreDataSourceImpl(
                     return@addSnapshotListener
                 }
 
-                snapshot?.documents?.mapNotNull { documentSnapshot ->
-                    documentSnapshot.data!!.toProperty()
-                }
-                    ?.filter {
-                        val tag = it.tag.toTag()
-                        tag != RENTED || tag != RESERVED
-                    }?.filter {
-                        !it.viewedBy.contains(userId)
-                    }
-                    ?.let { trySend(it) }
-                    ?: close(Exception("Something wrong is not right"))
+                snapshot?.documents?.let { documentSnapshot ->
+                    documentSnapshot
+                        .mapNotNull { it.data?.toProperty() }
+                        .run { trySend(this) }
+                } ?: cancel("Document is null", RuntimeException())
             }
 
             awaitClose { subscription.remove() }
@@ -74,7 +65,6 @@ class FirestoreDataSourceImpl(
 
                 snapshot?.data?.let {
                     trySend(it.toProperty())
-//                    cancel("Done")
                 } ?: cancel("Could not locate property reference")
             }
 
