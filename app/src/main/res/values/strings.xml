@@ -6,8 +6,7 @@
     <string name="results">results</string>
     <string name="price_range">Price range</string>
     <string name="surface_range">Surface range</string>
-    <string name="dorm_count">Dorms</string>
-    <string name="bath_count">Baths</string>
+    <string name="bathrooms">Bathroom</string>
     <string name="video_available">Watch video</string>
     <string name="about_this_property">About this property</string>
     <string name="see_on_web">See original listing</string>
@@ -23,6 +22,7 @@
     <string name="calculating_results">Calculating results&#8230;</string>
     <string name="visibility">Visibility</string>
     <string name="go_back">Go back</string>
+    <string name="bedrooms">Bedrooms</string>
     <plurals name="see_results_plurals">
         <item quantity="one">See %d result</item>
         <item quantity="other">See %d results</item>

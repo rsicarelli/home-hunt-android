@@ -48,19 +48,17 @@ private object Surface : Filter {
 
 private object Dorm : Filter {
     override fun applyFilter(searchOption: SearchOption, property: Property): Boolean {
-        return when {
-            searchOption.dormSelection.isNotEmpty() -> property.dormCount in searchOption.dormSelection
-            else -> true
-        }
+        return property.dormCount?.let {
+            it >= searchOption.dormCount
+        } ?: true
     }
 }
 
 private object Bath : Filter {
     override fun applyFilter(searchOption: SearchOption, property: Property): Boolean {
-        return when {
-            searchOption.bathSelection.isNotEmpty() -> property.bathCount in searchOption.bathSelection
-            else -> true
-        }
+        return property.bathCount?.let {
+            it >= searchOption.bathCount
+        } ?: true
     }
 }
 

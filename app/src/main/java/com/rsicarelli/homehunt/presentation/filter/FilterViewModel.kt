@@ -77,13 +77,7 @@ class FilterViewModel @Inject constructor(
     }
 
     private fun bathSelectionChanged(events: FilterEvents.BathSelectionChanged) {
-        val selectedBaths = state.value.selectedBaths.toMutableList()
-        if (selectedBaths.contains(events.newValue)) {
-            selectedBaths.remove(events.newValue)
-        } else {
-            selectedBaths.add(events.newValue)
-        }
-        _state.value = state.value.copy(selectedBaths = selectedBaths)
+        _state.value = state.value.copy(bathCount = events.newValue)
     }
 
     private fun surfaceRangeChanged(events: FilterEvents.SurfaceRangeChanged) {
@@ -91,13 +85,7 @@ class FilterViewModel @Inject constructor(
     }
 
     private fun dormsSelectionChanged(events: FilterEvents.DormsSelectionChanged) {
-        val selectedDorms = state.value.selectedDorms.toMutableList()
-        if (selectedDorms.contains(events.newValue)) {
-            selectedDorms.remove(events.newValue)
-        } else {
-            selectedDorms.add(events.newValue)
-        }
-        _state.value = state.value.copy(selectedDorms = selectedDorms)
+        _state.value = state.value.copy(dormCount = events.newValue)
     }
 
     private fun priceRangeChanged(events: FilterEvents.PriceRangeChanged) {

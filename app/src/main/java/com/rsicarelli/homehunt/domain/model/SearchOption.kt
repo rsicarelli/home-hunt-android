@@ -8,8 +8,8 @@ import com.rsicarelli.homehunt.domain.strategy.allFilters
 data class SearchOption(
     val priceRange: Pair<Double, Double>,
     val surfaceRange: Pair<Int, Int>,
-    val dormSelection: List<Int>,
-    val bathSelection: List<Int>,
+    val dormCount: Int,
+    val bathCount: Int,
     val seenOnly: PropertyVisibility.Seen?,
     val notSeenOnly: PropertyVisibility.NotSeen?,
     val longTermOnly: Boolean,

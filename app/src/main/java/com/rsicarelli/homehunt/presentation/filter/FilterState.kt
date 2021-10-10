@@ -8,8 +8,8 @@ import com.rsicarelli.homehunt.domain.model.SearchOption
 data class FilterState(
     val priceRange: ClosedFloatingPointRange<Float> = 0f..1600F,
     val surfaceRange: ClosedFloatingPointRange<Float> = 0f..300f,
-    val selectedDorms: List<Int> = listOf(),
-    val selectedBaths: List<Int> = listOf(),
+    val dormCount: Int = 0,
+    val bathCount: Int = 0,
     val seenOnly: Seen? = null,
     val notSeenOnly: NotSeen? = null,
     val longTermOnly: Boolean = false,
@@ -21,8 +21,8 @@ data class FilterState(
     fun toFilter() = SearchOption(
         priceRange = Pair(priceRange.start.toDouble(), priceRange.endInclusive.toDouble()),
         surfaceRange = Pair(surfaceRange.start.toInt(), surfaceRange.endInclusive.toInt()),
-        dormSelection = selectedDorms,
-        bathSelection = selectedBaths,
+        dormCount = dormCount,
+        bathCount = bathCount,
         seenOnly = seenOnly,
         notSeenOnly = notSeenOnly,
         longTermOnly = longTermOnly,
@@ -33,8 +33,8 @@ data class FilterState(
     fun fromFilter(searchOption: SearchOption) = FilterState(
         priceRange = searchOption.priceRange.first.toFloat()..searchOption.priceRange.second.toFloat(),
         surfaceRange = searchOption.surfaceRange.first.toFloat()..searchOption.surfaceRange.second.toFloat(),
-        selectedBaths = searchOption.bathSelection,
-        selectedDorms = searchOption.dormSelection,
+        bathCount = searchOption.bathCount,
+        dormCount = searchOption.dormCount,
         seenOnly = searchOption.seenOnly,
         notSeenOnly = searchOption.notSeenOnly,
         longTermOnly = searchOption.longTermOnly,

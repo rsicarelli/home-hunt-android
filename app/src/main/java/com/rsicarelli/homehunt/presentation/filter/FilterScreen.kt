@@ -1,14 +1,19 @@
 package com.rsicarelli.homehunt.presentation.filter
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,12 +29,12 @@ import com.rsicarelli.homehunt.domain.model.PropertyVisibility.NotSeen
 import com.rsicarelli.homehunt.domain.model.PropertyVisibility.Seen
 import com.rsicarelli.homehunt.presentation.components.OnLifecycleEvent
 import com.rsicarelli.homehunt.presentation.components.Selector
+import com.rsicarelli.homehunt.presentation.filter.FilterEvents.BathSelectionChanged
+import com.rsicarelli.homehunt.presentation.filter.FilterEvents.DormsSelectionChanged
 import com.rsicarelli.homehunt.ui.theme.*
 
 private val priceRange = 0F..2000F
 private val surfaceRange = 0F..300F
-
-val countRange = mapOf("1" to 1, "2" to 2, "3" to 3, "4" to 4, "5" to 5)
 
 val visibilityRange = mapOf("Not seen" to NotSeen, "Seen" to Seen)
 
@@ -77,9 +82,9 @@ private fun FilterContent(
             }
             item { PriceRange(state, events) }
             item { SurfaceRange(state, events) }
-            item { DormSelector(state = state, events = events) }
-            item { VisibilitySelector(state = state, events = events) }
+            item { DormSelector(state, events) }
             item { BathSelector(state = state, events = events) }
+            item { VisibilitySelector(state = state, events = events) }
         }
 
         SeeResultsButton(state, events)
@@ -218,13 +223,12 @@ private fun DormSelector(
     state: FilterState,
     events: (FilterEvents) -> Unit
 ) {
-    Selector(
-        titleRes = R.string.dorm_count,
-        items = countRange,
-        selectedItems = state.selectedDorms,
-        onSelectedChanged = {
-            events(FilterEvents.DormsSelectionChanged(it.second))
-        })
+    AddOrRemoveItem(
+        text = stringResource(id = R.string.bedrooms),
+        value = state.dormCount,
+        onIncrease = { events(DormsSelectionChanged(state.dormCount + 1)) },
+        onDecrease = { events(DormsSelectionChanged(state.dormCount - 1)) }
+    )
 }
 
 @Composable
@@ -232,11 +236,88 @@ private fun BathSelector(
     state: FilterState,
     events: (FilterEvents) -> Unit
 ) {
-    Selector(
-        titleRes = R.string.bath_count,
-        items = countRange,
-        selectedItems = state.selectedBaths,
-        onSelectedChanged = {
-            events(FilterEvents.BathSelectionChanged(it.second))
-        })
+    AddOrRemoveItem(
+        text = stringResource(id = R.string.bathrooms),
+        value = state.bathCount,
+        onIncrease = { events(BathSelectionChanged(state.bathCount + 1)) },
+        onDecrease = { events(BathSelectionChanged(state.bathCount - 1)) }
+    )
+}
+
+@Composable
+private fun AddOrRemoveItem(
+    text: String,
+    value: Int,
+    onIncrease: () -> Unit,
+    onDecrease: () -> Unit
+) {
+    Spacer(modifier = Modifier.height(SpaceMedium))
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            modifier = Modifier.weight(1.0f),
+            text = text,
+            style = MaterialTheme.typography.h6,
+        )
+        Counter(
+            value,
+            onIncrease = onIncrease,
+            onDecrease = onDecrease
+        )
+    }
+}
+
+@Composable
+private fun Counter(
+    value: Int,
+    onIncrease: () -> Unit,
+    onDecrease: () -> Unit
+) {
+    val isDecreaseEnabled = value != 0
+    val isIncreaseEnabled = value != 5
+
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RoundButton(onDecrease, isDecreaseEnabled, Icons.Rounded.Delete)
+        Spacer(modifier = Modifier.width(SpaceMedium))
+        Text(text = value.toString(), style = MaterialTheme.typography.body2)
+        Spacer(modifier = Modifier.width(SpaceMedium))
+        RoundButton(onIncrease, isIncreaseEnabled, Icons.Rounded.Add)
+    }
+
+}
+
+@Composable
+private fun RoundButton(
+    onClick: () -> Unit,
+    enabled: Boolean,
+    imageVector: ImageVector
+) {
+    val color =
+        if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primary.copy(alpha = 0.3f)
+
+    IconButton(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = Modifier
+            .then(Modifier.size(40.dp))
+            .border(
+                1.dp,
+                color = color,
+                shape = CircleShape
+            )
+    ) {
+
+        Icon(
+            imageVector,
+            modifier = Modifier.size(20.dp),
+            contentDescription = "content description",
+            tint = color
+        )
+    }
 }
