@@ -1,6 +1,7 @@
 package com.rsicarelli.homehunt.presentation.filter
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -53,7 +54,6 @@ fun FilterScreen(
     scaffoldDelegate: ScaffoldDelegate,
     viewModel: FilterViewModel = hiltViewModel()
 ) {
-
     FilterContent(viewModel.state.value, scaffoldDelegate, viewModel::onEvent)
 }
 
@@ -80,21 +80,18 @@ private fun FilterContent(
             .fillMaxWidth()
             .padding(SpaceLarge)
     ) {
-        Spacer(modifier = Modifier.height(SpaceBiggest))
+        LazyColumn(
+            Modifier
+                .fillMaxWidth()
+                .weight(1.0f)) {
+            item { PriceRange(state, events) }
+            item { SurfaceRange(state, events) }
+            item { DormSelector(state = state, events = events) }
+            item { BathSelector(state = state, events = events) }
+            item {
 
-        PriceRange(state, events)
-
-        Spacer(modifier = Modifier.height(SpaceLarger))
-
-        SurfaceRange(state, events)
-
-        Spacer(modifier = Modifier.height(SpaceLarger))
-
-        DormSelector(state = state, events = events)
-
-        Spacer(modifier = Modifier.height(SpaceLarger))
-
-        BathSelector(state = state, events = events)
+            }
+        }
 
         Box(
             modifier = Modifier
@@ -127,6 +124,8 @@ private fun SurfaceRange(
     state: FilterState,
     events: (FilterEvents) -> Unit
 ) {
+    Spacer(modifier = Modifier.height(SpaceLarger))
+
     Text(
         text = stringResource(id = R.string.surface),
         style = MaterialTheme.typography.h6
@@ -143,6 +142,8 @@ private fun PriceRange(
     state: FilterState,
     events: (FilterEvents) -> Unit
 ) {
+    Spacer(modifier = Modifier.height(SpaceBiggest))
+
     Text(
         text = stringResource(id = R.string.price),
         style = MaterialTheme.typography.h6
@@ -155,10 +156,12 @@ private fun PriceRange(
 }
 
 @Composable
-fun DormSelector(
+private fun DormSelector(
     state: FilterState,
     events: (FilterEvents) -> Unit
 ) {
+    Spacer(modifier = Modifier.height(SpaceLarger))
+
     Text(
         text = stringResource(id = R.string.dorm_count),
         style = MaterialTheme.typography.h6
@@ -174,10 +177,12 @@ fun DormSelector(
 }
 
 @Composable
-fun BathSelector(
+private fun BathSelector(
     state: FilterState,
     events: (FilterEvents) -> Unit
 ) {
+    Spacer(modifier = Modifier.height(SpaceLarger))
+
     Text(
         text = stringResource(id = R.string.bath_count),
         style = MaterialTheme.typography.h6
