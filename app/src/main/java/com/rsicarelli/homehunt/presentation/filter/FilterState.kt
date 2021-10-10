@@ -6,8 +6,8 @@ import com.rsicarelli.homehunt.domain.model.PropertyVisibility.Seen
 import com.rsicarelli.homehunt.domain.model.SearchOption
 
 data class FilterState(
-    val priceRange: ClosedFloatingPointRange<Float> = 0.0f..999999F,
-    val surfaceRange: ClosedFloatingPointRange<Float> = 0.0f..999999f,
+    val priceRange: ClosedFloatingPointRange<Float> = 0f..1600F,
+    val surfaceRange: ClosedFloatingPointRange<Float> = 0f..300f,
     val selectedDorms: List<Int> = listOf(),
     val selectedBaths: List<Int> = listOf(),
     val seenOnly: Seen? = null,

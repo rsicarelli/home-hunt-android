@@ -47,7 +47,7 @@ val EczarTypography = Typography(
     h5 = TextStyle(
         fontFamily = Eczar,
         fontWeight = FontWeight.W500,
-        fontSize = 27.sp,
+        fontSize = 30.sp,
     ),
     h6 = TextStyle(
         fontFamily = Eczar,
