@@ -90,7 +90,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             NavHost(
                                 navController = navController,
-                                startDestination = Screen.Splash.route, //Test only
+                                startDestination = Screen.Home.route, //Test only
                                 modifier = Modifier.fillMaxSize()
                             ) {
                                 composable(Screen.Login.route) {

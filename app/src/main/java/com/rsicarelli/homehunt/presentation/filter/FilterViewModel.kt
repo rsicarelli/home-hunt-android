@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.core.model.UiEvent
+import com.rsicarelli.homehunt.domain.model.PropertyVisibility
 import com.rsicarelli.homehunt.domain.usecase.GetFilterPreferencesUseCase
 import com.rsicarelli.homehunt.domain.usecase.PreviewFilterResultUseCase
 import com.rsicarelli.homehunt.domain.usecase.SaveFilterPreferencesUseCase
@@ -34,12 +35,26 @@ class FilterViewModel @Inject constructor(
             FilterEvents.ClearFilter -> TODO()
             FilterEvents.SaveFilter -> onSaveFilter()
             is FilterEvents.PriceRangeChanged -> priceRangeChanged(events)
-            is FilterEvents.DormsSelectedChange -> dormsSelectionChanged(events)
+            is FilterEvents.DormsSelectionChanged -> dormsSelectionChanged(events)
             is FilterEvents.SurfaceRangeChanged -> surfaceRangeChanged(events)
-            is FilterEvents.BathSelectedChange -> bathSelectionChanged(events)
+            is FilterEvents.BathSelectionChanged -> bathSelectionChanged(events)
             is FilterEvents.LifecycleEvent -> handleLifecycle(events.event)
+            is FilterEvents.VisibilitySelectionChanged -> handleVisibilityChanged(events.newValue)
         }
         previewResults()
+    }
+
+    private fun handleVisibilityChanged(newValue: PropertyVisibility) {
+        when (newValue) {
+            is PropertyVisibility.Seen -> {
+                val value = if (state.value.seenOnly == null) newValue else null
+                _state.value = state.value.copy(seenOnly = value)
+            }
+            is PropertyVisibility.NotSeen -> {
+                val value = if (state.value.notSeenOnly == null) newValue else null
+                _state.value = state.value.copy(notSeenOnly = value)
+            }
+        }
     }
 
     private fun handleLifecycle(event: Lifecycle.Event) {
@@ -61,7 +76,7 @@ class FilterViewModel @Inject constructor(
         }
     }
 
-    private fun bathSelectionChanged(events: FilterEvents.BathSelectedChange) {
+    private fun bathSelectionChanged(events: FilterEvents.BathSelectionChanged) {
         val selectedBaths = state.value.selectedBaths.toMutableList()
         if (selectedBaths.contains(events.newValue)) {
             selectedBaths.remove(events.newValue)
@@ -75,7 +90,7 @@ class FilterViewModel @Inject constructor(
         _state.value = state.value.copy(surfaceRange = events.range)
     }
 
-    private fun dormsSelectionChanged(events: FilterEvents.DormsSelectedChange) {
+    private fun dormsSelectionChanged(events: FilterEvents.DormsSelectionChanged) {
         val selectedDorms = state.value.selectedDorms.toMutableList()
         if (selectedDorms.contains(events.newValue)) {
             selectedDorms.remove(events.newValue)

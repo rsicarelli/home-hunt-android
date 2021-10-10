@@ -4,6 +4,7 @@ import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.core.model.ProgressBarState
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.repository.PropertyRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
@@ -19,6 +20,6 @@ class GetFavouritedPropertiesUseCase(
                 .collect {
                     emit(DataState.Data(it))
                 }
-        }
+        }.flowOn(Dispatchers.IO)
 
 }

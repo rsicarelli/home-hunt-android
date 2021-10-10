@@ -3,7 +3,6 @@ package com.rsicarelli.homehunt.presentation.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
@@ -17,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -28,6 +26,7 @@ import com.rsicarelli.homehunt.ui.navigation.BottomNavItem
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HintGray
 import com.rsicarelli.homehunt.ui.theme.Secondary
+import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 
 @Composable
@@ -62,35 +61,41 @@ fun AppScaffold(
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
-                BottomAppBar(
-                    modifier = Modifier.fillMaxWidth().systemBarsPadding(),
-                    backgroundColor = MaterialTheme.colors.surface,
-                    cutoutShape = CircleShape,
-                    elevation = 5.dp
-                ) {
-                    BottomNavigation {
-                        bottomNavItems.forEachIndexed { _, bottomNavItem ->
-                            AppBottomNavItem(
-                                icon = bottomNavItem.icon,
-                                iconPainter = bottomNavItem.painter,
-                                contentDescription = bottomNavItem.contentDescription,
-                                selected = bottomNavItem.route == navController.currentDestination?.route,
-                                alertCount = bottomNavItem.alertCount,
-                                enabled = bottomNavItem.icon != null
-                            ) {
-                                if (navController.currentDestination?.route != bottomNavItem.route) {
-                                    navController.navigate(bottomNavItem.route)
-                                }
-                            }
-                        }
-                    }
-                }
+                TestNavigation(navController)
             }
         },
         scaffoldState = state,
         modifier = modifier
     ) {
         content()
+    }
+}
+
+@Composable
+private fun AppBottomNavigation(
+    bottomNavItems: List<BottomNavItem>,
+    navController: NavController
+) {
+    BottomAppBar(
+        modifier = Modifier
+            .fillMaxWidth()
+            .systemBarsPadding()
+    ) {
+        BottomNavigation {
+            bottomNavItems.forEachIndexed { _, bottomNavItem ->
+                AppBottomNavItem(
+                    icon = bottomNavItem.icon,
+                    iconPainter = bottomNavItem.painter,
+                    contentDescription = bottomNavItem.contentDescription,
+                    selected = bottomNavItem.route == navController.currentDestination?.route,
+                    enabled = bottomNavItem.icon != null
+                ) {
+                    if (navController.currentDestination?.route != bottomNavItem.route) {
+                        navController.navigate(bottomNavItem.route)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -102,15 +107,11 @@ fun RowScope.AppBottomNavItem(
     iconPainter: Painter? = null,
     contentDescription: String? = null,
     selected: Boolean = false,
-    alertCount: Int? = null,
     selectedColor: Color = MaterialTheme.colors.primary,
     unselectedColor: Color = HintGray,
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
-    if (alertCount != null && alertCount < 0) {
-        throw IllegalArgumentException("Alert count can't be negative")
-    }
     val lineLength = animateFloatAsState(
         targetValue = if (selected) 1f else 0f,
         animationSpec = tween(
@@ -126,47 +127,84 @@ fun RowScope.AppBottomNavItem(
         selectedContentColor = selectedColor,
         unselectedContentColor = unselectedColor,
         icon = {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(SpaceSmall)
-                    .drawBehind {
-                        if (lineLength.value > 0f) {
-                            drawLine(
-                                color = if (selected) selectedColor
-                                else unselectedColor,
-                                start = Offset(
-                                    size.width / 2f - lineLength.value * 15.dp.toPx(),
-                                    size.height
-                                ),
-                                end = Offset(
-                                    size.width / 2f + lineLength.value * 15.dp.toPx(),
-                                    size.height
-                                ),
-                                strokeWidth = 2.dp.toPx(),
-                                cap = StrokeCap.Round
-                            )
-                        }
 
-
-                    }
-            ) {
-                if (icon != null) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = contentDescription,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                    )
-                } else if (iconPainter != null) {
-                    Icon(
-                        painter = iconPainter,
-                        contentDescription = contentDescription,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                    )
-                }
-            }
         }
     )
+}
+
+@Composable
+fun TestNavigation(navController: NavController) {
+    val items: List<BottomNavItem> = listOf(
+        BottomNavItem(
+            route = Screen.Home.route,
+            icon = Icons.Rounded.Home,
+            contentDescription = stringResource(id = R.string.home)
+        ),
+        BottomNavItem(
+            route = Screen.Favourites.route,
+            icon = Icons.Rounded.Favorite,
+            contentDescription = stringResource(id = R.string.favourites)
+        )
+    )
+
+    BottomNavigation(
+        backgroundColor = MaterialTheme.colors.surface,
+        contentColor = Color.White
+    ) {
+        items.forEach { item ->
+            val selected = item.route == navController.currentDestination?.route
+
+            val lineLength = animateFloatAsState(
+                targetValue = if (selected) 1f else 0f,
+                animationSpec = tween(
+                    durationMillis = 300
+                )
+            )
+
+            BottomNavigationItem(
+                icon = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(SpaceSmall)
+                            .drawBehind {
+                                if (lineLength.value > 0f) {
+                                    drawLine(
+                                        color = if (selected) Color.White
+                                        else Color.White.copy(0.4f),
+                                        start = Offset(
+                                            size.width / 2f - lineLength.value * 15.dp.toPx(),
+                                            size.height
+                                        ),
+                                        end = Offset(
+                                            size.width / 2f + lineLength.value * 15.dp.toPx(),
+                                            size.height
+                                        ),
+                                        strokeWidth = 2.dp.toPx(),
+                                        cap = StrokeCap.Round
+                                    )
+                                }
+
+
+                            }
+                    ) {
+                        if (item.icon != null) {
+                            Icon(
+                                imageVector = item.icon,
+                                contentDescription = item.contentDescription,
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                            )
+                        }
+                    }
+                },
+                selected = selected,
+                onClick = {
+                    if (navController.currentDestination?.route != item.route) {
+                        navController.navigate(item.route)
+                    }
+                }
+            )
+        }
+    }
 }

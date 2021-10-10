@@ -49,7 +49,6 @@ private fun FavouritesContent(
     PropertyList(
         properties = state.properties,
         imageLoader = imageLoader,
-        showFab = false,
         headerPrefixRes = R.string.favourites,
         scaffoldDelegate = scaffoldDelegate,
         onToggleFavourite = { property ->

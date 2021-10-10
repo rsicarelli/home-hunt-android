@@ -8,9 +8,11 @@ import com.rsicarelli.homehunt.core.model.ProgressBarState
 import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.core.model.UiText
 import com.rsicarelli.homehunt.core.util.await
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class SignInUseCase(
     private val firebaseAuth: FirebaseAuth
@@ -33,7 +35,7 @@ class SignInUseCase(
             delay(100)
             emit(DataState.Loading(ProgressBarState.Idle))
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
 
     data class Request(

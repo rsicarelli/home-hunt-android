@@ -14,7 +14,7 @@ val allFilters = listOf(
     Surface,
     Dorm,
     Bath,
-    Seen,
+    Visibility,
     LongTermOnly,
     Rented,
     Reserved
@@ -64,17 +64,23 @@ private object Bath : Filter {
     }
 }
 
-private object Seen : Filter {
+private object Visibility : Filter {
     override fun applyFilter(searchOption: SearchOption, property: Property): Boolean {
-        if (searchOption.notSeenOnly) {
+        if ((searchOption.seenOnly == null && searchOption.notSeenOnly == null)
+            || (searchOption.seenOnly != null && searchOption.notSeenOnly != null)
+        ) {
+            return true
+        }
+
+        searchOption.notSeenOnly?.let {
             return !property.viewedBy.contains(searchOption.userId)
         }
 
-        if (searchOption.seenOnly) {
+        searchOption.seenOnly?.let {
             return property.viewedBy.contains(searchOption.userId)
         }
 
-        return searchOption.seenAndNotSeen
+        return true
     }
 }
 

@@ -21,6 +21,7 @@
     <string name="rented">Rented</string>
     <string name="reserved">Reserved</string>
     <string name="calculating_results">Calculating results&#8230;</string>
+    <string name="visibility">Visibility</string>
     <plurals name="see_results_plurals">
         <item quantity="one">See %d result</item>
         <item quantity="other">See %d results</item>

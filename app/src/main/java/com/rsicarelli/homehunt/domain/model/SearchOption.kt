@@ -10,9 +10,8 @@ data class SearchOption(
     val surfaceRange: Pair<Int, Int>,
     val dormSelection: List<Int>,
     val bathSelection: List<Int>,
-    val seenOnly: Boolean,
-    val notSeenOnly: Boolean,
-    val seenAndNotSeen: Boolean,
+    val seenOnly: PropertyVisibility.Seen?,
+    val notSeenOnly: PropertyVisibility.NotSeen?,
     val longTermOnly: Boolean,
     val showRented: Boolean,
     val showReserved: Boolean
@@ -27,4 +26,9 @@ data class SearchOption(
             }
         }
     }
+}
+
+sealed class PropertyVisibility {
+    object Seen : PropertyVisibility()
+    object NotSeen : PropertyVisibility()
 }

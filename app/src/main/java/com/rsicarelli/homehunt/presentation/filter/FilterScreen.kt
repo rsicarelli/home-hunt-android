@@ -17,9 +17,12 @@ import com.google.accompanist.insets.systemBarsPadding
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
-import com.rsicarelli.homehunt.presentation.components.ChipGroup
+import com.rsicarelli.homehunt.domain.model.PropertyVisibility
+import com.rsicarelli.homehunt.domain.model.PropertyVisibility.NotSeen
+import com.rsicarelli.homehunt.domain.model.PropertyVisibility.Seen
 import com.rsicarelli.homehunt.presentation.components.CustomRangeSlider
 import com.rsicarelli.homehunt.presentation.components.OnLifecycleEvent
+import com.rsicarelli.homehunt.presentation.components.Selector
 import com.rsicarelli.homehunt.ui.theme.*
 
 val priceRange = mapOf(
@@ -48,7 +51,9 @@ val surfaceRange = mapOf(
     "180m² +" to 180.0
 )
 
-val countRange = listOf(1, 2, 3, 4, 5)
+val countRange = mapOf("1" to 1, "2" to 2, "3" to 3, "4" to 4, "5" to 5)
+
+val visibilityRange = mapOf("Not seen" to NotSeen, "Seen" to Seen)
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -90,6 +95,9 @@ private fun FilterContent(
             item { PriceRange(state, events) }
             item { SurfaceRange(state, events) }
             item { DormSelector(state = state, events = events) }
+            item {
+                VisibilitySelector(state = state, events = events)
+            }
             item { BathSelector(state = state, events = events) }
             item {
 
@@ -98,7 +106,6 @@ private fun FilterContent(
 
         Box(
             modifier = Modifier
-                .weight(1f)
                 .fillMaxWidth()
                 .systemBarsPadding(),
             contentAlignment = Alignment.BottomCenter
@@ -132,6 +139,23 @@ private fun FilterContent(
         }
 
     }
+}
+
+@Composable
+fun VisibilitySelector(state: FilterState, events: (FilterEvents) -> Unit) {
+    val selectedItems = mutableListOf<PropertyVisibility>()
+    state.seenOnly?.let { selectedItems.add(it) }
+    state.notSeenOnly?.let { selectedItems.add(it) }
+
+    Selector(
+        titleRes = R.string.visibility,
+        items = visibilityRange,
+        selectedItems = selectedItems,
+        onSelectedChanged = {
+            events(FilterEvents.VisibilitySelectionChanged(it.second))
+        },
+        horizontalArrangement = Arrangement.spacedBy(2.dp)
+    )
 }
 
 @Composable
@@ -175,20 +199,13 @@ private fun DormSelector(
     state: FilterState,
     events: (FilterEvents) -> Unit
 ) {
-    Spacer(modifier = Modifier.height(SpaceLarger))
-
-    Text(
-        text = stringResource(id = R.string.dorm_count),
-        style = MaterialTheme.typography.h6
-    )
-    Spacer(modifier = Modifier.height(SpaceMedium))
-    ChipGroup(
+    Selector(
+        titleRes = R.string.dorm_count,
         items = countRange,
-        selectedItem = state.selectedDorms,
+        selectedItems = state.selectedDorms,
         onSelectedChanged = {
-            events(FilterEvents.DormsSelectedChange(it.toInt()))
-        }
-    )
+            events(FilterEvents.DormsSelectionChanged(it.second))
+        })
 }
 
 @Composable
@@ -196,18 +213,11 @@ private fun BathSelector(
     state: FilterState,
     events: (FilterEvents) -> Unit
 ) {
-    Spacer(modifier = Modifier.height(SpaceLarger))
-
-    Text(
-        text = stringResource(id = R.string.bath_count),
-        style = MaterialTheme.typography.h6
-    )
-    Spacer(modifier = Modifier.height(SpaceMedium))
-    ChipGroup(
+    Selector(
+        titleRes = R.string.bath_count,
         items = countRange,
-        selectedItem = state.selectedBaths,
+        selectedItems = state.selectedBaths,
         onSelectedChanged = {
-            events(FilterEvents.BathSelectedChange(it.toInt()))
-        }
-    )
+            events(FilterEvents.BathSelectionChanged(it.second))
+        })
 }

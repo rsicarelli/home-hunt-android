@@ -22,29 +22,10 @@ private val DarkColorPalette = darkColors(
     onSurface = OnSurface,
 )
 
-@SuppressLint("ConflictingOnColor")
-private val LightColorPalette = lightColors(
-    primary = Primary,
-    primaryVariant = PrimaryVariant,
-    onPrimary = OnSecondary,
-    secondary = Secondary,
-    secondaryVariant = SecondaryVariant,
-    onSecondary = OnSecondary,
-    error = Error,
-    onError = OnError,
-    background = Background,
-    onBackground = OnBackground,
-    surface = Surface,
-    onSurface = OnSurface,
-)
 
 @Composable
 fun HomeHuntTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
+    val colors = DarkColorPalette
 
     MaterialTheme(
         colors = colors,

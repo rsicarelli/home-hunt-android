@@ -25,7 +25,7 @@ class PreviewFilterResultUseCase(
                     properties = it
                 )
             )
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(Dispatchers.Default)
 
     data class Request(
         val searchOption: SearchOption

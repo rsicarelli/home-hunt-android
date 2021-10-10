@@ -31,17 +31,15 @@ import com.rsicarelli.homehunt.ui.theme.rally_blue_700
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun PropertyList(
+    scrollState: LazyListState = rememberLazyListState(),
     properties: List<Property>,
     imageLoader: ImageLoader,
     scaffoldDelegate: ScaffoldDelegate,
     onToggleFavourite: (Property) -> Unit,
-    showFab: Boolean,
     @StringRes headerPrefixRes: Int,
     extraContent: @Composable RowScope.(Property) -> Unit = {}
 ) {
     if (properties.isEmpty()) return
-
-    val scrollState = rememberLazyListState()
 
     Box(
         modifier = Modifier
@@ -61,7 +59,7 @@ fun PropertyList(
                     modifier = Modifier.fillMaxSize(),
                     state = scrollState
                 ) {
-                    stickyHeader { Spacer(modifier = Modifier.height(50.dp)) }
+                    item { Spacer(modifier = Modifier.height(50.dp)) }
                     items(properties) { property ->
                         PropertyListItem(
                             extraContent = extraContent,
@@ -71,12 +69,7 @@ fun PropertyList(
                             onFavouriteClick = { onToggleFavourite(property) }
                         )
                     }
-                }
-            }
-
-            if (showFab) {
-                FilterFab(scrollState = scrollState) {
-                    scaffoldDelegate.navigate(UiEvent.Navigate(Screen.Filter.route))
+                    item { Spacer(modifier = Modifier.height(8.dp)) }
                 }
             }
         }
@@ -114,31 +107,5 @@ private fun ResultsHeader(
                 style = MaterialTheme.typography.h4
             )
         }
-    }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-private fun FilterFab(scrollState: LazyListState, onClick: () -> Unit) {
-    AnimatedVisibility(
-        visible = !scrollState.isScrollInProgress,
-        enter = slideInVertically() + expandVertically(
-            expandFrom = Alignment.Bottom
-        ) + fadeIn(initialAlpha = 0.3f),
-        exit = slideOutVertically() + shrinkVertically() + fadeOut()
-    ) {
-        Box(modifier = Modifier.padding(bottom = SpaceSmall)) {
-            FloatingActionButton(
-                onClick = onClick,
-                elevation = FloatingActionButtonDefaults.elevation(10.dp),
-                backgroundColor = rally_blue_700
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_round_filter),
-                    contentDescription = "Filter"
-                )
-            }
-        }
-
     }
 }

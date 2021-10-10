@@ -1,6 +1,8 @@
 package com.rsicarelli.homehunt.presentation.filter
 
 import com.rsicarelli.homehunt.core.model.UiEvent
+import com.rsicarelli.homehunt.domain.model.PropertyVisibility.NotSeen
+import com.rsicarelli.homehunt.domain.model.PropertyVisibility.Seen
 import com.rsicarelli.homehunt.domain.model.SearchOption
 
 data class FilterState(
@@ -8,9 +10,8 @@ data class FilterState(
     val surfaceRange: ClosedFloatingPointRange<Float> = 0.0f..999999f,
     val selectedDorms: List<Int> = listOf(),
     val selectedBaths: List<Int> = listOf(),
-    val seenOnly: Boolean = false,
-    val notSeenOnly: Boolean = false,
-    val seenAndNotSeen: Boolean = true,
+    val seenOnly: Seen? = null,
+    val notSeenOnly: NotSeen? = null,
     val longTermOnly: Boolean = false,
     val previewResultCount: Int? = null,
     val showReserved: Boolean = false,
@@ -24,7 +25,6 @@ data class FilterState(
         bathSelection = selectedBaths,
         seenOnly = seenOnly,
         notSeenOnly = notSeenOnly,
-        seenAndNotSeen = seenAndNotSeen,
         longTermOnly = longTermOnly,
         showReserved = showReserved,
         showRented = showRented
@@ -37,7 +37,6 @@ data class FilterState(
         selectedDorms = searchOption.dormSelection,
         seenOnly = searchOption.seenOnly,
         notSeenOnly = searchOption.notSeenOnly,
-        seenAndNotSeen = searchOption.seenAndNotSeen,
         longTermOnly = searchOption.longTermOnly,
         showRented = searchOption.showRented,
         showReserved = searchOption.showReserved

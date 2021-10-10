@@ -1,6 +1,7 @@
 package com.rsicarelli.homehunt.data.datasource
 
 import android.content.SharedPreferences
+import com.rsicarelli.homehunt.domain.model.PropertyVisibility
 import com.rsicarelli.homehunt.domain.model.SearchOption
 
 interface FilterLocalDataSource {
@@ -13,6 +14,9 @@ class FilterLocalDataSourceImpl(
 ) : FilterLocalDataSource {
     override fun save(searchOption: SearchOption) {
         with(sharedPreferences.edit()) {
+            val notSeen = searchOption.notSeenOnly != null
+            val seen = searchOption.seenOnly != null
+
             putFloat(Mapper.minPrice, searchOption.priceRange.first.toFloat())
             putFloat(Mapper.maxPrice, searchOption.priceRange.second.toFloat())
             putInt(Mapper.minSurface, searchOption.surfaceRange.first)
@@ -25,9 +29,8 @@ class FilterLocalDataSourceImpl(
                 Mapper.bathSelection,
                 searchOption.bathSelection.map { it.toString() }.toSet()
             )
-            putBoolean(Mapper.notSeenOnly, searchOption.notSeenOnly)
-            putBoolean(Mapper.seenOnly, searchOption.seenOnly)
-            putBoolean(Mapper.seenAndNotSeen, searchOption.seenAndNotSeen)
+            putBoolean(Mapper.notSeenOnly, notSeen)
+            putBoolean(Mapper.seenOnly, seen)
             putBoolean(Mapper.longTermOnly, searchOption.longTermOnly)
             putBoolean(Mapper.showRented, searchOption.showRented)
             putBoolean(Mapper.showReserved, searchOption.showReserved)
@@ -49,7 +52,6 @@ class FilterLocalDataSourceImpl(
 
             val notSeenOnly = getBoolean(Mapper.notSeenOnly, false)
             val seenOnly = getBoolean(Mapper.seenOnly, false)
-            val seenAndNotSeen = getBoolean(Mapper.seenAndNotSeen, true)
             val longTermOnly = getBoolean(Mapper.longTermOnly, false)
             val showReserved = getBoolean(Mapper.showReserved, false)
             val showRented = getBoolean(Mapper.showRented, false)
@@ -59,9 +61,8 @@ class FilterLocalDataSourceImpl(
                 surfaceRange = Pair(minSurface, maxSurface),
                 dormSelection = dormSelection,
                 bathSelection = bathSelection,
-                notSeenOnly = notSeenOnly,
-                seenOnly = seenOnly,
-                seenAndNotSeen = seenAndNotSeen,
+                seenOnly = if (seenOnly) PropertyVisibility.Seen else null,
+                notSeenOnly = if (notSeenOnly) PropertyVisibility.NotSeen else null,
                 longTermOnly = longTermOnly,
                 showRented = showRented,
                 showReserved = showReserved
@@ -78,7 +79,6 @@ class FilterLocalDataSourceImpl(
         const val bathSelection = "PREF_BATH_SELECTION"
         const val longTermOnly = "PREF_LONG_TERM_ONLY"
         const val notSeenOnly = "PREF_NOT_SEEN_ONLY"
-        const val seenAndNotSeen = "PREF_SEEN_AND_NOT_SEEN"
         const val seenOnly = "PREF_SEEN_ONLY"
         const val showReserved = "PREF_SHOW_RESERVED"
         const val showRented = "PREF_SHOW_RENTED"

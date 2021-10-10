@@ -2,6 +2,7 @@ package com.rsicarelli.homehunt.domain.usecase
 
 import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.domain.model.Property
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
@@ -34,7 +35,7 @@ class GetFilteredPropertiesUseCase(
                     )
                 )
             }
-            .filter { it is DataState.Data }
+            .filter { it is DataState.Data }.flowOn(Dispatchers.Default)
     }
 
 

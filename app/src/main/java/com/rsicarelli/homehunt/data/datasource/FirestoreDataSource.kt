@@ -5,11 +5,13 @@ import com.rsicarelli.homehunt.data.datasource.FirestoreDataSourceImpl.Firestore
 import com.rsicarelli.homehunt.domain.model.Mapper
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.model.toProperty
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
 
 interface FirestoreDataSource {
@@ -47,7 +49,7 @@ class FirestoreDataSourceImpl(
             }
 
             awaitClose { subscription.remove() }
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     override suspend fun getById(referenceId: String): Flow<Property> {
@@ -69,7 +71,7 @@ class FirestoreDataSourceImpl(
             }
 
             awaitClose { subscription.remove() }
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     override fun toggleFavourite(
@@ -116,7 +118,7 @@ class FirestoreDataSourceImpl(
             }
 
             awaitClose { subscription.remove() }
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
 

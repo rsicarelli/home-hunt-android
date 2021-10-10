@@ -5,6 +5,7 @@ import com.rsicarelli.homehunt.core.model.ProgressBarState
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.repository.PropertyRepository
 import com.rsicarelli.homehunt.domain.repository.UserRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
 class GetAllPropertiesUseCase(
@@ -20,5 +21,5 @@ class GetAllPropertiesUseCase(
                 .collect {
                     emit(DataState.Data(it))
                 }
-        }
+        }.flowOn(Dispatchers.IO)
 }
