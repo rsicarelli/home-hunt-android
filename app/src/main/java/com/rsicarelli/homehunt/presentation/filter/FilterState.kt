@@ -12,7 +12,7 @@ data class FilterState(
     val notSeenOnly: Boolean = false,
     val seenAndNotSeen: Boolean = true,
     val longTermOnly: Boolean = false,
-    val previewResultCount: Int = 0,
+    val previewResultCount: Int? = null,
     val showReserved: Boolean = false,
     val showRented: Boolean = false,
     val uiEvent: UiEvent = UiEvent.Idle,

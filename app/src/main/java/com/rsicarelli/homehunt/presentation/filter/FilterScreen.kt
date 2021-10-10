@@ -8,10 +8,12 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.insets.systemBarsPadding
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
@@ -83,7 +85,8 @@ private fun FilterContent(
         LazyColumn(
             Modifier
                 .fillMaxWidth()
-                .weight(1.0f)) {
+                .weight(1.0f)
+        ) {
             item { PriceRange(state, events) }
             item { SurfaceRange(state, events) }
             item { DormSelector(state = state, events = events) }
@@ -96,21 +99,33 @@ private fun FilterContent(
         Box(
             modifier = Modifier
                 .weight(1f)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .systemBarsPadding(),
             contentAlignment = Alignment.BottomCenter
         ) {
+            val hasResults = state.previewResultCount != null
             Button(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .height(48.dp),
                 shape = MaterialTheme.shapes.large,
+                enabled = hasResults,
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = rally_green_500,
                     contentColor = MaterialTheme.colors.background
                 ),
-                onClick = { events(FilterEvents.SaveFilter) }) {
+                onClick = { events(FilterEvents.SaveFilter) })
+            {
+                val resources = LocalContext.current.resources
+
+                val text = state.previewResultCount?.let {
+                    resources.getQuantityString(
+                        R.plurals.see_results_plurals, it, it
+                    )
+                } ?: stringResource(id = R.string.calculating_results)
+
                 Text(
-                    text = "See ${state.previewResultCount} results",
+                    text = text,
                     style = MaterialTheme.typography.button.copy(fontSize = 16.sp)
                 )
             }
