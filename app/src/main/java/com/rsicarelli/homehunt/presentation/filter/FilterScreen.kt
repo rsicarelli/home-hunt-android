@@ -13,8 +13,10 @@ import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -265,7 +267,8 @@ private fun AddOrRemoveItem(
         Counter(
             value,
             onIncrease = onIncrease,
-            onDecrease = onDecrease
+            onDecrease = onDecrease,
+            contentDescription = text
         )
     }
 }
@@ -274,7 +277,8 @@ private fun AddOrRemoveItem(
 private fun Counter(
     value: Int,
     onIncrease: () -> Unit,
-    onDecrease: () -> Unit
+    onDecrease: () -> Unit,
+    contentDescription: String,
 ) {
     val isDecreaseEnabled = value != 0
     val isIncreaseEnabled = value != 5
@@ -283,11 +287,21 @@ private fun Counter(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        RoundButton(onDecrease, isDecreaseEnabled, Icons.Rounded.Delete)
+        RoundButton(
+            onDecrease,
+            isDecreaseEnabled,
+            painter = painterResource(id = R.drawable.ic_round_remove_24),
+            contentDescription = contentDescription
+        )
         Spacer(modifier = Modifier.width(SpaceMedium))
         Text(text = value.toString(), style = MaterialTheme.typography.body2)
         Spacer(modifier = Modifier.width(SpaceMedium))
-        RoundButton(onIncrease, isIncreaseEnabled, Icons.Rounded.Add)
+        RoundButton(
+            onIncrease,
+            isIncreaseEnabled,
+            Icons.Rounded.Add,
+            contentDescription = contentDescription
+        )
     }
 
 }
@@ -296,7 +310,9 @@ private fun Counter(
 private fun RoundButton(
     onClick: () -> Unit,
     enabled: Boolean,
-    imageVector: ImageVector
+    imageVector: ImageVector? = null,
+    painter: Painter? = null,
+    contentDescription: String,
 ) {
     val color =
         if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primary.copy(alpha = 0.3f)
@@ -313,11 +329,23 @@ private fun RoundButton(
             )
     ) {
 
-        Icon(
-            imageVector,
-            modifier = Modifier.size(20.dp),
-            contentDescription = "content description",
-            tint = color
-        )
+        imageVector?.let {
+            Icon(
+                it,
+                modifier = Modifier.size(20.dp),
+                contentDescription = contentDescription,
+                tint = color
+            )
+        }
+
+        painter?.let {
+            Icon(
+                it,
+                modifier = Modifier.size(20.dp),
+                contentDescription = contentDescription,
+                tint = color
+            )
+        }
+
     }
 }
