@@ -17,6 +17,12 @@ val Eczar = FontFamily(
     Font(R.font.eczar_extra_bold, FontWeight.W800)
 )
 
+private val RobotoCondensed = FontFamily(
+    Font(R.font.roboto_condensed_light, FontWeight.W300),
+    Font(R.font.roboto_condensed_regular, FontWeight.W400),
+    Font(R.font.roboto_condensed_bold, FontWeight.W700),
+)
+
 val EczarTypography = Typography(
     h1 = TextStyle(
         fontFamily = Eczar,
@@ -46,41 +52,41 @@ val EczarTypography = Typography(
     h6 = TextStyle(
         fontFamily = Eczar,
         fontWeight = FontWeight.W500,
-        fontSize = 20.sp
+        fontSize = 23.sp,
     ),
     subtitle1 = TextStyle(
         fontFamily = Eczar,
-        fontWeight = FontWeight.W500,
-        fontSize = 18.sp
+        fontWeight = FontWeight.W400,
+        fontSize = 18.sp,
     ),
     subtitle2 = TextStyle(
         fontFamily = Eczar,
-        fontWeight = FontWeight.W600,
-        fontSize = 16.sp
+        fontWeight = FontWeight.W500,
+        fontSize = 16.sp,
     ),
     body1 = TextStyle(
-        fontFamily = Eczar,
-        fontWeight = FontWeight.W600,
-        fontSize = 18.sp
+        fontFamily = RobotoCondensed,
+        fontWeight = FontWeight.W400,
+        fontSize = 16.sp
     ),
     body2 = TextStyle(
-        fontFamily = Eczar,
+        fontFamily = RobotoCondensed,
         fontWeight = FontWeight.W400,
-        fontSize = 16.sp
-    ),
-    button = TextStyle(
-        fontFamily = Eczar,
-        fontWeight = FontWeight.W600,
-        fontSize = 16.sp
-    ),
-    caption = TextStyle(
-        fontFamily = Eczar,
-        fontWeight = FontWeight.W500,
         fontSize = 14.sp
     ),
-    overline = TextStyle(
-        fontFamily = Eczar,
+    button = TextStyle(
+        fontFamily = RobotoCondensed,
+        fontWeight = FontWeight.W700,
+        fontSize = 14.sp,
+    ),
+    caption = TextStyle(
+        fontFamily = RobotoCondensed,
         fontWeight = FontWeight.W400,
         fontSize = 12.sp
+    ),
+    overline = TextStyle(
+        fontFamily = RobotoCondensed,
+        fontWeight = FontWeight.W400,
+        fontSize = 10.sp
     )
 )

@@ -47,9 +47,9 @@ android {
 
 dependencies {
     implementation(Accompanist.animations)
+    implementation(Accompanist.insets)
     implementation(Accompanist.pager)
     implementation(Accompanist.systemUiController)
-    implementation(Accompanist.insets)
 
     implementation(AndroidX.androidXCore)
     implementation(AndroidX.androidXAppCompat)

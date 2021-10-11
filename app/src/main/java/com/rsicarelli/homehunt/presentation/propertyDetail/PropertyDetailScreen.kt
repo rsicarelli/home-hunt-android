@@ -3,7 +3,12 @@ package com.rsicarelli.homehunt.presentation.propertyDetail
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.widget.Space
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -35,6 +40,7 @@ import coil.request.ImageRequest
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
@@ -352,7 +358,10 @@ fun PropertyHeader(
 }
 
 @ExperimentalMaterialApi
-@OptIn(ExperimentalPagerApi::class, ExperimentalCoilApi::class)
+@OptIn(
+    ExperimentalPagerApi::class, ExperimentalCoilApi::class,
+    androidx.compose.animation.ExperimentalAnimationApi::class
+)
 @Composable
 private fun GalleryCarousel(
     photoGallery: List<String>,
@@ -360,49 +369,42 @@ private fun GalleryCarousel(
     onOpenGallery: () -> Unit,
     onPlayVideo: () -> Unit,
 ) {
-    HorizontalPager(photoGallery.size) { page ->
-        Box(
-            modifier = Modifier.clickable { onOpenGallery() },
-            contentAlignment = Alignment.BottomEnd
-        ) {
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(256.dp),
-                painter = rememberImagePainter(
-                    data = photoGallery[page],
-                    builder = {
-                        crossfade(true)
-                    }
-                ),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-            )
+    val state: PagerState = rememberPagerState()
 
-            Row(
-                modifier = Modifier
-                    .padding(SpaceSmall)
+    Box(contentAlignment = Alignment.BottomEnd) {
+        HorizontalPager(count = photoGallery.size, state = state) { page ->
+            Box(
+                modifier = Modifier.clickable { onOpenGallery() }
             ) {
-                if (page == 0 && hasVideo) {
-                    OutlinedButton(
-                        modifier = Modifier.height(36.dp),
-                        onClick = onPlayVideo,
-                        shape = RoundedCornerShape(10.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            backgroundColor = MaterialTheme.colors.background.copy(alpha = 0.8f),
-                        ),
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_round_play),
-                            contentDescription = stringResource(id = R.string.video_available)
-                        )
-                        Text(
-                            text = stringResource(id = R.string.video_available)
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(SpaceSmall))
-                Box(
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(256.dp),
+                    painter = rememberImagePainter(
+                        data = photoGallery[page],
+                        builder = {
+                            crossfade(true)
+                        }
+                    ),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                )
+            }
+        }
+        Row(
+            modifier = Modifier
+                .padding(SpaceSmall)
+        ) {
+            AnimatedVisibility(
+                visible = state.currentPage == 0 && hasVideo,
+                enter = fadeIn(
+                    initialAlpha = 0.4f
+                ),
+                exit = fadeOut(
+                    animationSpec = tween(durationMillis = 250)
+                )
+            ) {
+                Row(
                     modifier = Modifier
                         .height(36.dp)
                         .background(
@@ -410,19 +412,25 @@ private fun GalleryCarousel(
                             shape = RoundedCornerShape(10.dp)
                         )
                         .padding(
-                            start = SpaceMedium,
+                            start = SpaceSmall,
                             end = SpaceMedium
-                        ),
-                    contentAlignment = Alignment.Center
+                        )
+                        .clickable { onPlayVideo() },
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_round_play),
+                        contentDescription = stringResource(id = R.string.video_available)
+                    )
+                    Spacer(Modifier.width(SpaceSmallest))
                     Text(
+                        text = stringResource(id = R.string.video_available),
                         style = MaterialTheme.typography.button,
-                        text = "${currentPage + 1} of ${photoGallery.size}"
                     )
                 }
-
             }
-
+            Spacer(modifier = Modifier.width(SpaceSmall))
+            PagerIndicator(currentPage = state.currentPage, totalItems = photoGallery.size)
         }
     }
 }
@@ -477,11 +485,11 @@ fun GalleryBottomSheet(
         val imageLoader = LocalImageLoader.current
         val coroutinesScope = rememberCoroutineScope()
         val pagerState = rememberPagerState()
-
-        HorizontalPager(photosGalleryUrls.size, state = pagerState) { page ->
-            Box(
-                contentAlignment = Alignment.BottomEnd
-            ) {
+        Box(contentAlignment = Alignment.BottomCenter) {
+            HorizontalPager(
+                count = photosGalleryUrls.size,
+                state = pagerState
+            ) { page ->
                 var drawable: Drawable? by remember { mutableStateOf(null) }
 
                 val request = ImageRequest.Builder(LocalContext.current)
@@ -505,3 +513,27 @@ fun GalleryBottomSheet(
     }
 }
 
+@Composable
+fun PagerIndicator(
+    currentPage: Int,
+    totalItems: Int
+) {
+    Box(
+        modifier = Modifier
+            .height(36.dp)
+            .background(
+                color = MaterialTheme.colors.background.copy(alpha = 0.8f),
+                shape = RoundedCornerShape(10.dp)
+            )
+            .padding(
+                start = SpaceMedium,
+                end = SpaceMedium
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            style = MaterialTheme.typography.button,
+            text = "${currentPage + 1} of $totalItems"
+        )
+    }
+}
