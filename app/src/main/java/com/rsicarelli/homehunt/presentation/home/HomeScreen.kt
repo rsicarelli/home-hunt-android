@@ -23,7 +23,7 @@ import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.components.EmptyContent
-import com.rsicarelli.homehunt.presentation.components.OnLifecycleEvent
+import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
@@ -45,7 +45,7 @@ private fun HomeContent(
     scaffoldDelegate: ScaffoldDelegate
 ) {
     val scrollState = rememberLazyListState()
-    OnLifecycleEvent { event ->
+    LifecycleEffect { event ->
         events(HomeEvents.LifecycleEvent(event))
     }
 

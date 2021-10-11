@@ -8,8 +8,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +27,8 @@ import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.domain.model.PropertyVisibility
 import com.rsicarelli.homehunt.domain.model.PropertyVisibility.NotSeen
 import com.rsicarelli.homehunt.domain.model.PropertyVisibility.Seen
-import com.rsicarelli.homehunt.presentation.components.OnLifecycleEvent
+import com.rsicarelli.homehunt.presentation.components.BackButton
+import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
 import com.rsicarelli.homehunt.presentation.components.Selector
 import com.rsicarelli.homehunt.presentation.filter.FilterEvents.BathSelectionChanged
 import com.rsicarelli.homehunt.presentation.filter.FilterEvents.DormsSelectionChanged
@@ -56,7 +55,7 @@ private fun FilterContent(
 ) {
     if (state.uiEvent is UiEvent.Navigate) scaffoldDelegate.navigateSingleTop(state.uiEvent)
 
-    OnLifecycleEvent { event ->
+    LifecycleEffect { event ->
         events(FilterEvents.LifecycleEvent(event))
     }
 
@@ -70,25 +69,15 @@ private fun FilterContent(
                 .fillMaxWidth()
                 .weight(1.0f)
         ) {
-            stickyHeader {
-                IconButton(
-                    modifier = Modifier.padding(top = SpaceMedium),
-                    onClick = { scaffoldDelegate.navigateUp() }) {
-                    Icon(
-                        imageVector = Icons.Rounded.ArrowBack,
-                        contentDescription = stringResource(id = R.string.go_back)
-                    )
-                }
-            }
-            item { PriceRange(state, events) }
-            item { SurfaceRange(state, events) }
-            item { DormSelector(state, events) }
+            stickyHeader { BackButton(scaffoldDelegate = scaffoldDelegate) }
+            item { PriceRange(state = state, events = events) }
+            item { SurfaceRange(state = state, events = events) }
+            item { DormSelector(state = state, events = events) }
             item { BathSelector(state = state, events = events) }
             item { VisibilitySelector(state = state, events = events) }
         }
 
-        SeeResultsButton(state, events)
-
+        SeeResultsButton(state = state, events = events)
     }
 }
 
