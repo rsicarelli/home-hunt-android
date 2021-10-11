@@ -17,6 +17,7 @@
         <entry key="app/src/main/res/drawable/ic_round_single_bed_24.xml" value="0.227" />
         <entry key="app/src/main/res/drawable/round_filter_alt_24.xml" value="0.227" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.190625" />
+        <entry key="app/src/main/res/layout/image_fragment.xml" value="0.2005549949545913" />
         <entry key="app/src/main/res/layout/layout_map.xml" value="0.41302083333333334" />
         <entry key="app/src/main/res/layout/layout_map_lite.xml" value="0.41302083333333334" />
         <entry key="app/src/main/res/layout/test_view.xml" value="0.19322916666666667" />

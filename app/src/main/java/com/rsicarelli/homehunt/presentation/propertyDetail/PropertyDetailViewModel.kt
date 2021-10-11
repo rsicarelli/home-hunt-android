@@ -52,6 +52,12 @@ class PropertyDetailViewModel @Inject constructor(
                     event.referenceId
                 )
             )
+            PropertyDetailEvents.CloseGallery -> _state.value = state.value.copy(
+                openGallery = false
+            )
+            PropertyDetailEvents.OpenGallery -> _state.value = state.value.copy(
+                openGallery = true
+            )
         }
     }
 

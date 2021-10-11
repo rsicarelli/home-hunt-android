@@ -1,6 +1,7 @@
 package com.rsicarelli.homehunt.presentation.propertyDetail
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -12,7 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,16 +29,22 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
+import coil.compose.LocalImageLoader
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.util.toCurrency
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.*
+import com.rsicarelli.homehunt.presentation.photoGallery.components.ZoomableImage
+import com.rsicarelli.homehunt.presentation.propertyDetail.components.FullHeightBottomSheet
 import com.rsicarelli.homehunt.ui.theme.*
+import kotlinx.coroutines.launch
 
 @Composable
 fun PropertyDetailScreen(
@@ -62,7 +69,8 @@ private fun PropertyDetailContent(
         Box(modifier = Modifier.fillMaxSize()) {
             PropertyDetail(
                 property = property,
-                scaffoldDelegate = scaffoldDelegate
+                scaffoldDelegate = scaffoldDelegate,
+                events = events,
             )
             PropertyTopBar(
                 isFavourited = property.isFavourited,
@@ -73,6 +81,14 @@ private fun PropertyDetailContent(
                             isFavourited = !property.isFavourited
                         )
                     )
+                }
+            )
+
+            GalleryBottomSheet(
+                photosGalleryUrls = property.photoGalleryUrls,
+                isEnabled = state.openGallery,
+                onCollapsed = {
+                    events(PropertyDetailEvents.CloseGallery)
                 }
             )
         }
@@ -97,14 +113,14 @@ fun PropertyTopBar(
             isFavourited = isFavourited
         )
     }
-
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun PropertyDetail(
     property: Property,
-    scaffoldDelegate: ScaffoldDelegate
+    scaffoldDelegate: ScaffoldDelegate,
+    events: (PropertyDetailEvents) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -117,7 +133,7 @@ private fun PropertyDetail(
                 photoGallery = property.photoGalleryUrls,
                 hasVideo = hasVideo,
                 onOpenGallery = {
-                    scaffoldDelegate.launchPhotoDetailsGallery(property)
+                    events(PropertyDetailEvents.OpenGallery)
                 }, onPlayVideo = {
                     scaffoldDelegate.launchVideoPlayer(property.videoUrl!!)
                 }
@@ -442,6 +458,50 @@ private fun PropertyMap(
             )
         }
 
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
+@Composable
+fun GalleryBottomSheet(
+    photosGalleryUrls: List<String>,
+    isEnabled: Boolean,
+    onCollapsed: () -> Unit
+) {
+    if (!isEnabled) return
+
+    FullHeightBottomSheet(
+        isEnabled = isEnabled,
+        onCollapsed = onCollapsed
+    ) {
+        val imageLoader = LocalImageLoader.current
+        val coroutinesScope = rememberCoroutineScope()
+        val pagerState = rememberPagerState()
+
+        HorizontalPager(photosGalleryUrls.size, state = pagerState) { page ->
+            Box(
+                contentAlignment = Alignment.BottomEnd
+            ) {
+                var drawable: Drawable? by remember { mutableStateOf(null) }
+
+                val request = ImageRequest.Builder(LocalContext.current)
+                    .data(photosGalleryUrls[page])
+                    .build()
+
+                LaunchedEffect(key1 = "imageLoader", block = {
+                    coroutinesScope.launch {
+                        drawable = imageLoader.execute(request).drawable
+                    }
+                })
+
+                drawable?.let {
+                    ZoomableImage(
+                        drawable = it,
+                        resetZoom = pagerState.currentPage != page
+                    )
+                }
+            }
+        }
     }
 }
 
