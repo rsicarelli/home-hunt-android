@@ -1,22 +1,14 @@
 package com.rsicarelli.homehunt.presentation.filter
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,7 +24,10 @@ import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
 import com.rsicarelli.homehunt.presentation.components.Selector
 import com.rsicarelli.homehunt.presentation.filter.FilterEvents.BathSelectionChanged
 import com.rsicarelli.homehunt.presentation.filter.FilterEvents.DormsSelectionChanged
-import com.rsicarelli.homehunt.ui.theme.*
+import com.rsicarelli.homehunt.presentation.filter.components.AddOrRemoveItem
+import com.rsicarelli.homehunt.presentation.filter.components.FilterRange
+import com.rsicarelli.homehunt.ui.theme.SpaceLarge
+import com.rsicarelli.homehunt.ui.theme.rally_green_500
 
 private val priceRange = 0F..2000F
 private val surfaceRange = 0F..300F
@@ -115,6 +110,57 @@ private fun SurfaceRange(
 }
 
 @Composable
+fun VisibilitySelector(state: FilterState, events: (FilterEvents) -> Unit) {
+    val selectedItems = mutableListOf<PropertyVisibility>()
+    state.seenOnly?.let { selectedItems.add(it) }
+    state.notSeenOnly?.let { selectedItems.add(it) }
+
+    Divider(thickness = 1.dp)
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+    }
+    Selector(
+        titleRes = R.string.visibility,
+        items = mapOf("Not seen" to NotSeen, "Seen" to Seen),
+        selectedItems = selectedItems,
+        onSelectedChanged = {
+            events(FilterEvents.VisibilitySelectionChanged(it.second))
+        },
+        horizontalArrangement = Arrangement.spacedBy(2.dp)
+    )
+}
+
+@Composable
+private fun DormSelector(
+    state: FilterState,
+    events: (FilterEvents) -> Unit
+) {
+    AddOrRemoveItem(
+        text = stringResource(id = R.string.bedrooms),
+        value = state.dormCount,
+        onIncrease = { events(DormsSelectionChanged(state.dormCount + 1)) },
+        onDecrease = { events(DormsSelectionChanged(state.dormCount - 1)) }
+    )
+}
+
+@Composable
+private fun BathSelector(
+    state: FilterState,
+    events: (FilterEvents) -> Unit
+) {
+    AddOrRemoveItem(
+        text = stringResource(id = R.string.bathrooms),
+        value = state.bathCount,
+        onIncrease = { events(BathSelectionChanged(state.bathCount + 1)) },
+        onDecrease = { events(BathSelectionChanged(state.bathCount - 1)) }
+    )
+}
+
+@Composable
 private fun SeeResultsButton(
     state: FilterState,
     events: (FilterEvents) -> Unit
@@ -149,191 +195,6 @@ private fun SeeResultsButton(
             Text(
                 text = text,
                 style = MaterialTheme.typography.button.copy(fontSize = 16.sp)
-            )
-        }
-    }
-}
-
-@Composable
-fun VisibilitySelector(state: FilterState, events: (FilterEvents) -> Unit) {
-    val selectedItems = mutableListOf<PropertyVisibility>()
-    state.seenOnly?.let { selectedItems.add(it) }
-    state.notSeenOnly?.let { selectedItems.add(it) }
-
-    Selector(
-        titleRes = R.string.visibility,
-        items = mapOf("Not seen" to NotSeen, "Seen" to Seen),
-        selectedItems = selectedItems,
-        onSelectedChanged = {
-            events(FilterEvents.VisibilitySelectionChanged(it.second))
-        },
-        horizontalArrangement = Arrangement.spacedBy(2.dp)
-    )
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun FilterRange(
-    title: String,
-    range: ClosedFloatingPointRange<Float>,
-    rangeText: String,
-    valueRange: ClosedFloatingPointRange<Float>,
-    onValueChange: (ClosedFloatingPointRange<Float>) -> Unit,
-) {
-    Spacer(modifier = Modifier.height(SpaceMedium))
-
-    Text(
-        text = title,
-        style = MaterialTheme.typography.h6
-    )
-
-    Spacer(modifier = Modifier.height(SpaceSmallest))
-
-    Text(
-        text = rangeText,
-        style = MaterialTheme.typography.subtitle1
-    )
-
-    RangeSlider(
-        modifier = Modifier.fillMaxWidth(),
-        values = range,
-        valueRange = valueRange,
-        onValueChange = {
-            onValueChange(it)
-        })
-
-    Spacer(modifier = Modifier.height(SpaceSmall))
-
-    Divider(thickness = 1.dp)
-}
-
-@Composable
-private fun DormSelector(
-    state: FilterState,
-    events: (FilterEvents) -> Unit
-) {
-    AddOrRemoveItem(
-        text = stringResource(id = R.string.bedrooms),
-        value = state.dormCount,
-        onIncrease = { events(DormsSelectionChanged(state.dormCount + 1)) },
-        onDecrease = { events(DormsSelectionChanged(state.dormCount - 1)) }
-    )
-}
-
-@Composable
-private fun BathSelector(
-    state: FilterState,
-    events: (FilterEvents) -> Unit
-) {
-    AddOrRemoveItem(
-        text = stringResource(id = R.string.bathrooms),
-        value = state.bathCount,
-        onIncrease = { events(BathSelectionChanged(state.bathCount + 1)) },
-        onDecrease = { events(BathSelectionChanged(state.bathCount - 1)) }
-    )
-}
-
-@Composable
-private fun AddOrRemoveItem(
-    text: String,
-    value: Int,
-    onIncrease: () -> Unit,
-    onDecrease: () -> Unit
-) {
-    Spacer(modifier = Modifier.height(SpaceMedium))
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            modifier = Modifier.weight(1.0f),
-            text = text,
-            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.W400),
-        )
-        Counter(
-            value,
-            onIncrease = onIncrease,
-            onDecrease = onDecrease,
-            contentDescription = text
-        )
-    }
-}
-
-@Composable
-private fun Counter(
-    value: Int,
-    onIncrease: () -> Unit,
-    onDecrease: () -> Unit,
-    contentDescription: String,
-) {
-    val isDecreaseEnabled = value != 0
-    val isIncreaseEnabled = value != 5
-
-    Row(
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        RoundButton(
-            onDecrease,
-            isDecreaseEnabled,
-            painter = painterResource(id = R.drawable.ic_round_remove_24),
-            contentDescription = contentDescription
-        )
-        Spacer(modifier = Modifier.width(SpaceMedium))
-        Text(
-            modifier = Modifier.width(SpaceMedium),
-            text = value.toString(),
-            style = MaterialTheme.typography.body2
-        )
-        Spacer(modifier = Modifier.width(SpaceSmall))
-        RoundButton(
-            onIncrease,
-            isIncreaseEnabled,
-            Icons.Rounded.Add,
-            contentDescription = contentDescription
-        )
-    }
-}
-
-@Composable
-private fun RoundButton(
-    onClick: () -> Unit,
-    enabled: Boolean,
-    imageVector: ImageVector? = null,
-    painter: Painter? = null,
-    contentDescription: String,
-) {
-    val color =
-        if (enabled) MaterialTheme.colors.primary else MaterialTheme.colors.primary.copy(alpha = 0.3f)
-
-    IconButton(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = Modifier
-            .then(Modifier.size(32.dp))
-            .border(
-                1.dp,
-                color = color,
-                shape = CircleShape
-            )
-    ) {
-
-        imageVector?.let {
-            Icon(
-                it,
-                modifier = Modifier.size(20.dp),
-                contentDescription = contentDescription,
-                tint = color
-            )
-        }
-
-        painter?.let {
-            Icon(
-                it,
-                modifier = Modifier.size(20.dp),
-                contentDescription = contentDescription,
-                tint = color
             )
         }
     }
