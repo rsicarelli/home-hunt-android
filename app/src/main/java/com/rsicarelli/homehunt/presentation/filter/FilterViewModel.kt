@@ -39,8 +39,13 @@ class FilterViewModel @Inject constructor(
             is FilterEvents.BathSelectionChanged -> bathSelectionChanged(events)
             is FilterEvents.LifecycleEvent -> handleLifecycle(events.event)
             is FilterEvents.VisibilitySelectionChanged -> handleVisibilityChanged(events.newValue)
+            is FilterEvents.LongerTermRentalSelectionChanged -> handleLongTermChanged(events.newValue)
         }
         previewResults()
+    }
+
+    private fun handleLongTermChanged(newValue: Boolean) {
+        _state.value = state.value.copy(longTermOnly = newValue)
     }
 
     private fun handleVisibilityChanged(newValue: Boolean) {

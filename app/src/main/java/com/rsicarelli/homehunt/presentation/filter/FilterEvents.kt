@@ -12,6 +12,7 @@ sealed class FilterEvents {
     data class DormsSelectionChanged(val newValue: Int) : FilterEvents()
     data class BathSelectionChanged(val newValue: Int) : FilterEvents()
     data class VisibilitySelectionChanged(val newValue: Boolean) : FilterEvents()
+    data class LongerTermRentalSelectionChanged(val newValue: Boolean) : FilterEvents()
     data class LifecycleEvent(val event: Lifecycle.Event) : FilterEvents()
 
     object SaveFilter : FilterEvents()

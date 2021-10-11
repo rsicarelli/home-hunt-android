@@ -74,7 +74,7 @@ private object LongTermOnly : Filter {
     override fun applyFilter(searchOption: SearchOption, property: Property): Boolean {
         if (!searchOption.longTermOnly) return true
 
-        return property.fullDescription?.lowercase()?.contains("short term") ?: true
+        return property.fullDescription?.lowercase()?.contains("short term")?.not() ?: true
     }
 }
 

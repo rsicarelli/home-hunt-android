@@ -25,6 +25,7 @@ import com.rsicarelli.homehunt.presentation.filter.components.CheckboxItem
 import com.rsicarelli.homehunt.presentation.filter.components.FilterRange
 import com.rsicarelli.homehunt.ui.theme.SpaceLarge
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
+import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
 import com.rsicarelli.homehunt.ui.theme.rally_green_500
 
 private val priceRange = 0F..2000F
@@ -68,6 +69,7 @@ private fun FilterContent(
             item { DormSelector(state = state, events = events) }
             item { BathSelector(state = state, events = events) }
             item { VisibilitySelector(state = state, events = events) }
+            item { LongTermRentalSelector(state = state, events = events) }
         }
 
         SeeResultsButton(state = state, events = events)
@@ -108,8 +110,10 @@ private fun SurfaceRange(
 }
 
 @Composable
-fun VisibilitySelector(state: FilterState, events: (FilterEvents) -> Unit) {
-
+fun VisibilitySelector(
+    state: FilterState,
+    events: (FilterEvents) -> Unit
+) {
     Spacer(modifier = Modifier.height(SpaceSmall))
 
     CheckboxItem(
@@ -120,6 +124,23 @@ fun VisibilitySelector(state: FilterState, events: (FilterEvents) -> Unit) {
         },
     )
 }
+
+@Composable
+fun LongTermRentalSelector(
+    state: FilterState,
+    events: (FilterEvents) -> Unit
+) {
+    Spacer(modifier = Modifier.height(SpaceSmallest))
+
+    CheckboxItem(
+        title = stringResource(id = R.string.show_longer_term_only),
+        isChecked = state.longTermOnly,
+        onCheckedChange = {
+            events(FilterEvents.LongerTermRentalSelectionChanged(it))
+        },
+    )
+}
+
 
 @Composable
 private fun DormSelector(
