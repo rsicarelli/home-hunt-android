@@ -27,6 +27,7 @@ enum class States {
     COLLAPSED
 }
 
+//From https://proandroiddev.com/how-to-master-swipeable-and-nestedscroll-modifiers-in-compose-bb0635d6a760
 @ExperimentalMaterialApi
 @Composable
 fun FullHeightBottomSheet(
