@@ -2,7 +2,6 @@ package com.rsicarelli.homehunt.presentation.home.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -15,7 +14,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.rsicarelli.homehunt.R
@@ -33,7 +31,6 @@ fun PropertyListItem(
     property: Property,
     onSelectProperty: (Property) -> Unit,
     onFavouriteClick: () -> Unit,
-    imageLoader: ImageLoader,
     extraContent: @Composable RowScope.(Property) -> Unit = {}
 ) {
     Surface(
@@ -56,19 +53,15 @@ fun PropertyListItem(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.TopEnd
             ) {
-                val painter = rememberImagePainter(
-                    property.photoGalleryUrls.first(),
-                    imageLoader = imageLoader,
-                    builder = {
-                        placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
-                    }
-                )
                 Image(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
                         .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)),
-                    painter = painter,
+                    painter = rememberImagePainter(
+                        property.photoGalleryUrls.first(),
+                        builder = { crossfade(true) }
+                    ),
                     contentDescription = property.title,
                     contentScale = ContentScale.FillWidth,
                 )

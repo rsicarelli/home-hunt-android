@@ -20,7 +20,6 @@ import com.rsicarelli.homehunt.domain.model.Property
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 internal const val KEY_ARG_DETAILS_PHOTO_GALLERY = "KEY_ARG_DETAILS_PHOTO_GALLERY"
 
@@ -39,19 +38,19 @@ fun createPhotoGalleryActivityIntent(context: Context, property: Property): Inte
 }
 
 
-/*
-* No decent pure jetpack compose zoomable image :(
-* */
+//TODO refactor to Compose§
 @AndroidEntryPoint
 class PhotoGalleryActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var imageLoader: ImageLoader
 
     private lateinit var binding: PhotoGalleryActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val imageLoader = ImageLoader.Builder(this)
+            .availableMemoryPercentage(0.25)
+            .crossfade(true)
+            .build()
 
         binding = PhotoGalleryActivityBinding.inflate(layoutInflater)
 
@@ -60,7 +59,12 @@ class PhotoGalleryActivity : AppCompatActivity() {
         val photoImages = intent.getStringArrayListExtra(KEY_ARG_DETAILS_PHOTO_GALLERY)
 
         binding.viewPager2.adapter =
-            AdapterImages(photoImages!!.toList(), this, imageLoader, lifecycleScope)
+            AdapterImages(
+                photoList = photoImages!!.toList(),
+                context = this,
+                imageLoader = imageLoader,
+                coroutinesScope = lifecycleScope
+            )
 
         binding.heulerView.setOnDragDismissedListener {
             finish()

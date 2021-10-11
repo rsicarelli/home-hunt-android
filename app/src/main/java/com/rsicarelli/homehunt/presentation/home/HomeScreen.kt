@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.ImageLoader
 import com.google.accompanist.insets.systemBarsPadding
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
@@ -26,23 +25,23 @@ import com.rsicarelli.homehunt.presentation.components.EmptyContent
 import com.rsicarelli.homehunt.presentation.components.OnLifecycleEvent
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
 import com.rsicarelli.homehunt.ui.navigation.Screen
-import com.rsicarelli.homehunt.ui.theme.*
+import com.rsicarelli.homehunt.ui.theme.SpaceLarge
+import com.rsicarelli.homehunt.ui.theme.SpaceSmall
+import com.rsicarelli.homehunt.ui.theme.rally_blue_700
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
     scaffoldDelegate: ScaffoldDelegate,
     viewModel: HomeViewModel = hiltViewModel(),
-    imageLoader: ImageLoader
 ) {
-    HomeContent(viewModel::onEvent, viewModel.state.value, imageLoader, scaffoldDelegate)
+    HomeContent(viewModel::onEvent, viewModel.state.value, scaffoldDelegate)
 }
 
 @Composable
 private fun HomeContent(
     events: (HomeEvents) -> Unit,
     state: HomeState,
-    imageLoader: ImageLoader,
     scaffoldDelegate: ScaffoldDelegate
 ) {
     val scrollState = rememberLazyListState()
@@ -60,7 +59,6 @@ private fun HomeContent(
         PropertyList(
             scrollState = scrollState,
             properties = state.properties,
-            imageLoader = imageLoader,
             headerPrefixRes = R.string.results,
             scaffoldDelegate = scaffoldDelegate,
             onToggleFavourite = { property ->

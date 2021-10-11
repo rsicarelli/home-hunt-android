@@ -18,7 +18,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import coil.ImageLoader
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.presentation.components.AppScaffold
@@ -31,16 +30,11 @@ import com.rsicarelli.homehunt.presentation.splash.SplashScreen
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var imageLoader: ImageLoader
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +69,6 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             scaffoldState = scaffoldState,
                             scaffoldDelegate = scaffoldDelegate,
-                            imageLoader = imageLoader
                         )
                     }
                 }
@@ -89,7 +82,6 @@ private fun MainContent(
     navController: NavHostController,
     scaffoldState: ScaffoldState,
     scaffoldDelegate: ScaffoldDelegate,
-    imageLoader: ImageLoader
 ) {
     AppScaffold(
         navController = navController,
@@ -112,7 +104,6 @@ private fun MainContent(
             composable(Screen.Home.route) {
                 HomeScreen(
                     scaffoldDelegate = scaffoldDelegate,
-                    imageLoader = imageLoader
                 )
             }
 
@@ -121,7 +112,6 @@ private fun MainContent(
                 arguments = Screen.PropertyDetail.arguments
             ) {
                 PropertyDetailScreen(
-                    imageLoader = imageLoader,
                     scaffoldDelegate = scaffoldDelegate
                 )
             }
@@ -132,7 +122,6 @@ private fun MainContent(
             composable(Screen.Favourites.route) {
                 FavouritesScreen(
                     scaffoldDelegate = scaffoldDelegate,
-                    imageLoader = imageLoader
                 )
             }
         }

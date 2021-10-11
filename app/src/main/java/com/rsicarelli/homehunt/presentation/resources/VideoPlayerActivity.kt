@@ -1,5 +1,6 @@
 package com.rsicarelli.homehunt.presentation.resources
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -11,11 +12,9 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import app.futured.hauler.setOnDragDismissedListener
-import coil.ImageLoader
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.databinding.VideoPlayerActivityBinding
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 
 internal const val KEY_ARG_VIDEO_URL = "KEY_ARG_VIDEO_URL"
@@ -32,13 +31,13 @@ fun createVideoPlayerActivityIntent(context: Context, videoUrl: String): Intent 
 }
 
 
+//TODO Refactor to compose
+@SuppressLint("SetJavaScriptEnabled")
 @AndroidEntryPoint
 class VideoPlayerActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var imageLoader: ImageLoader
-
     private lateinit var binding: VideoPlayerActivityBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

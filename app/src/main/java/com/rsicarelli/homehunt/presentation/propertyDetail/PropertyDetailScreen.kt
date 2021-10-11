@@ -6,7 +6,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.statusBarsPadding
@@ -43,34 +41,39 @@ import com.rsicarelli.homehunt.ui.theme.*
 
 @Composable
 fun PropertyDetailScreen(
-    imageLoader: ImageLoader,
     scaffoldDelegate: ScaffoldDelegate,
     viewModel: PropertyDetailViewModel = hiltViewModel()
 ) {
-    PropertyDetailContent(imageLoader, scaffoldDelegate, viewModel.state.value, viewModel::onEvent)
+    PropertyDetailContent(
+        scaffoldDelegate = scaffoldDelegate,
+        state = viewModel.state.value,
+        events = viewModel::onEvent
+    )
 }
 
 @OptIn(ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
 @Composable
 private fun PropertyDetailContent(
-    imageLoader: ImageLoader,
     scaffoldDelegate: ScaffoldDelegate,
     state: PropertyDetailState,
     events: (PropertyDetailEvents) -> Unit
 ) {
     state.property?.let { property ->
         Box(modifier = Modifier.fillMaxSize()) {
-            PropertyDetail(property, imageLoader, scaffoldDelegate)
+            PropertyDetail(
+                property = property,
+                scaffoldDelegate = scaffoldDelegate
+            )
             PropertyTopBar(
+                isFavourited = property.isFavourited,
                 onFavouriteClick = {
                     events(
                         PropertyDetailEvents.ToggleFavourite(
-                            property.reference,
-                            !property.isFavourited
+                            referenceId = property.reference,
+                            isFavourited = !property.isFavourited
                         )
                     )
-                },
-                property.isFavourited
+                }
             )
         }
     }
@@ -101,7 +104,6 @@ fun PropertyTopBar(
 @Composable
 private fun PropertyDetail(
     property: Property,
-    imageLoader: ImageLoader,
     scaffoldDelegate: ScaffoldDelegate
 ) {
     LazyColumn(
@@ -109,10 +111,11 @@ private fun PropertyDetail(
             .fillMaxSize()
     ) {
         item {
+            val hasVideo = property.videoUrl != null && property.videoUrl.isNotEmpty()
+
             GalleryCarousel(
                 photoGallery = property.photoGalleryUrls,
-                imageLoader = imageLoader,
-                hasVideo = property.videoUrl != null && property.videoUrl.isNotEmpty(),
+                hasVideo = hasVideo,
                 onOpenGallery = {
                     scaffoldDelegate.launchPhotoDetailsGallery(property)
                 }, onPlayVideo = {
@@ -337,7 +340,6 @@ fun PropertyHeader(
 @Composable
 private fun GalleryCarousel(
     photoGallery: List<String>,
-    imageLoader: ImageLoader,
     hasVideo: Boolean,
     onOpenGallery: () -> Unit,
     onPlayVideo: () -> Unit,
@@ -347,18 +349,16 @@ private fun GalleryCarousel(
             modifier = Modifier.clickable { onOpenGallery() },
             contentAlignment = Alignment.BottomEnd
         ) {
-            val painter = rememberImagePainter(
-                photoGallery[page],
-                imageLoader = imageLoader,
-                builder = {
-                    placeholder(if (isSystemInDarkTheme()) R.drawable.black_background else R.drawable.white_background)
-                }
-            )
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(256.dp),
-                painter = painter,
+                painter = rememberImagePainter(
+                    data = photoGallery[page],
+                    builder = {
+                        crossfade(true)
+                    }
+                ),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
             )
@@ -390,10 +390,13 @@ private fun GalleryCarousel(
                     modifier = Modifier
                         .height(36.dp)
                         .background(
-                            MaterialTheme.colors.background.copy(alpha = 0.8f),
-                            RoundedCornerShape(10.dp)
+                            color = MaterialTheme.colors.background.copy(alpha = 0.8f),
+                            shape = RoundedCornerShape(10.dp)
                         )
-                        .padding(start = SpaceMedium, end = SpaceMedium),
+                        .padding(
+                            start = SpaceMedium,
+                            end = SpaceMedium
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -432,7 +435,10 @@ private fun PropertyMap(
             MapView(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onMapClick() }, lat = lat, lng = lng, isLiteMode = true
+                    .clickable { onMapClick() },
+                lat = lat,
+                lng = lng,
+                isLiteMode = true
             )
         }
 

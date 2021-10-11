@@ -10,7 +10,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.ImageLoader
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.domain.model.Property
@@ -21,16 +20,13 @@ import com.rsicarelli.homehunt.presentation.home.components.PropertyList
 import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 import com.rsicarelli.homehunt.ui.theme.rally_orange_300
 
-
 @Composable
 fun FavouritesScreen(
     scaffoldDelegate: ScaffoldDelegate,
-    viewModel: FavouritesViewModel = hiltViewModel(),
-    imageLoader: ImageLoader
+    viewModel: FavouritesViewModel = hiltViewModel()
 ) {
     FavouritesContent(
         scaffoldDelegate = scaffoldDelegate,
-        imageLoader = imageLoader,
         events = viewModel::onEvent,
         state = viewModel.state.value
     )
@@ -40,7 +36,6 @@ fun FavouritesScreen(
 private fun FavouritesContent(
     events: (FavouritesEvents) -> Unit,
     state: FavouritesState,
-    imageLoader: ImageLoader,
     scaffoldDelegate: ScaffoldDelegate
 ) {
 
@@ -48,7 +43,6 @@ private fun FavouritesContent(
 
     PropertyList(
         properties = state.properties,
-        imageLoader = imageLoader,
         headerPrefixRes = R.string.favourites,
         scaffoldDelegate = scaffoldDelegate,
         onToggleFavourite = { property ->
