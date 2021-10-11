@@ -19,6 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.systemBarsPadding
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.presentation.components.AppScaffold
 import com.rsicarelli.homehunt.presentation.favourites.FavouritesScreen
@@ -45,8 +46,9 @@ class MainActivity : ComponentActivity() {
             HomeHuntTheme {
                 ProvideWindowInsets {
                     Surface(
-                        color = MaterialTheme.colors.background,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .systemBarsPadding(top = false)
                     ) {
                         val navController = rememberNavController()
                         val scaffoldState = rememberScaffoldState()

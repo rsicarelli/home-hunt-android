@@ -59,10 +59,16 @@ fun AppScaffold(
 private fun SystemBarEffect() {
     val systemUiController = rememberSystemUiController()
     val useDarkIcons = MaterialTheme.colors.isLight
+    val systemBarColor = MaterialTheme.colors.surface
+
     SideEffect {
-        systemUiController.setSystemBarsColor(
-            Secondary.copy(alpha = 0.4f),
+        systemUiController.setStatusBarColor(
+            color = Secondary.copy(alpha = 0.4f),
             darkIcons = useDarkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = systemBarColor,
+            darkIcons = useDarkIcons,
         )
     }
 }
