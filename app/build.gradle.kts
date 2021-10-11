@@ -51,6 +51,10 @@ dependencies {
     implementation(Accompanist.systemUiController)
     implementation(Accompanist.insets)
 
+    implementation(AndroidX.androidXCore)
+    implementation(AndroidX.androidXAppCompat)
+    implementation(AndroidX.androidXKTX)
+
     implementation(Coil.coil)
 
     implementation(Compose.activity)
@@ -64,8 +68,6 @@ dependencies {
     androidTestImplementation(ComposeTest.uiTestJunit4)
     debugImplementation(ComposeTest.uiTestManifest)
 
-    implementation(Dependencies.androidXCore)
-    implementation(Dependencies.androidXAppCompat)
     implementation(Dependencies.coroutines)
     implementation(Dependencies.touchImageView)
     implementation(Dependencies.heuler)

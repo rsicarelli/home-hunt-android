@@ -16,17 +16,15 @@ import com.google.accompanist.insets.systemBarsPadding
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
-import com.rsicarelli.homehunt.domain.model.PropertyVisibility
-import com.rsicarelli.homehunt.domain.model.PropertyVisibility.NotSeen
-import com.rsicarelli.homehunt.domain.model.PropertyVisibility.Seen
 import com.rsicarelli.homehunt.presentation.components.BackButton
 import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
-import com.rsicarelli.homehunt.presentation.components.Selector
 import com.rsicarelli.homehunt.presentation.filter.FilterEvents.BathSelectionChanged
 import com.rsicarelli.homehunt.presentation.filter.FilterEvents.DormsSelectionChanged
 import com.rsicarelli.homehunt.presentation.filter.components.AddOrRemoveItem
+import com.rsicarelli.homehunt.presentation.filter.components.CheckboxItem
 import com.rsicarelli.homehunt.presentation.filter.components.FilterRange
 import com.rsicarelli.homehunt.ui.theme.SpaceLarge
+import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 import com.rsicarelli.homehunt.ui.theme.rally_green_500
 
 private val priceRange = 0F..2000F
@@ -111,26 +109,15 @@ private fun SurfaceRange(
 
 @Composable
 fun VisibilitySelector(state: FilterState, events: (FilterEvents) -> Unit) {
-    val selectedItems = mutableListOf<PropertyVisibility>()
-    state.seenOnly?.let { selectedItems.add(it) }
-    state.notSeenOnly?.let { selectedItems.add(it) }
 
-    Divider(thickness = 1.dp)
+    Spacer(modifier = Modifier.height(SpaceSmall))
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-    }
-    Selector(
-        titleRes = R.string.visibility,
-        items = mapOf("Not seen" to NotSeen, "Seen" to Seen),
-        selectedItems = selectedItems,
-        onSelectedChanged = {
-            events(FilterEvents.VisibilitySelectionChanged(it.second))
+    CheckboxItem(
+        title = stringResource(id = R.string.show_seen),
+        isChecked = state.showSeen,
+        onCheckedChange = {
+            events(FilterEvents.VisibilitySelectionChanged(it))
         },
-        horizontalArrangement = Arrangement.spacedBy(2.dp)
     )
 }
 

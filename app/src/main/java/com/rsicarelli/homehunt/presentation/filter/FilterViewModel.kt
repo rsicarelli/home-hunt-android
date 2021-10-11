@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.core.model.UiEvent
-import com.rsicarelli.homehunt.domain.model.PropertyVisibility
 import com.rsicarelli.homehunt.domain.usecase.GetFilterPreferencesUseCase
 import com.rsicarelli.homehunt.domain.usecase.PreviewFilterResultUseCase
 import com.rsicarelli.homehunt.domain.usecase.SaveFilterPreferencesUseCase
@@ -44,17 +43,8 @@ class FilterViewModel @Inject constructor(
         previewResults()
     }
 
-    private fun handleVisibilityChanged(newValue: PropertyVisibility) {
-        when (newValue) {
-            is PropertyVisibility.Seen -> {
-                val value = if (state.value.seenOnly == null) newValue else null
-                _state.value = state.value.copy(seenOnly = value)
-            }
-            is PropertyVisibility.NotSeen -> {
-                val value = if (state.value.notSeenOnly == null) newValue else null
-                _state.value = state.value.copy(notSeenOnly = value)
-            }
-        }
+    private fun handleVisibilityChanged(newValue: Boolean) {
+        _state.value = state.value.copy(showSeen = newValue)
     }
 
     private fun handleLifecycle(event: Lifecycle.Event) {

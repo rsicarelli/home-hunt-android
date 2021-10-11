@@ -25,6 +25,7 @@
     <string name="bedrooms">Bedrooms</string>
     <string name="filter">Filter</string>
     <string name="google">Google</string>
+    <string name="show_seen">Show seen properties</string>
     <plurals name="see_results_plurals">
         <item quantity="one">See %d result</item>
         <item quantity="other">See %d results</item>

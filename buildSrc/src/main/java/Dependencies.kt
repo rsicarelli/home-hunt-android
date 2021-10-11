@@ -1,10 +1,4 @@
 object Dependencies {
-    private const val androidXCoreVersion = "1.6.0"
-    const val androidXCore = "androidx.core:core-ktx:$androidXCoreVersion"
-
-    private const val androidXAppCompatVersion = "1.3.1"
-    const val androidXAppCompat = "androidx.appcompat:appcompat:$androidXAppCompatVersion"
-
     private const val coroutinesVersion = "1.3.9"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 

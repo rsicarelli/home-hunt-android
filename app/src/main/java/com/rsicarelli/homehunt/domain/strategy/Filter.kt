@@ -64,21 +64,9 @@ private object Bath : Filter {
 
 private object Visibility : Filter {
     override fun applyFilter(searchOption: SearchOption, property: Property): Boolean {
-        if ((searchOption.seenOnly == null && searchOption.notSeenOnly == null)
-            || (searchOption.seenOnly != null && searchOption.notSeenOnly != null)
-        ) {
-            return true
-        }
+        if (searchOption.showSeen) return true
 
-        searchOption.notSeenOnly?.let {
-            return !property.viewedBy.contains(searchOption.userId)
-        }
-
-        searchOption.seenOnly?.let {
-            return property.viewedBy.contains(searchOption.userId)
-        }
-
-        return true
+        return !property.viewedBy.contains(searchOption.userId)
     }
 }
 
