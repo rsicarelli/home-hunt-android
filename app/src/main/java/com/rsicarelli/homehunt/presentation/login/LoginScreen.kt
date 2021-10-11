@@ -134,7 +134,7 @@ private fun GoogleSignInOption(events: (LoginEvents) -> Unit) {
                         Text(
                             style = MaterialTheme.typography.button,
                             color = MaterialTheme.colors.onSurface,
-                            text = "Google"
+                            text = stringResource(id = R.string.google)
                         )
                         Icon(
                             tint = Color.Transparent,

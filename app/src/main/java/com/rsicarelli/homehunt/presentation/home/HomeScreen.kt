@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.systemBarsPadding
@@ -25,7 +26,6 @@ import com.rsicarelli.homehunt.presentation.components.EmptyContent
 import com.rsicarelli.homehunt.presentation.components.OnLifecycleEvent
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
 import com.rsicarelli.homehunt.ui.navigation.Screen
-import com.rsicarelli.homehunt.ui.theme.SpaceLarge
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 import com.rsicarelli.homehunt.ui.theme.rally_blue_700
 
@@ -92,7 +92,7 @@ private fun FilterFab(scrollState: LazyListState, onClick: () -> Unit) {
     ) {
         Box(
             modifier = Modifier
-                .padding(bottom = 40.dp + SpaceLarge, end = SpaceSmall)
+                .padding(bottom = 40.dp + SpaceSmall, end = SpaceSmall)
                 .systemBarsPadding()
         ) {
             FloatingActionButton(
@@ -102,7 +102,7 @@ private fun FilterFab(scrollState: LazyListState, onClick: () -> Unit) {
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_round_filter),
-                    contentDescription = "Filter"
+                    contentDescription = stringResource(id = R.string.filter)
                 )
             }
         }

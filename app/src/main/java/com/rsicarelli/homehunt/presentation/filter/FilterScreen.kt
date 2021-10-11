@@ -38,8 +38,6 @@ import com.rsicarelli.homehunt.ui.theme.*
 private val priceRange = 0F..2000F
 private val surfaceRange = 0F..300F
 
-val visibilityRange = mapOf("Not seen" to NotSeen, "Seen" to Seen)
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FilterScreen(
@@ -175,7 +173,7 @@ fun VisibilitySelector(state: FilterState, events: (FilterEvents) -> Unit) {
 
     Selector(
         titleRes = R.string.visibility,
-        items = visibilityRange,
+        items = mapOf("Not seen" to NotSeen, "Seen" to Seen),
         selectedItems = selectedItems,
         onSelectedChanged = {
             events(FilterEvents.VisibilitySelectionChanged(it.second))

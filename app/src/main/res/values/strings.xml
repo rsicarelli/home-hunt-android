@@ -23,6 +23,8 @@
     <string name="visibility">Visibility</string>
     <string name="go_back">Go back</string>
     <string name="bedrooms">Bedrooms</string>
+    <string name="filter">Filter</string>
+    <string name="google">Google</string>
     <plurals name="see_results_plurals">
         <item quantity="one">See %d result</item>
         <item quantity="other">See %d results</item>

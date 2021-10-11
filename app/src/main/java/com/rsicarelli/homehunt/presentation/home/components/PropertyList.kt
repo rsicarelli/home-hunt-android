@@ -40,14 +40,13 @@ fun PropertyList(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
             .systemBarsPadding()
             .padding(SpaceMedium)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 40.dp),
+                .padding(bottom = 24.dp),
             contentAlignment = Alignment.BottomEnd
         ) {
             AnimatedVisibility(visible = properties.isNotEmpty()) {
