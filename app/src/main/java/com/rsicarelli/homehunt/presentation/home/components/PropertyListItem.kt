@@ -16,16 +16,20 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.util.toCurrency
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.FavouritableIconButton
+import com.rsicarelli.homehunt.presentation.components.GalleryCarousel
 import com.rsicarelli.homehunt.presentation.components.IconText
 import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
 
-@OptIn(ExperimentalCoilApi::class)
+@OptIn(ExperimentalCoilApi::class, ExperimentalPagerApi::class)
 @Composable
 fun PropertyListItem(
     property: Property,
@@ -53,17 +57,11 @@ fun PropertyListItem(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.TopEnd
             ) {
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)),
-                    painter = rememberImagePainter(
-                        property.photoGalleryUrls.first(),
-                        builder = { crossfade(true) }
-                    ),
-                    contentDescription = property.title,
-                    contentScale = ContentScale.FillWidth,
+                val pagerState = rememberPagerState()
+                GalleryCarousel(
+                    state = pagerState,
+                    photoGallery = property.photoGalleryUrls,
+                    onOpenGallery = { onSelectProperty(property) },
                 )
                 Row {
                     extraContent(property)

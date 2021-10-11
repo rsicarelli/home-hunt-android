@@ -7,4 +7,6 @@ object Accompanist {
     const val systemUiController =
         "com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion"
     const val insets = "com.google.accompanist:accompanist-insets:$accompanistVersion"
+
+    const val pagerIndicators = "com.google.accompanist:accompanist-pager-indicators:$accompanistVersion"
 }
