@@ -101,20 +101,12 @@ private fun MainContent(
             startDestination = Screen.Home.route, //Test only
             modifier = Modifier.fillMaxSize()
         ) {
-            composable(Screen.Login.route) {
-                LoginScreen(
-                    scaffoldDelegate = scaffoldDelegate,
-                )
+            composable(Screen.Splash.route) {
+                SplashScreen(scaffoldDelegate = scaffoldDelegate)
             }
 
-            composable(
-                Screen.PropertyDetail.route + "/{referenceId}",
-                arguments = Screen.PropertyDetail.arguments
-            ) {
-                PropertyDetailScreen(
-                    imageLoader,
-                    scaffoldDelegate
-                )
+            composable(Screen.Login.route) {
+                LoginScreen(scaffoldDelegate = scaffoldDelegate)
             }
 
             composable(Screen.Home.route) {
@@ -124,16 +116,18 @@ private fun MainContent(
                 )
             }
 
-            composable(Screen.Splash.route) {
-                SplashScreen(
-                    scaffoldDelegate = scaffoldDelegate,
+            composable(
+                route = Screen.PropertyDetail.route + "/{referenceId}",
+                arguments = Screen.PropertyDetail.arguments
+            ) {
+                PropertyDetailScreen(
+                    imageLoader = imageLoader,
+                    scaffoldDelegate = scaffoldDelegate
                 )
             }
 
             composable(Screen.Filter.route) {
-                FilterScreen(
-                    scaffoldDelegate = scaffoldDelegate,
-                )
+                FilterScreen(scaffoldDelegate = scaffoldDelegate)
             }
             composable(Screen.Favourites.route) {
                 FavouritesScreen(
