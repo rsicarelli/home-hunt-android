@@ -5,7 +5,6 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarDuration
 import androidx.navigation.NavController
 import com.rsicarelli.homehunt.core.util.asString
-import com.rsicarelli.homehunt.presentation.resources.launchVideoPlayerActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -42,9 +41,5 @@ class ScaffoldDelegate(
 
     fun navigateUp() {
         navController.navigateUp()
-    }
-
-    fun launchVideoPlayer(videoUrl: String) {
-        launchVideoPlayerActivity(context, videoUrl)
     }
 }

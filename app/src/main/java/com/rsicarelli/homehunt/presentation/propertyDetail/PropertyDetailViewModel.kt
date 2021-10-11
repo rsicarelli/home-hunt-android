@@ -58,6 +58,12 @@ class PropertyDetailViewModel @Inject constructor(
             PropertyDetailEvents.OpenGallery -> _state.value = state.value.copy(
                 openGallery = true
             )
+            PropertyDetailEvents.CloseVideoPreview -> _state.value = state.value.copy(
+                openVideoPreview = false
+            )
+            PropertyDetailEvents.OpenVideoPreview -> _state.value = state.value.copy(
+                openVideoPreview = true
+            )
         }
     }
 

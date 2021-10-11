@@ -1,13 +1,15 @@
 package com.rsicarelli.homehunt.presentation.propertyDetail
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.annotation.ExperimentalCoilApi
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
-import com.rsicarelli.homehunt.presentation.propertyDetail.components.*
+import com.rsicarelli.homehunt.presentation.propertyDetail.components.GalleryBottomSheet
+import com.rsicarelli.homehunt.presentation.propertyDetail.components.PropertyDetail
+import com.rsicarelli.homehunt.presentation.propertyDetail.components.PropertyTopBar
+import com.rsicarelli.homehunt.presentation.propertyDetail.components.PropertyVideoBottomSheet
 
 @Composable
 fun PropertyDetailScreen(
@@ -15,16 +17,13 @@ fun PropertyDetailScreen(
     viewModel: PropertyDetailViewModel = hiltViewModel()
 ) {
     PropertyDetailContent(
-        scaffoldDelegate = scaffoldDelegate,
         state = viewModel.state.value,
         events = viewModel::onEvent
     )
 }
 
-@OptIn(ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
 @Composable
 private fun PropertyDetailContent(
-    scaffoldDelegate: ScaffoldDelegate,
     state: PropertyDetailState,
     events: (PropertyDetailEvents) -> Unit
 ) {
@@ -32,8 +31,12 @@ private fun PropertyDetailContent(
         Box(modifier = Modifier.fillMaxSize()) {
             PropertyDetail(
                 property = property,
-                scaffoldDelegate = scaffoldDelegate,
-                events = events,
+                onOpenGallery = {
+                    events(PropertyDetailEvents.OpenGallery)
+                },
+                onPlayVideo = {
+                    events(PropertyDetailEvents.OpenVideoPreview)
+                }
             )
             PropertyTopBar(
                 isFavourited = property.isFavourited,
@@ -51,6 +54,13 @@ private fun PropertyDetailContent(
                 isEnabled = state.openGallery,
                 onCollapsed = {
                     events(PropertyDetailEvents.CloseGallery)
+                }
+            )
+            PropertyVideoBottomSheet(
+                videoUrl = property.videoUrl,
+                isEnabled = state.openVideoPreview,
+                onCollapsed = {
+                    events(PropertyDetailEvents.CloseVideoPreview)
                 }
             )
         }

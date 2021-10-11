@@ -15,8 +15,8 @@ import com.rsicarelli.homehunt.presentation.propertyDetail.PropertyDetailEvents
 @Composable
 fun PropertyDetail(
     property: Property,
-    scaffoldDelegate: ScaffoldDelegate,
-    events: (PropertyDetailEvents) -> Unit
+    onOpenGallery: () -> Unit,
+    onPlayVideo: () -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -26,15 +26,16 @@ fun PropertyDetail(
             GalleryCarousel(
                 photoGallery = property.photoGalleryUrls,
                 hasVideo = property.videoUrl != null && property.videoUrl.isNotEmpty(),
-                onOpenGallery = {
-                    events(PropertyDetailEvents.OpenGallery)
-                }, onPlayVideo = {
-                    scaffoldDelegate.launchVideoPlayer(property.videoUrl!!)
-                }
+                onOpenGallery = onOpenGallery,
+                onPlayVideo = onPlayVideo
             )
         }
-        item { PropertyHeader(property) }
-        item { PropertyFeatures(property.characteristics) }
+        item {
+            PropertyHeader(property = property)
+        }
+        item {
+            PropertyFeatures(characteristics = property.characteristics)
+        }
         item {
             PropertyMap(
                 lat = property.lat,
@@ -58,9 +59,9 @@ fun PropertyDetail(
         }
         item {
             PropertyFooter(
-                property.reference,
-                property.propertyUrl,
-                property.pdfUrl
+                reference = property.reference,
+                propertyUrl = property.propertyUrl,
+                pdfUrl = property.pdfUrl
             )
         }
     }

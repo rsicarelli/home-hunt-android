@@ -6,5 +6,6 @@ import com.rsicarelli.homehunt.domain.model.Property
 data class PropertyDetailState(
     val property: Property? = null,
     val progressBarState: ProgressBarState = ProgressBarState.Idle,
-    val openGallery: Boolean = false
+    val openGallery: Boolean = false,
+    val openVideoPreview: Boolean = false
 )

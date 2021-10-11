@@ -26,11 +26,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".presentation.resources.VideoPlayerActivity"
-            android:theme="@style/Theme.HomeHunt.NoActionBar" />
-
-
     </application>
 
 </manifest>

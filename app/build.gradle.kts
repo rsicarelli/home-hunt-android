@@ -70,7 +70,6 @@ dependencies {
 
     implementation(Dependencies.coroutines)
     implementation(Dependencies.touchImageView)
-    implementation(Dependencies.heuler)
     implementation(Dependencies.heulerDataBinding)
     implementation(Dependencies.timber)
 
