@@ -45,38 +45,38 @@ val EczarTypography = Typography(
     ),
     h6 = TextStyle(
         fontFamily = Eczar,
-        fontWeight = FontWeight.W400,
+        fontWeight = FontWeight.W500,
         fontSize = 20.sp
     ),
     subtitle1 = TextStyle(
         fontFamily = Eczar,
         fontWeight = FontWeight.W500,
-        fontSize = 16.sp
+        fontSize = 18.sp
     ),
     subtitle2 = TextStyle(
         fontFamily = Eczar,
         fontWeight = FontWeight.W600,
-        fontSize = 14.sp
+        fontSize = 16.sp
     ),
     body1 = TextStyle(
         fontFamily = Eczar,
         fontWeight = FontWeight.W600,
-        fontSize = 16.sp
+        fontSize = 18.sp
     ),
     body2 = TextStyle(
         fontFamily = Eczar,
         fontWeight = FontWeight.W400,
-        fontSize = 14.sp
+        fontSize = 16.sp
     ),
     button = TextStyle(
         fontFamily = Eczar,
         fontWeight = FontWeight.W600,
-        fontSize = 14.sp
+        fontSize = 16.sp
     ),
     caption = TextStyle(
         fontFamily = Eczar,
         fontWeight = FontWeight.W500,
-        fontSize = 12.sp
+        fontSize = 14.sp
     ),
     overline = TextStyle(
         fontFamily = Eczar,

@@ -184,14 +184,14 @@ private fun FilterRange(
 
     Text(
         text = title,
-        style = MaterialTheme.typography.h5
+        style = MaterialTheme.typography.h6
     )
 
     Spacer(modifier = Modifier.height(SpaceSmallest))
 
     Text(
         text = rangeText,
-        style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.W400)
+        style = MaterialTheme.typography.subtitle1
     )
 
     RangeSlider(
@@ -249,7 +249,7 @@ private fun AddOrRemoveItem(
         Text(
             modifier = Modifier.weight(1.0f),
             text = text,
-            style = MaterialTheme.typography.subtitle1,
+            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.W400),
         )
         Counter(
             value,
@@ -271,7 +271,7 @@ private fun Counter(
     val isIncreaseEnabled = value != 5
 
     Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
+        horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
         RoundButton(
@@ -281,8 +281,12 @@ private fun Counter(
             contentDescription = contentDescription
         )
         Spacer(modifier = Modifier.width(SpaceMedium))
-        Text(text = value.toString(), style = MaterialTheme.typography.body2)
-        Spacer(modifier = Modifier.width(SpaceMedium))
+        Text(
+            modifier = Modifier.width(SpaceMedium),
+            text = value.toString(),
+            style = MaterialTheme.typography.body2
+        )
+        Spacer(modifier = Modifier.width(SpaceSmall))
         RoundButton(
             onIncrease,
             isIncreaseEnabled,
@@ -290,7 +294,6 @@ private fun Counter(
             contentDescription = contentDescription
         )
     }
-
 }
 
 @Composable
@@ -308,7 +311,7 @@ private fun RoundButton(
         onClick = onClick,
         enabled = enabled,
         modifier = Modifier
-            .then(Modifier.size(40.dp))
+            .then(Modifier.size(32.dp))
             .border(
                 1.dp,
                 color = color,
@@ -333,6 +336,5 @@ private fun RoundButton(
                 tint = color
             )
         }
-
     }
 }
