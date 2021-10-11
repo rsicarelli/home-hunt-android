@@ -2,66 +2,50 @@ package com.rsicarelli.homehunt.presentation.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.google.accompanist.insets.systemBarsPadding
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.ui.navigation.BottomNavItem
 import com.rsicarelli.homehunt.ui.navigation.Screen
-import com.rsicarelli.homehunt.ui.theme.HintGray
+import com.rsicarelli.homehunt.ui.navigation.bottomBarDestinations
 import com.rsicarelli.homehunt.ui.theme.Secondary
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 
 @Composable
 fun AppScaffold(
     modifier: Modifier = Modifier,
     navController: NavController,
-    showBottomBar: Boolean = true,
     state: ScaffoldState,
-    bottomNavItems: List<BottomNavItem> = listOf(
-        BottomNavItem(
-            route = Screen.Home.route,
-            icon = Icons.Rounded.Home,
-            contentDescription = stringResource(id = R.string.home)
-        ),
-        BottomNavItem(
-            route = Screen.Favourites.route,
-            icon = Icons.Rounded.Favorite,
-            contentDescription = stringResource(id = R.string.favourites)
-        )
-    ),
     content: @Composable () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-    val useDarkIcons = MaterialTheme.colors.isLight
-    SideEffect {
-        systemUiController.setSystemBarsColor(
-            Secondary.copy(alpha = 0.4f),
-            darkIcons = useDarkIcons
-        )
-    }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val showBottomBar = navBackStackEntry?.destination?.route in bottomBarDestinations
+
+    SystemBarEffect()
 
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
-                TestNavigation(navController)
+                HomeHuntBottomNavigation(navController)
             }
         },
         scaffoldState = state,
@@ -72,68 +56,19 @@ fun AppScaffold(
 }
 
 @Composable
-private fun AppBottomNavigation(
-    bottomNavItems: List<BottomNavItem>,
-    navController: NavController
-) {
-    BottomAppBar(
-        modifier = Modifier
-            .fillMaxWidth()
-            .systemBarsPadding()
-    ) {
-        BottomNavigation {
-            bottomNavItems.forEachIndexed { _, bottomNavItem ->
-                AppBottomNavItem(
-                    icon = bottomNavItem.icon,
-                    iconPainter = bottomNavItem.painter,
-                    contentDescription = bottomNavItem.contentDescription,
-                    selected = bottomNavItem.route == navController.currentDestination?.route,
-                    enabled = bottomNavItem.icon != null
-                ) {
-                    if (navController.currentDestination?.route != bottomNavItem.route) {
-                        navController.navigate(bottomNavItem.route)
-                    }
-                }
-            }
-        }
+private fun SystemBarEffect() {
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = MaterialTheme.colors.isLight
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            Secondary.copy(alpha = 0.4f),
+            darkIcons = useDarkIcons
+        )
     }
 }
 
 @Composable
-@Throws(IllegalArgumentException::class)
-fun RowScope.AppBottomNavItem(
-    modifier: Modifier = Modifier,
-    icon: ImageVector? = null,
-    iconPainter: Painter? = null,
-    contentDescription: String? = null,
-    selected: Boolean = false,
-    selectedColor: Color = MaterialTheme.colors.primary,
-    unselectedColor: Color = HintGray,
-    enabled: Boolean = true,
-    onClick: () -> Unit
-) {
-    val lineLength = animateFloatAsState(
-        targetValue = if (selected) 1f else 0f,
-        animationSpec = tween(
-            durationMillis = 300
-        )
-    )
-
-    BottomNavigationItem(
-        selected = selected,
-        onClick = onClick,
-        modifier = modifier,
-        enabled = enabled,
-        selectedContentColor = selectedColor,
-        unselectedContentColor = unselectedColor,
-        icon = {
-
-        }
-    )
-}
-
-@Composable
-fun TestNavigation(navController: NavController) {
+fun HomeHuntBottomNavigation(navController: NavController) {
     val items: List<BottomNavItem> = listOf(
         BottomNavItem(
             route = Screen.Home.route,

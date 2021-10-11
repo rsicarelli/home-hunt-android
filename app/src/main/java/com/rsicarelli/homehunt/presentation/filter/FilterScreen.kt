@@ -262,7 +262,7 @@ private fun AddOrRemoveItem(
         Text(
             modifier = Modifier.weight(1.0f),
             text = text,
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.subtitle1,
         )
         Counter(
             value,

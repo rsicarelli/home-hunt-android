@@ -11,6 +11,7 @@ import com.rsicarelli.homehunt.presentation.resources.launchVideoPlayerActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+//TODO Improve this class which look like an "utils" one :face_palm:
 class ScaffoldDelegate(
     private val coroutineScope: CoroutineScope,
     private val scaffoldState: ScaffoldState,
