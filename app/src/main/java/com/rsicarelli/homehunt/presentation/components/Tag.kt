@@ -10,9 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import com.rsicarelli.homehunt.ui.theme.ElevationSize
-import com.rsicarelli.homehunt.ui.theme.Size_X_Small
+import androidx.compose.ui.tooling.preview.Preview
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_Small
+import com.rsicarelli.homehunt.ui.theme.Size_X_Small
 
 @Composable
 fun Tag(
@@ -21,11 +22,13 @@ fun Tag(
     color: Color = MaterialTheme.colors.surface,
     style: TextStyle = MaterialTheme.typography.body2
 ) {
+
+    if (text.isEmpty()) return
+
     Surface(
         modifier = modifier
             .clip(MaterialTheme.shapes.large),
-        color = color,
-        elevation = ElevationSize
+        color = color
     ) {
         Text(
             text,
@@ -39,5 +42,21 @@ fun Tag(
                     bottom = Size_X_Small
                 )
         )
+    }
+}
+
+@Composable
+@Preview
+private fun TagPreview() {
+    HomeHuntTheme {
+        Tag(text = "A tag")
+    }
+}
+
+@Composable
+@Preview
+private fun TagEmptyPreview() {
+    HomeHuntTheme {
+        Tag(text = "")
     }
 }
