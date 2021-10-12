@@ -13,11 +13,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.util.extractAuthCredentials
 import com.rsicarelli.homehunt.core.util.getGoogleSignInOptions
 import com.rsicarelli.homehunt.presentation.login.LoginEvents
 import com.rsicarelli.homehunt.ui.theme.BorderSizeSmallest
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_2X_Large
 import com.rsicarelli.homehunt.ui.theme.Size_Large
 
@@ -34,13 +36,7 @@ fun GoogleSignInOption(events: (LoginEvents) -> Unit) {
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                start = Size_Large,
-                end = Size_Large,
-                top = Size_Large,
-                bottom = Size_2X_Large
-            )
+            .padding(Size_Large)
     ) {
         OutlinedButton(
             border = ButtonDefaults.outlinedBorder.copy(width = BorderSizeSmallest),
@@ -75,5 +71,13 @@ fun GoogleSignInOption(events: (LoginEvents) -> Unit) {
                 )
             }
         )
+    }
+}
+
+@Composable
+@Preview
+private fun GoogleSignInOptionPreview() {
+    HomeHuntTheme(isPreview = true) {
+        GoogleSignInOption(events = {})
     }
 }
