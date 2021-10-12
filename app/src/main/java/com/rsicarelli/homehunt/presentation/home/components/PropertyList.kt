@@ -22,6 +22,7 @@ import com.google.accompanist.insets.systemBarsPadding
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.ui.navigation.Screen
+import com.rsicarelli.homehunt.ui.theme.SpaceLarge
 import com.rsicarelli.homehunt.ui.theme.SpaceMedium
 import com.rsicarelli.homehunt.ui.theme.SpaceSmall
 
@@ -41,12 +42,16 @@ fun PropertyList(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
-            .padding(SpaceMedium)
+            .padding(
+                start = SpaceMedium,
+                end = SpaceMedium,
+                bottom = SpaceMedium
+            )
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 24.dp),
+                .padding(bottom = SpaceLarge),
             contentAlignment = Alignment.BottomEnd
         ) {
             AnimatedVisibility(visible = properties.isNotEmpty()) {
