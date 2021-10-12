@@ -9,7 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.rsicarelli.homehunt.R
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 
 @Composable
 fun EmptyContent(emptyResults: Boolean) {
@@ -27,5 +29,13 @@ fun EmptyContent(emptyResults: Boolean) {
                 .fillMaxSize(),
             contentScale = ContentScale.Inside
         )
+    }
+}
+
+@Composable
+@Preview
+private fun EmptyContentPreview() {
+    HomeHuntTheme {
+        EmptyContent(emptyResults = true)
     }
 }
