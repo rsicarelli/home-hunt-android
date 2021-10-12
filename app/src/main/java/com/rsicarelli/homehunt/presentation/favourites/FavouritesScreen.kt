@@ -10,14 +10,16 @@ import com.rsicarelli.homehunt.ui.components.AppScaffold
 import com.rsicarelli.homehunt.presentation.components.EmptyContent
 import com.rsicarelli.homehunt.presentation.components.ListingTag
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
+import com.rsicarelli.homehunt.ui.composition.LocalScaffoldDelegate
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import utils.Fixtures
 
 @Composable
 fun FavouritesScreen(
-    scaffoldDelegate: ScaffoldDelegate,
     viewModel: FavouritesViewModel = hiltViewModel()
 ) {
+    val scaffoldDelegate = LocalScaffoldDelegate.current
+
     FavouritesContent(
         events = viewModel::onEvent,
         state = viewModel.state.value,

@@ -24,6 +24,7 @@ import com.rsicarelli.homehunt.core.util.getGoogleSignInOptions
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.login.LoginEvents.Error
 import com.rsicarelli.homehunt.presentation.login.LoginEvents.Login
+import com.rsicarelli.homehunt.ui.composition.LocalScaffoldDelegate
 import com.rsicarelli.homehunt.ui.theme.BorderSizeSmallest
 import com.rsicarelli.homehunt.ui.theme.Size_Regular
 import com.rsicarelli.homehunt.ui.theme.Size_Large
@@ -31,9 +32,10 @@ import com.rsicarelli.homehunt.ui.theme.Size_2X_Large
 
 @Composable
 fun LoginScreen(
-    scaffoldDelegate: ScaffoldDelegate,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val scaffoldDelegate = LocalScaffoldDelegate.current
+
     HomeContent(viewModel.state.value, scaffoldDelegate, viewModel::onEvent)
 }
 

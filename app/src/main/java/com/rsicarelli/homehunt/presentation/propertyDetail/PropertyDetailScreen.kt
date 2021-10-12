@@ -10,12 +10,14 @@ import com.rsicarelli.homehunt.presentation.propertyDetail.components.GalleryBot
 import com.rsicarelli.homehunt.presentation.propertyDetail.components.PropertyDetail
 import com.rsicarelli.homehunt.presentation.propertyDetail.components.PropertyTopBar
 import com.rsicarelli.homehunt.presentation.propertyDetail.components.PropertyVideoBottomSheet
+import com.rsicarelli.homehunt.ui.composition.LocalScaffoldDelegate
 
 @Composable
 fun PropertyDetailScreen(
-    scaffoldDelegate: ScaffoldDelegate,
     viewModel: PropertyDetailViewModel = hiltViewModel()
 ) {
+    val scaffoldDelegate = LocalScaffoldDelegate.current
+
     PropertyDetailContent(
         state = viewModel.state.value,
         events = viewModel::onEvent,

@@ -67,35 +67,29 @@ private fun MainContent(
                 modifier = Modifier.fillMaxSize()
             ) {
                 composable(Screen.Splash.route) {
-                    SplashScreen(scaffoldDelegate = scaffoldDelegate)
+                    SplashScreen()
                 }
 
                 composable(Screen.Login.route) {
-                    LoginScreen(scaffoldDelegate = scaffoldDelegate)
+                    LoginScreen()
                 }
 
                 composable(Screen.Home.route) {
-                    HomeScreen(
-                        scaffoldDelegate = scaffoldDelegate,
-                    )
+                    HomeScreen()
                 }
 
                 composable(
                     route = Screen.PropertyDetail.route + "/{${NavArguments.PROPERTY_DETAIL}}",
                     arguments = Screen.PropertyDetail.arguments
                 ) {
-                    PropertyDetailScreen(
-                        scaffoldDelegate = scaffoldDelegate
-                    )
+                    PropertyDetailScreen()
                 }
 
                 composable(Screen.Filter.route) {
-                    FilterScreen(scaffoldDelegate = scaffoldDelegate)
+                    FilterScreen()
                 }
                 composable(Screen.Favourites.route) {
-                    FavouritesScreen(
-                        scaffoldDelegate = scaffoldDelegate,
-                    )
+                    FavouritesScreen()
                 }
             }
         }

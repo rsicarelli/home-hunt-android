@@ -18,12 +18,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
+import com.rsicarelli.homehunt.ui.composition.LocalScaffoldDelegate
 
 @Composable
 fun SplashScreen(
-    scaffoldDelegate: ScaffoldDelegate,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
+    val scaffoldDelegate = LocalScaffoldDelegate.current
+
     SplashContent(viewModel.state.value, scaffoldDelegate, viewModel::onEvent)
 }
 

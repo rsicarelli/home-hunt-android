@@ -24,6 +24,7 @@ import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProg
 import com.rsicarelli.homehunt.presentation.components.EmptyContent
 import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
+import com.rsicarelli.homehunt.ui.composition.LocalScaffoldDelegate
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.BottomBarSize
 import com.rsicarelli.homehunt.ui.theme.ElevationSize
@@ -33,9 +34,10 @@ import com.rsicarelli.homehunt.ui.theme.rally_blue_700
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
-    scaffoldDelegate: ScaffoldDelegate,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
+    val scaffoldDelegate = LocalScaffoldDelegate.current
+
     HomeContent(
         events = viewModel::onEvent,
         state = viewModel.state.value,
