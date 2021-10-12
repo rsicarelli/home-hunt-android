@@ -9,10 +9,13 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.insets.statusBarsPadding
+import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.*
+import utils.Fixtures
 
 @Composable
 fun PropertyList(
@@ -57,5 +60,18 @@ fun PropertyList(
         }
 
         ResultsHeader(scrollState, properties.size, headerPrefixRes)
+    }
+}
+
+@Composable
+@Preview
+private fun PropertyListPreview() {
+    HomeHuntTheme(isPreview = true) {
+        PropertyList(
+            properties = Fixtures.aListOfProperty,
+            onNavigate = {},
+            onToggleFavourite = {},
+            headerPrefixRes = R.string.results
+        )
     }
 }
