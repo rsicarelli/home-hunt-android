@@ -18,10 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.insets.systemBarsPadding
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
-import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.components.EmptyContent
 import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
@@ -59,8 +57,7 @@ private fun HomeContent(
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomEnd
     ) {
         EmptyContent(state.emptyResults)
@@ -99,8 +96,7 @@ private fun FilterFab(isScrollInProgress: Boolean, onClick: () -> Unit) {
     ) {
         Box(
             modifier = Modifier
-                .padding(bottom = BottomBarSize + Size_Small, end = Size_Small)
-                .systemBarsPadding()
+                .padding(bottom = BottomBarSize, end = Size_Small)
         ) {
             FloatingActionButton(
                 onClick = onClick,

@@ -17,10 +17,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import com.google.accompanist.insets.systemBarsPadding
-import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.google.accompanist.insets.statusBarsPadding
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.*
@@ -40,7 +38,7 @@ fun PropertyList(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .systemBarsPadding()
+            .statusBarsPadding()
             .padding(
                 start = Size_Regular,
                 end = Size_Regular,
@@ -81,8 +79,6 @@ private fun ResultsHeader(
     resultCount: Int,
     @StringRes headerPrefixRes: Int
 ) {
-    val density = LocalDensity.current
-
     AnimatedVisibility(
         visible = !scrollState.isScrollInProgress,
         enter = expandVertically(expandFrom = Alignment.Top),
