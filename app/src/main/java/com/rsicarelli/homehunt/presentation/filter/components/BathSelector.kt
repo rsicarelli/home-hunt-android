@@ -2,7 +2,9 @@ package com.rsicarelli.homehunt.presentation.filter.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.rsicarelli.homehunt.R
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 
 @Composable
 fun BathSelector(
@@ -15,4 +17,12 @@ fun BathSelector(
         onIncrease = { onValueChanged(bathCount + 1) },
         onDecrease = { onValueChanged(bathCount - 1) }
     )
+}
+
+@Composable
+@Preview
+private fun BathSelectorPreview() {
+    HomeHuntTheme {
+        BathSelector(bathCount = 2, onValueChanged = {})
+    }
 }
