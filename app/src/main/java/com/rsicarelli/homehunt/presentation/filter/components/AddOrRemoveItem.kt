@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
+import com.rsicarelli.homehunt.ui.theme.Size_Regular
 
 @Composable
 fun AddOrRemoveItem(
@@ -19,7 +19,7 @@ fun AddOrRemoveItem(
     onIncrease: () -> Unit,
     onDecrease: () -> Unit
 ) {
-    Spacer(modifier = Modifier.height(SpaceMedium))
+    Spacer(modifier = Modifier.height(Size_Regular))
 
     Row(
         modifier = Modifier.fillMaxWidth(),

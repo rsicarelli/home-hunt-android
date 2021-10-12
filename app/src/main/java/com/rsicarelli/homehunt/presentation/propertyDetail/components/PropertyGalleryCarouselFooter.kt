@@ -8,7 +8,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -17,11 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.rsicarelli.homehunt.R
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
-import com.rsicarelli.homehunt.ui.theme.SpaceSmall
-import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
+import com.rsicarelli.homehunt.ui.theme.Size_X_Small
+import com.rsicarelli.homehunt.ui.theme.Size_Small
+import com.rsicarelli.homehunt.ui.theme.Size_Regular
+import com.rsicarelli.homehunt.ui.theme.Size_X_Large
 
 @ExperimentalAnimationApi
 @Composable
@@ -33,7 +32,7 @@ fun PropertyGalleryCarouselFooter(
 ) {
     Row(
         modifier = Modifier
-            .padding(SpaceSmall)
+            .padding(Size_Small)
     ) {
         AnimatedVisibility(
             visible = currentPage == 0 && hasVideo,
@@ -46,14 +45,14 @@ fun PropertyGalleryCarouselFooter(
         ) {
             Row(
                 modifier = Modifier
-                    .height(36.dp)
+                    .height(Size_X_Large)
                     .background(
                         color = MaterialTheme.colors.background.copy(alpha = 0.8f),
-                        shape = RoundedCornerShape(10.dp)
+                        shape = MaterialTheme.shapes.large
                     )
                     .padding(
-                        start = SpaceSmall,
-                        end = SpaceMedium
+                        start = Size_Small,
+                        end = Size_Regular
                     )
                     .clickable { onPlayVideo() },
                 verticalAlignment = Alignment.CenterVertically
@@ -62,14 +61,14 @@ fun PropertyGalleryCarouselFooter(
                     painter = painterResource(id = R.drawable.ic_round_play),
                     contentDescription = stringResource(id = R.string.video_available)
                 )
-                Spacer(Modifier.width(SpaceSmallest))
+                Spacer(Modifier.width(Size_X_Small))
                 Text(
                     text = stringResource(id = R.string.video_available),
                     style = MaterialTheme.typography.button,
                 )
             }
         }
-        Spacer(modifier = Modifier.width(SpaceSmall))
+        Spacer(modifier = Modifier.width(Size_Small))
         PagerIndicator(currentPage = currentPage, totalItems = gallerySize)
     }
 }

@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
+import com.rsicarelli.homehunt.ui.theme.BorderSizeSmallest
+import com.rsicarelli.homehunt.ui.theme.IconSizeSmall
+import com.rsicarelli.homehunt.ui.theme.Size_X_Large
 
 @Composable
 fun RoundedButton(
@@ -27,9 +29,9 @@ fun RoundedButton(
         onClick = onClick,
         enabled = enabled,
         modifier = Modifier
-            .then(Modifier.size(32.dp))
+            .then(Modifier.size(Size_X_Large))
             .border(
-                1.dp,
+                BorderSizeSmallest,
                 color = color,
                 shape = CircleShape
             )
@@ -38,7 +40,7 @@ fun RoundedButton(
         imageVector?.let {
             Icon(
                 it,
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(IconSizeSmall),
                 contentDescription = contentDescription,
                 tint = color
             )
@@ -47,7 +49,7 @@ fun RoundedButton(
         painter?.let {
             Icon(
                 it,
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(IconSizeSmall),
                 contentDescription = contentDescription,
                 tint = color
             )

@@ -1,9 +1,7 @@
 package com.rsicarelli.homehunt.presentation.home.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -11,13 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.util.toCurrency
@@ -25,9 +19,10 @@ import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.FavouritableIconButton
 import com.rsicarelli.homehunt.presentation.components.GalleryCarousel
 import com.rsicarelli.homehunt.presentation.components.IconText
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
-import com.rsicarelli.homehunt.ui.theme.SpaceSmall
-import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
+import com.rsicarelli.homehunt.ui.theme.ElevationSize
+import com.rsicarelli.homehunt.ui.theme.Size_X_Small
+import com.rsicarelli.homehunt.ui.theme.Size_Small
+import com.rsicarelli.homehunt.ui.theme.Size_Regular
 
 @OptIn(ExperimentalCoilApi::class, ExperimentalPagerApi::class)
 @Composable
@@ -41,15 +36,15 @@ fun PropertyListItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = SpaceMedium,
-                bottom = SpaceSmall
+                top = Size_Regular,
+                bottom = Size_Small
             )
-            .clip(RoundedCornerShape(10.dp))
+            .clip(MaterialTheme.shapes.large)
             .clickable {
                 onSelectProperty(property)
             },
         color = MaterialTheme.colors.surface,
-        elevation = 8.dp
+        elevation = ElevationSize
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Box(
@@ -66,7 +61,7 @@ fun PropertyListItem(
                 Row {
                     extraContent(property)
                     Box(
-                        modifier = Modifier.padding(SpaceSmall)
+                        modifier = Modifier.padding(Size_Small)
                     ) {
                         FavouritableIconButton(
                             onFavouriteClick = onFavouriteClick,
@@ -75,12 +70,12 @@ fun PropertyListItem(
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(SpaceSmall))
+            Spacer(modifier = Modifier.height(Size_Small))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = SpaceMedium, end = SpaceMedium),
+                    .padding(start = Size_Regular, end = Size_Regular),
                 verticalAlignment = Alignment.Bottom
             ) {
                 Text(
@@ -89,11 +84,11 @@ fun PropertyListItem(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(modifier = Modifier.width(SpaceSmall))
+                Spacer(modifier = Modifier.width(Size_Small))
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
-                        .padding(top = SpaceSmallest, start = SpaceSmallest),
+                        .padding(top = Size_X_Small, start = Size_X_Small),
                     text = property.location,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -105,22 +100,22 @@ fun PropertyListItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        bottom = SpaceMedium,
-                        start = SpaceMedium,
-                        end = SpaceMedium,
-                        top = SpaceSmallest
+                        bottom = Size_Regular,
+                        start = Size_Regular,
+                        end = Size_Regular,
+                        top = Size_X_Small
                     )
             ) {
                 IconText(
                     text = "${property.dormCount}",
                     leadingIcon = R.drawable.ic_round_double_bed
                 )
-                Spacer(modifier = Modifier.width(SpaceMedium))
+                Spacer(modifier = Modifier.width(Size_Regular))
                 IconText(
                     text = "${property.bathCount}",
                     leadingIcon = R.drawable.ic_round_shower
                 )
-                Spacer(modifier = Modifier.width(SpaceMedium))
+                Spacer(modifier = Modifier.width(Size_Regular))
                 IconText(
                     text = "${property.surface}",
                     leadingIcon = R.drawable.ic_round_ruler

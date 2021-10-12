@@ -2,7 +2,6 @@ package com.rsicarelli.homehunt.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -11,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.dp
-import com.rsicarelli.homehunt.ui.theme.SpaceSmall
-import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
+import com.rsicarelli.homehunt.ui.theme.ElevationSize
+import com.rsicarelli.homehunt.ui.theme.Size_X_Small
+import com.rsicarelli.homehunt.ui.theme.Size_Small
 
 @Composable
 fun Tag(
@@ -24,9 +23,9 @@ fun Tag(
 ) {
     Surface(
         modifier = modifier
-            .clip(RoundedCornerShape(10.dp)),
+            .clip(MaterialTheme.shapes.large),
         color = color,
-        elevation = 8.dp
+        elevation = ElevationSize
     ) {
         Text(
             text,
@@ -34,10 +33,10 @@ fun Tag(
             modifier = Modifier
                 .background(Color.Unspecified)
                 .padding(
-                    start = SpaceSmall,
-                    end = SpaceSmall,
-                    top = SpaceSmallest,
-                    bottom = SpaceSmallest
+                    start = Size_Small,
+                    end = Size_Small,
+                    top = Size_X_Small,
+                    bottom = Size_X_Small
                 )
         )
     }

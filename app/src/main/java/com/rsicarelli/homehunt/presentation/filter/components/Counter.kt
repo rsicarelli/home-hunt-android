@@ -13,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.rsicarelli.homehunt.R
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
-import com.rsicarelli.homehunt.ui.theme.SpaceSmall
+import com.rsicarelli.homehunt.ui.theme.Size_Regular
+import com.rsicarelli.homehunt.ui.theme.Size_Small
 
 @Composable
 fun Counter(
@@ -36,13 +36,13 @@ fun Counter(
             painter = painterResource(id = R.drawable.ic_round_remove_24),
             contentDescription = contentDescription
         )
-        Spacer(modifier = Modifier.width(SpaceMedium))
+        Spacer(modifier = Modifier.width(Size_Regular))
         Text(
-            modifier = Modifier.width(SpaceMedium),
+            modifier = Modifier.width(Size_Regular),
             text = value.toString(),
             style = MaterialTheme.typography.body2
         )
-        Spacer(modifier = Modifier.width(SpaceSmall))
+        Spacer(modifier = Modifier.width(Size_Small))
         RoundedButton(
             onIncrease,
             isIncreaseEnabled,

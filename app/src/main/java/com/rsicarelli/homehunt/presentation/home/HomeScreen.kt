@@ -1,10 +1,12 @@
 package com.rsicarelli.homehunt.presentation.home
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
@@ -15,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.systemBarsPadding
 import com.rsicarelli.homehunt.R
@@ -26,7 +27,9 @@ import com.rsicarelli.homehunt.presentation.components.EmptyContent
 import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
 import com.rsicarelli.homehunt.ui.navigation.Screen
-import com.rsicarelli.homehunt.ui.theme.SpaceSmall
+import com.rsicarelli.homehunt.ui.theme.BottomBarSize
+import com.rsicarelli.homehunt.ui.theme.ElevationSize
+import com.rsicarelli.homehunt.ui.theme.Size_Small
 import com.rsicarelli.homehunt.ui.theme.rally_blue_700
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -71,7 +74,7 @@ private fun HomeContent(
             }
         )
 
-        FilterFab(scrollState = scrollState) {
+        FilterFab(isScrollInProgress = scrollState.isScrollInProgress) {
             scaffoldDelegate.navigate(UiEvent.Navigate(Screen.Filter.route))
         }
 
@@ -82,22 +85,20 @@ private fun HomeContent(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun FilterFab(scrollState: LazyListState, onClick: () -> Unit) {
+private fun FilterFab(isScrollInProgress: Boolean, onClick: () -> Unit) {
     AnimatedVisibility(
-        visible = !scrollState.isScrollInProgress,
-        enter = slideInVertically() + expandVertically(
-            expandFrom = Alignment.Bottom
-        ) + fadeIn(initialAlpha = 0.3f),
-        exit = slideOutVertically() + shrinkVertically() + fadeOut()
+        visible = !isScrollInProgress,
+        enter = expandVertically(expandFrom = Alignment.Top),
+        exit = shrinkVertically(shrinkTowards = Alignment.Top)
     ) {
         Box(
             modifier = Modifier
-                .padding(bottom = 40.dp + SpaceSmall, end = SpaceSmall)
+                .padding(bottom = BottomBarSize + Size_Small, end = Size_Small)
                 .systemBarsPadding()
         ) {
             FloatingActionButton(
                 onClick = onClick,
-                elevation = FloatingActionButtonDefaults.elevation(10.dp),
+                elevation = FloatingActionButtonDefaults.elevation(ElevationSize),
                 backgroundColor = rally_blue_700
             ) {
                 Icon(
@@ -106,6 +107,5 @@ private fun FilterFab(scrollState: LazyListState, onClick: () -> Unit) {
                 )
             }
         }
-
     }
 }

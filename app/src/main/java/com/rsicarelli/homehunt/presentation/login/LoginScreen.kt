@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
@@ -25,8 +24,10 @@ import com.rsicarelli.homehunt.core.util.getGoogleSignInOptions
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.login.LoginEvents.Error
 import com.rsicarelli.homehunt.presentation.login.LoginEvents.Login
-import com.rsicarelli.homehunt.ui.theme.SpaceLarge
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
+import com.rsicarelli.homehunt.ui.theme.BorderSizeSmallest
+import com.rsicarelli.homehunt.ui.theme.Size_Regular
+import com.rsicarelli.homehunt.ui.theme.Size_Large
+import com.rsicarelli.homehunt.ui.theme.Size_2X_Large
 
 @Composable
 fun LoginScreen(
@@ -55,8 +56,8 @@ private fun HomeContent(
         Welcome()
         BrandingSentence()
 
-        Spacer(modifier = Modifier.height(SpaceLarge))
-        Spacer(modifier = Modifier.height(SpaceLarge))
+        Spacer(modifier = Modifier.height(Size_Large))
+        Spacer(modifier = Modifier.height(Size_Large))
 
         if (!state.progressBarState.isLoading()) {
             GoogleSignInOption(events)
@@ -71,7 +72,7 @@ private fun Welcome() {
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 50.dp, end = 20.dp, bottom = 20.dp, start = 20.dp),
+            .padding(top = Size_2X_Large, end = Size_Large, bottom = Size_Large, start = Size_Large),
         text = stringResource(id = R.string.welcome),
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.h4,
@@ -87,7 +88,7 @@ private fun BrandingSentence() {
         style = MaterialTheme.typography.subtitle1,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(SpaceMedium),
+            .padding(Size_Regular),
         color = Color.White.copy(alpha = 0.5f)
     )
 }
@@ -106,17 +107,17 @@ private fun GoogleSignInOption(events: (LoginEvents) -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                start = SpaceLarge,
-                end = SpaceLarge,
-                top = SpaceLarge,
-                bottom = 50.dp
+                start = Size_Large,
+                end = Size_Large,
+                top = Size_Large,
+                bottom = Size_2X_Large
             )
     ) {
         OutlinedButton(
-            border = ButtonDefaults.outlinedBorder.copy(width = 1.dp),
+            border = ButtonDefaults.outlinedBorder.copy(width = BorderSizeSmallest),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(50.dp),
+                .height(Size_2X_Large),
             onClick = {
                 launcher.launch(context.getGoogleSignInOptions().signInIntent)
             },

@@ -12,14 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
-import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
+import com.rsicarelli.homehunt.ui.theme.Size_X_Small
 
 @Composable
 fun IconText(
     modifier: Modifier = Modifier,
     text: String,
     textStyle: TextStyle = MaterialTheme.typography.body1,
-    paddingLeadingIconEnd: Dp = SpaceSmallest,
+    paddingLeadingIconEnd: Dp = Size_X_Small,
     @DrawableRes leadingIcon: Int,
 ) {
     Row(

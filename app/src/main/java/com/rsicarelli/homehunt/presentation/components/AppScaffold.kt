@@ -19,7 +19,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -28,7 +27,9 @@ import com.rsicarelli.homehunt.ui.navigation.BottomNavItem
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.navigation.bottomBarDestinations
 import com.rsicarelli.homehunt.ui.theme.Secondary
-import com.rsicarelli.homehunt.ui.theme.SpaceSmall
+import com.rsicarelli.homehunt.ui.theme.Size_Regular
+import com.rsicarelli.homehunt.ui.theme.Size_Small
+import com.rsicarelli.homehunt.ui.theme.Size_2X_Small
 
 @Composable
 fun AppScaffold(
@@ -107,21 +108,21 @@ fun HomeHuntBottomNavigation(navController: NavController) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(SpaceSmall)
+                            .padding(Size_Small)
                             .drawBehind {
                                 if (lineLength.value > 0f) {
                                     drawLine(
                                         color = if (selected) Color.White
                                         else Color.White.copy(0.4f),
                                         start = Offset(
-                                            size.width / 2f - lineLength.value * 15.dp.toPx(),
+                                            size.width / 2f - lineLength.value * Size_Regular.toPx(),
                                             size.height
                                         ),
                                         end = Offset(
-                                            size.width / 2f + lineLength.value * 15.dp.toPx(),
+                                            size.width / 2f + lineLength.value * Size_Regular.toPx(),
                                             size.height
                                         ),
-                                        strokeWidth = 2.dp.toPx(),
+                                        strokeWidth = Size_2X_Small.toPx(),
                                         cap = StrokeCap.Round
                                     )
                                 }

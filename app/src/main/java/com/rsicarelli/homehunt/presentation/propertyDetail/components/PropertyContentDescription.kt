@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.rsicarelli.homehunt.presentation.components.ExpandableText
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
-import com.rsicarelli.homehunt.ui.theme.SpaceSmall
+import com.rsicarelli.homehunt.ui.theme.Size_Regular
+import com.rsicarelli.homehunt.ui.theme.Size_Small
 
 @Composable
 fun PropertyContentDescription(
@@ -20,13 +20,13 @@ fun PropertyContentDescription(
         Column(
             Modifier
                 .fillMaxWidth()
-                .padding(SpaceMedium)
+                .padding(Size_Regular)
         ) {
             Text(
                 text = stringResource(id = titleRes),
                 style = MaterialTheme.typography.h6
             )
-            Spacer(modifier = Modifier.height(SpaceSmall))
+            Spacer(modifier = Modifier.height(Size_Small))
             ExpandableText(text)
         }
     }

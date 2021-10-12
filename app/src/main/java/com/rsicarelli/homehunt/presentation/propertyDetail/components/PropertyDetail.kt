@@ -6,11 +6,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.GalleryCarousel
+import com.rsicarelli.homehunt.ui.theme.GalleryItemSizeLarger
 
 @OptIn(
     ExperimentalMaterialApi::class,
@@ -31,7 +31,7 @@ fun PropertyDetail(
             GalleryCarousel(
                 photoGallery = property.photoGalleryUrls,
                 onOpenGallery = onOpenGallery,
-                imageSize = 256.dp,
+                imageSize = GalleryItemSizeLarger,
                 footer = { currentPage ->
                     PropertyGalleryCarouselFooter(
                         hasVideo = property.videoUrl != null && property.videoUrl.isNotEmpty(),

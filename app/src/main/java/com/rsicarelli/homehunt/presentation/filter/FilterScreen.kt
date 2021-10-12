@@ -9,7 +9,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.systemBarsPadding
@@ -23,10 +22,7 @@ import com.rsicarelli.homehunt.presentation.filter.FilterEvents.DormsSelectionCh
 import com.rsicarelli.homehunt.presentation.filter.components.AddOrRemoveItem
 import com.rsicarelli.homehunt.presentation.filter.components.CheckboxItem
 import com.rsicarelli.homehunt.presentation.filter.components.FilterRange
-import com.rsicarelli.homehunt.ui.theme.SpaceLarge
-import com.rsicarelli.homehunt.ui.theme.SpaceSmall
-import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
-import com.rsicarelli.homehunt.ui.theme.rally_green_500
+import com.rsicarelli.homehunt.ui.theme.*
 
 private val priceRange = 0F..2000F
 private val surfaceRange = 0F..300F
@@ -56,7 +52,7 @@ private fun FilterContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(SpaceLarge)
+            .padding(Size_Large)
     ) {
         LazyColumn(
             Modifier
@@ -114,7 +110,7 @@ fun VisibilitySelector(
     state: FilterState,
     events: (FilterEvents) -> Unit
 ) {
-    Spacer(modifier = Modifier.height(SpaceSmall))
+    Spacer(modifier = Modifier.height(Size_Small))
 
     CheckboxItem(
         title = stringResource(id = R.string.show_seen),
@@ -130,7 +126,7 @@ fun LongTermRentalSelector(
     state: FilterState,
     events: (FilterEvents) -> Unit
 ) {
-    Spacer(modifier = Modifier.height(SpaceSmallest))
+    Spacer(modifier = Modifier.height(Size_X_Small))
 
     CheckboxItem(
         title = stringResource(id = R.string.show_longer_term_only),
@@ -183,7 +179,7 @@ private fun SeeResultsButton(
         Button(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .height(48.dp),
+                .height(Size_2X_Large),
             shape = MaterialTheme.shapes.large,
             enabled = hasResults,
             colors = ButtonDefaults.buttonColors(

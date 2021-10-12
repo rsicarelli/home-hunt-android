@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
@@ -17,7 +16,8 @@ import com.rsicarelli.homehunt.domain.model.toTag
 import com.rsicarelli.homehunt.presentation.components.EmptyContent
 import com.rsicarelli.homehunt.presentation.components.Tag
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
+import com.rsicarelli.homehunt.ui.theme.Size_Small
+import com.rsicarelli.homehunt.ui.theme.Size_Regular
 import com.rsicarelli.homehunt.ui.theme.rally_orange_300
 
 @Composable
@@ -63,7 +63,7 @@ private fun FavouritesContent(
 private fun ListingTags(property: Property) {
     val color = rally_orange_300
     val style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold)
-    val modifier = Modifier.padding(top = SpaceMedium)
+    val modifier = Modifier.padding(top = Size_Regular)
     val propertyTag = property.tag.toTag()
 
     if (!property.isActive) {
@@ -76,7 +76,7 @@ private fun ListingTags(property: Property) {
     }
 
     if (propertyTag is Property.Tag.RENTED) {
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(Size_Small))
         Tag(
             text = stringResource(id = R.string.rented),
             modifier = modifier,
@@ -86,7 +86,7 @@ private fun ListingTags(property: Property) {
     }
 
     if (propertyTag is Property.Tag.RESERVED) {
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(Size_Small))
         Tag(
             text = stringResource(id = R.string.reserved),
             modifier = modifier,

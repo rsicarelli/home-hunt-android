@@ -11,12 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.rsicarelli.homehunt.ui.theme.GalleryItemSize
 
 @OptIn(ExperimentalPagerApi::class, androidx.compose.animation.ExperimentalAnimationApi::class)
 @Composable
@@ -24,7 +24,7 @@ fun GalleryCarousel(
     state: PagerState = rememberPagerState(),
     photoGallery: List<String>,
     onOpenGallery: () -> Unit,
-    imageSize: Dp = 200.dp,
+    imageSize: Dp = GalleryItemSize,
     footer: @Composable BoxScope.(Int) -> Unit = {}
 ) {
     Box(contentAlignment = Alignment.BottomEnd) {

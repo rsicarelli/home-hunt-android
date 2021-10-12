@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.CheckboxDefaults.colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -13,9 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
-import com.rsicarelli.homehunt.ui.theme.SpaceSmall
-import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
+import com.rsicarelli.homehunt.ui.theme.Size_Small
+import com.rsicarelli.homehunt.ui.theme.Size_X_Small
 
 @Composable
 fun CheckboxItem(
@@ -29,7 +27,7 @@ fun CheckboxItem(
             .clickable {
                 onCheckedChange(!isChecked)
             }
-            .padding(top = SpaceSmall, bottom = SpaceSmall, end = SpaceSmallest),
+            .padding(top = Size_Small, bottom = Size_Small, end = Size_X_Small),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(

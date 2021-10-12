@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.google.accompanist.insets.statusBarsPadding
 import com.rsicarelli.homehunt.presentation.components.FavouritableIconButton
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
+import com.rsicarelli.homehunt.ui.theme.Size_Regular
 
 @Composable
 fun PropertyTopBar(
@@ -20,7 +20,7 @@ fun PropertyTopBar(
         modifier = Modifier
             .fillMaxWidth()
             .statusBarsPadding()
-            .padding(SpaceMedium),
+            .padding(Size_Regular),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {

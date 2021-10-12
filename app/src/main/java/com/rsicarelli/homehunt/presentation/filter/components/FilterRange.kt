@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
-import com.rsicarelli.homehunt.ui.theme.SpaceSmall
-import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
+import com.rsicarelli.homehunt.ui.theme.DividerSize
+import com.rsicarelli.homehunt.ui.theme.Size_X_Small
+import com.rsicarelli.homehunt.ui.theme.Size_Small
+import com.rsicarelli.homehunt.ui.theme.Size_Regular
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -21,14 +21,14 @@ fun FilterRange(
     valueRange: ClosedFloatingPointRange<Float>,
     onValueChange: (ClosedFloatingPointRange<Float>) -> Unit,
 ) {
-    Spacer(modifier = Modifier.height(SpaceMedium))
+    Spacer(modifier = Modifier.height(Size_Regular))
 
     Text(
         text = title,
         style = MaterialTheme.typography.h6
     )
 
-    Spacer(modifier = Modifier.height(SpaceSmallest))
+    Spacer(modifier = Modifier.height(Size_X_Small))
 
     Text(
         text = rangeText,
@@ -43,7 +43,7 @@ fun FilterRange(
             onValueChange(it)
         })
 
-    Spacer(modifier = Modifier.height(SpaceSmall))
+    Spacer(modifier = Modifier.height(Size_Small))
 
-    Divider(thickness = 1.dp)
+    Divider(thickness = DividerSize)
 }

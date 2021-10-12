@@ -12,9 +12,9 @@ import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.util.toCurrency
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.presentation.components.IconText
-import com.rsicarelli.homehunt.ui.theme.SpaceMedium
-import com.rsicarelli.homehunt.ui.theme.SpaceSmall
-import com.rsicarelli.homehunt.ui.theme.SpaceSmallest
+import com.rsicarelli.homehunt.ui.theme.Size_Regular
+import com.rsicarelli.homehunt.ui.theme.Size_Small
+import com.rsicarelli.homehunt.ui.theme.Size_X_Small
 import com.rsicarelli.homehunt.ui.theme.rally_blue
 
 @Composable
@@ -24,7 +24,7 @@ fun PropertyHeader(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(SpaceMedium)
+            .padding(Size_Regular)
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
             val (specs, price, title, location) = createRefs()
@@ -42,7 +42,7 @@ fun PropertyHeader(
 
             IconText(
                 modifier = Modifier.constrainAs(location) {
-                    top.linkTo(title.bottom, SpaceSmallest)
+                    top.linkTo(title.bottom, Size_X_Small)
                 },
                 text = property.location,
                 textStyle = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primaryVariant),
@@ -51,20 +51,20 @@ fun PropertyHeader(
 
             Row(modifier = Modifier
                 .constrainAs(specs) {
-                    top.linkTo(location.bottom, SpaceSmallest)
+                    top.linkTo(location.bottom, Size_X_Small)
                 }) {
                 IconText(
                     text = property.dormCount.toString(),
                     textStyle = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primaryVariant),
                     leadingIcon = R.drawable.ic_round_double_bed
                 )
-                Spacer(modifier = Modifier.width(SpaceSmall))
+                Spacer(modifier = Modifier.width(Size_Small))
                 IconText(
                     text = property.bathCount.toString(),
                     textStyle = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primaryVariant),
                     leadingIcon = R.drawable.ic_round_shower
                 )
-                Spacer(modifier = Modifier.width(SpaceSmall))
+                Spacer(modifier = Modifier.width(Size_Small))
                 IconText(
                     text = "${property.surface} m²",
                     textStyle = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primaryVariant),
@@ -75,8 +75,8 @@ fun PropertyHeader(
             Text(
                 modifier = Modifier.constrainAs(price) {
                     bottom.linkTo(parent.bottom)
-                    end.linkTo(parent.end, margin = (-SpaceMedium))
-                    start.linkTo(barrier, SpaceMedium)
+                    end.linkTo(parent.end, margin = (-Size_Regular))
+                    start.linkTo(barrier, Size_Regular)
                 },
                 text = "${property.price.toCurrency()}",
                 style = MaterialTheme.typography.h4.copy(color = rally_blue),
