@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_Regular
 
 @Composable
@@ -35,6 +37,19 @@ fun AddOrRemoveItem(
             onIncrease = onIncrease,
             onDecrease = onDecrease,
             contentDescription = text
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun AddOrRemovePreview() {
+    HomeHuntTheme {
+        AddOrRemoveItem(
+            text = "Hello world",
+            value = 2,
+            onIncrease = {},
+            onDecrease = {}
         )
     }
 }
