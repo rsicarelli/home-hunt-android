@@ -1,7 +1,6 @@
 package com.rsicarelli.homehunt
 
 import android.app.Application
-import androidx.constraintlayout.compose.override
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -9,7 +8,6 @@ import timber.log.Timber
 class BaseApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        Timber.tag("HomeHunt")
         Timber.plant(object : Timber.DebugTree() {
 
             override fun log(priority: Int, tag: String?, message: String, t: Throwable?) =
@@ -25,8 +23,4 @@ class BaseApplication : Application() {
         })
 
     }
-}
-
-private class CustomDebugThree() : Timber.DebugTree() {
-
 }

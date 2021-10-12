@@ -13,6 +13,7 @@ import com.rsicarelli.homehunt.domain.usecase.GetSinglePropertyUseCase
 import com.rsicarelli.homehunt.domain.usecase.MarkAsViewedUseCase
 import com.rsicarelli.homehunt.domain.usecase.ToggleFavouriteUseCase
 import com.rsicarelli.homehunt.presentation.home.HomeState
+import com.rsicarelli.homehunt.ui.navigation.NavArguments
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -32,7 +33,7 @@ class PropertyDetailViewModel @Inject constructor(
     val state: State<PropertyDetailState> = _state
 
     init {
-        savedStateHandle.get<String>("referenceId")?.let { referenceId ->
+        savedStateHandle.get<String>(NavArguments.PROPERTY_DETAIL)?.let { referenceId ->
             onEvent(PropertyDetailEvents.GetPropertyFromCache(referenceId))
             onEvent(PropertyDetailEvents.MarkAsViewed(referenceId))
         }

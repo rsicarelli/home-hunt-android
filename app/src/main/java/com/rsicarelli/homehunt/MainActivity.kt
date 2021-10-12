@@ -28,6 +28,7 @@ import com.rsicarelli.homehunt.presentation.home.HomeScreen
 import com.rsicarelli.homehunt.presentation.login.LoginScreen
 import com.rsicarelli.homehunt.presentation.propertyDetail.PropertyDetailScreen
 import com.rsicarelli.homehunt.presentation.splash.SplashScreen
+import com.rsicarelli.homehunt.ui.navigation.NavArguments
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -110,7 +111,7 @@ private fun MainContent(
             }
 
             composable(
-                route = Screen.PropertyDetail.route + "/{referenceId}",
+                route = Screen.PropertyDetail.route + "/{${NavArguments.PROPERTY_DETAIL}}",
                 arguments = Screen.PropertyDetail.arguments
             ) {
                 PropertyDetailScreen(

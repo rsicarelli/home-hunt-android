@@ -9,6 +9,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.ui.theme.Size_Regular
 import com.rsicarelli.homehunt.ui.theme.Size_X_Large
 
@@ -32,7 +34,7 @@ fun PagerIndicator(
     ) {
         Text(
             style = MaterialTheme.typography.button,
-            text = "${currentPage + 1} of $totalItems"
+            text = "${currentPage + 1} ${stringResource(id = R.string.of)} $totalItems"
         )
     }
 }
