@@ -1,4 +1,4 @@
-package com.rsicarelli.homehunt.presentation.components
+package com.rsicarelli.homehunt.ui.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -20,31 +20,30 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rsicarelli.homehunt.R
+import com.rsicarelli.homehunt.ui.composition.LocalScaffoldDelegate
 import com.rsicarelli.homehunt.ui.navigation.BottomNavItem
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.*
 
 @Composable
 fun AppScaffold(
-    modifier: Modifier = Modifier,
-    navController: NavController,
-    state: ScaffoldState,
-    showBottomBar: Boolean,
+    showBottomBar: Boolean = LocalScaffoldDelegate.current.showStatusBar, //To provide previews
     content: @Composable () -> Unit
 ) {
+    val scaffoldDelegate = LocalScaffoldDelegate.current
+
     SystemBarEffect()
 
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
-                HomeHuntBottomNavigation(navController)
+                HomeHuntBottomNavigation(scaffoldDelegate.navController)
             }
         },
-        scaffoldState = state,
-        modifier = modifier
+        scaffoldState = scaffoldDelegate.scaffoldState,
+        modifier = Modifier.fillMaxSize()
     ) {
         content()
     }
@@ -148,9 +147,9 @@ fun HomeHuntBottomNavigation(navController: NavController) {
 @Composable
 @Preview
 private fun AppScaffoldPreview() {
-    val state = rememberScaffoldState()
-    val navController = rememberNavController()
     HomeHuntTheme {
-        AppScaffold(navController = navController, state = state, showBottomBar = true) {}
+        AppScaffold(showBottomBar = true, content = {
+
+        })
     }
 }

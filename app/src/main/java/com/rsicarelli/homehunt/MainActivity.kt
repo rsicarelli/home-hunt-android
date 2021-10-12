@@ -5,32 +5,26 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.systemBarsPadding
-import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
-import com.rsicarelli.homehunt.presentation.components.AppScaffold
 import com.rsicarelli.homehunt.presentation.favourites.FavouritesScreen
 import com.rsicarelli.homehunt.presentation.filter.FilterScreen
 import com.rsicarelli.homehunt.presentation.home.HomeScreen
 import com.rsicarelli.homehunt.presentation.login.LoginScreen
 import com.rsicarelli.homehunt.presentation.propertyDetail.PropertyDetailScreen
 import com.rsicarelli.homehunt.presentation.splash.SplashScreen
+import com.rsicarelli.homehunt.ui.components.AppScaffold
+import com.rsicarelli.homehunt.ui.composition.LocalScaffoldDelegate
+import com.rsicarelli.homehunt.ui.composition.ProvideHomeHuntCompositionLocals
 import com.rsicarelli.homehunt.ui.navigation.NavArguments
 import com.rsicarelli.homehunt.ui.navigation.Screen
-import com.rsicarelli.homehunt.ui.navigation.bottomBarDestinations
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,33 +41,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             HomeHuntTheme {
                 ProvideWindowInsets {
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .systemBarsPadding(top = false)
-                    ) {
-                        val navController = rememberNavController()
-                        val scaffoldState = rememberScaffoldState()
-                        val coroutineScope = rememberCoroutineScope()
-
-                        val context = LocalContext.current
-
-                        val scaffoldDelegate by remember {
-                            mutableStateOf(
-                                ScaffoldDelegate(
-                                    coroutineScope = coroutineScope,
-                                    scaffoldState = scaffoldState,
-                                    navController = navController,
-                                    context = context
-                                )
-                            )
-                        }
-
-                        MainContent(
-                            navController = navController,
-                            scaffoldState = scaffoldState,
-                            scaffoldDelegate = scaffoldDelegate,
-                        )
+                    ProvideHomeHuntCompositionLocals {
+                        MainContent()
                     }
                 }
             }
@@ -83,54 +52,51 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun MainContent(
-    navController: NavHostController,
-    scaffoldState: ScaffoldState,
-    scaffoldDelegate: ScaffoldDelegate,
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val showBottomBar = navBackStackEntry?.destination?.route in bottomBarDestinations
-
-    AppScaffold(
-        navController = navController,
-        state = scaffoldState,
-        modifier = Modifier.fillMaxSize(),
-        showBottomBar = showBottomBar
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding(top = false)
     ) {
-        NavHost(
-            navController = navController,
-            startDestination = Screen.Home.route, //Test only
-            modifier = Modifier.fillMaxSize()
-        ) {
-            composable(Screen.Splash.route) {
-                SplashScreen(scaffoldDelegate = scaffoldDelegate)
-            }
+        val scaffoldDelegate = LocalScaffoldDelegate.current
 
-            composable(Screen.Login.route) {
-                LoginScreen(scaffoldDelegate = scaffoldDelegate)
-            }
-
-            composable(Screen.Home.route) {
-                HomeScreen(
-                    scaffoldDelegate = scaffoldDelegate,
-                )
-            }
-
-            composable(
-                route = Screen.PropertyDetail.route + "/{${NavArguments.PROPERTY_DETAIL}}",
-                arguments = Screen.PropertyDetail.arguments
+        AppScaffold {
+            NavHost(
+                navController = scaffoldDelegate.navController,
+                startDestination = Screen.Home.route, //Test only
+                modifier = Modifier.fillMaxSize()
             ) {
-                PropertyDetailScreen(
-                    scaffoldDelegate = scaffoldDelegate
-                )
-            }
+                composable(Screen.Splash.route) {
+                    SplashScreen(scaffoldDelegate = scaffoldDelegate)
+                }
 
-            composable(Screen.Filter.route) {
-                FilterScreen(scaffoldDelegate = scaffoldDelegate)
-            }
-            composable(Screen.Favourites.route) {
-                FavouritesScreen(
-                    scaffoldDelegate = scaffoldDelegate,
-                )
+                composable(Screen.Login.route) {
+                    LoginScreen(scaffoldDelegate = scaffoldDelegate)
+                }
+
+                composable(Screen.Home.route) {
+                    HomeScreen(
+                        scaffoldDelegate = scaffoldDelegate,
+                    )
+                }
+
+                composable(
+                    route = Screen.PropertyDetail.route + "/{${NavArguments.PROPERTY_DETAIL}}",
+                    arguments = Screen.PropertyDetail.arguments
+                ) {
+                    PropertyDetailScreen(
+                        scaffoldDelegate = scaffoldDelegate
+                    )
+                }
+
+                composable(Screen.Filter.route) {
+                    FilterScreen(scaffoldDelegate = scaffoldDelegate)
+                }
+                composable(Screen.Favourites.route) {
+                    FavouritesScreen(
+                        scaffoldDelegate = scaffoldDelegate,
+                    )
+                }
             }
         }
     }

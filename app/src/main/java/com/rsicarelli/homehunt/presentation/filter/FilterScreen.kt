@@ -6,21 +6,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
-import com.rsicarelli.homehunt.presentation.components.AppScaffold
+import com.rsicarelli.homehunt.ui.components.AppScaffold
 import com.rsicarelli.homehunt.presentation.components.BackButton
 import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
 import com.rsicarelli.homehunt.presentation.filter.components.*
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_Large
-import com.rsicarelli.homehunt.ui.theme.Size_Regular
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -52,19 +49,18 @@ private fun FilterContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(Size_Large)
     ) {
+        BackButton(
+            modifier = Modifier,
+            onBackClick = onNavigateUp
+        )
+
         LazyColumn(
             Modifier
                 .fillMaxWidth()
                 .weight(1.0f)
+                .padding(start = Size_Large, end = Size_Large),
         ) {
-            stickyHeader {
-                BackButton(
-                    modifier = Modifier.padding(top = Size_Regular),
-                    onBackClick = onNavigateUp
-                )
-            }
             item {
                 PriceRange(
                     range = state.priceRange,
@@ -135,13 +131,9 @@ private fun FilterContent(
 @Composable
 @Preview
 private fun FilterContentPreview() {
-    val state = rememberScaffoldState()
-    val navController = rememberNavController()
     HomeHuntTheme {
         AppScaffold(
-            navController = navController,
-            state = state,
-            showBottomBar = true
+            showBottomBar = false
         ) {
             FilterContent(
                 state = FilterState(),
