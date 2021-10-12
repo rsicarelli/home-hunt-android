@@ -58,16 +58,15 @@ fun PropertyListItem(
                     photoGallery = property.photoGalleryUrls,
                     onOpenGallery = { onSelectProperty(property) },
                 )
-                Row {
+                Row(
+                    modifier = Modifier.padding(top = Size_Small, end = Size_Small),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     extraContent(property)
-                    Box(
-                        modifier = Modifier.padding(Size_Small)
-                    ) {
-                        FavouritableIconButton(
-                            onClick = onFavouriteClick,
-                            isFavourited = property.isFavourited
-                        )
-                    }
+                    FavouritableIconButton(
+                        onClick = onFavouriteClick,
+                        isFavourited = property.isFavourited
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(Size_Small))

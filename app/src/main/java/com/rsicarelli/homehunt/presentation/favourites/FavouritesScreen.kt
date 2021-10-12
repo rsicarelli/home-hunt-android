@@ -1,13 +1,20 @@
 package com.rsicarelli.homehunt.presentation.favourites
 
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.model.toTag
+import com.rsicarelli.homehunt.presentation.components.AppScaffold
 import com.rsicarelli.homehunt.presentation.components.EmptyContent
 import com.rsicarelli.homehunt.presentation.components.ListingTag
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
+import utils.Fixtures
 
 @Composable
 fun FavouritesScreen(
@@ -15,9 +22,11 @@ fun FavouritesScreen(
     viewModel: FavouritesViewModel = hiltViewModel()
 ) {
     FavouritesContent(
-        scaffoldDelegate = scaffoldDelegate,
         events = viewModel::onEvent,
-        state = viewModel.state.value
+        state = viewModel.state.value,
+        onNavigate = { route ->
+            scaffoldDelegate.navigate(route)
+        }
     )
 }
 
@@ -25,15 +34,14 @@ fun FavouritesScreen(
 private fun FavouritesContent(
     events: (FavouritesEvents) -> Unit,
     state: FavouritesState,
-    scaffoldDelegate: ScaffoldDelegate
+    onNavigate: (String) -> Unit,
 ) {
-
     EmptyContent(state.emptyResults)
 
     PropertyList(
         properties = state.properties,
         headerPrefixRes = R.string.favourites,
-        scaffoldDelegate = scaffoldDelegate,
+        onNavigate = onNavigate,
         onToggleFavourite = { property ->
             events(
                 FavouritesEvents.ToggleFavourite(
@@ -49,5 +57,32 @@ private fun FavouritesContent(
             )
         }
     )
+}
+
+@Composable
+@Preview
+private fun FavouriteScreenPreview() {
+    val state = rememberScaffoldState()
+    val navController = rememberNavController()
+    HomeHuntTheme {
+        AppScaffold(
+            navController = navController,
+            state = state,
+            showBottomBar = true
+        ) {
+            FavouritesContent(
+                events = {},
+                state = FavouritesState(
+                    properties = Fixtures.aListOfProperty.map {
+                        it.copy(
+                            isFavourited = true,
+                            isActive = false
+                        )
+                    },
+                    emptyResults = false
+                ),
+                onNavigate = {})
+        }
+    }
 }
 

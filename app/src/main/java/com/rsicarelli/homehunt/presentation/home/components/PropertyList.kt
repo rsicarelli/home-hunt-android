@@ -30,7 +30,7 @@ import com.rsicarelli.homehunt.ui.theme.*
 fun PropertyList(
     scrollState: LazyListState = rememberLazyListState(),
     properties: List<Property>,
-    scaffoldDelegate: ScaffoldDelegate,
+    onNavigate: (String) -> Unit,
     onToggleFavourite: (Property) -> Unit,
     @StringRes headerPrefixRes: Int,
     extraContent: @Composable RowScope.(Property) -> Unit = {}
@@ -62,7 +62,7 @@ fun PropertyList(
                     PropertyListItem(
                         extraContent = extraContent,
                         property = property,
-                        onSelectProperty = { scaffoldDelegate.navigate("${Screen.PropertyDetail.route}/${property.reference}") },
+                        onSelectProperty = { onNavigate("${Screen.PropertyDetail.route}/${property.reference}") },
                         onFavouriteClick = { onToggleFavourite(property) }
                     )
                 }

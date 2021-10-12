@@ -38,14 +38,20 @@ fun HomeScreen(
     scaffoldDelegate: ScaffoldDelegate,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    HomeContent(viewModel::onEvent, viewModel.state.value, scaffoldDelegate)
+    HomeContent(
+        events = viewModel::onEvent,
+        state = viewModel.state.value,
+        onNavigate = { route ->
+            scaffoldDelegate.navigate(route)
+        }
+    )
 }
 
 @Composable
 private fun HomeContent(
     events: (HomeEvents) -> Unit,
     state: HomeState,
-    scaffoldDelegate: ScaffoldDelegate
+    onNavigate: (String) -> Unit,
 ) {
     val scrollState = rememberLazyListState()
     LifecycleEffect { event ->
@@ -63,7 +69,7 @@ private fun HomeContent(
             scrollState = scrollState,
             properties = state.properties,
             headerPrefixRes = R.string.results,
-            scaffoldDelegate = scaffoldDelegate,
+            onNavigate = onNavigate,
             onToggleFavourite = { property ->
                 events(
                     HomeEvents.ToggleFavourite(
@@ -75,7 +81,7 @@ private fun HomeContent(
         )
 
         FilterFab(isScrollInProgress = scrollState.isScrollInProgress) {
-            scaffoldDelegate.navigate(UiEvent.Navigate(Screen.Filter.route))
+            onNavigate(Screen.Filter.route)
         }
 
         CircularIndeterminateProgressBar(state.progressBarState)

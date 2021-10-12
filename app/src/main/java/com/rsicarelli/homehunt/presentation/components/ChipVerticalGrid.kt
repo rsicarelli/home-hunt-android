@@ -1,6 +1,5 @@
 package com.rsicarelli.homehunt.presentation.components
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,6 +10,7 @@ import androidx.compose.ui.unit.IntOffset
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_Medium
 import com.rsicarelli.homehunt.ui.theme.Size_Regular
+import utils.Fixtures
 
 @Composable
 fun ChipVerticalGrid(
@@ -77,27 +77,12 @@ private fun ChipVerticalGroupSingleLinePreview() {
 @Composable
 @Preview
 private fun ChipVerticalGroupMultilinePreview() {
-    val items = listOf(
-        "AAC",
-        "Elevator",
-        "Balcony",
-        "Gas",
-        "Pool",
-        "Parking",
-        "Receptionist",
-        "Garden",
-        "Heating",
-        "Gym",
-        "Hot tub",
-        "Furnished"
-    )
-
     HomeHuntTheme {
         ChipVerticalGrid(
             spacing = Size_Medium,
             modifier = Modifier.padding(Size_Regular)
         ) {
-            items.forEach { word ->
+            Fixtures.aProperty.characteristics.forEach { word ->
                 Tag(text = word)
             }
         }
