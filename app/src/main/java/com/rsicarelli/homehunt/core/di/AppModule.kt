@@ -1,4 +1,4 @@
-package com.rsicarelli.homehunt.di
+package com.rsicarelli.homehunt.core.di
 
 import android.app.Application
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.rsicarelli.homehunt.di
+package com.rsicarelli.homehunt.core.di
 
 import android.content.SharedPreferences
 import com.google.firebase.auth.FirebaseAuth
