@@ -59,7 +59,7 @@ fun PropertyList(
             }
         }
 
-        ResultsHeader(scrollState, properties.size, headerPrefixRes)
+        ResultsHeader(scrollState.isScrollInProgress, properties.size, headerPrefixRes)
     }
 }
 
