@@ -39,12 +39,12 @@ data class Property(
     }
 }
 
-fun String?.toTag() = this?.let {
+fun String?.toTag(): Property.Tag = this?.let {
     return@let when (it.uppercase()) {
-        Property.Tag.NEW.identifier -> Property.Tag.NEW.identifier
-        Property.Tag.RESERVED.identifier -> Property.Tag.RESERVED.identifier
-        Property.Tag.RENTED.identifier -> Property.Tag.RENTED.identifier
-        else -> Property.Tag.EMPTY.identifier
+        Property.Tag.NEW.identifier -> Property.Tag.NEW
+        Property.Tag.RESERVED.identifier -> Property.Tag.RESERVED
+        Property.Tag.RENTED.identifier -> Property.Tag.RENTED
+        else -> Property.Tag.EMPTY
     }
 } ?: Property.Tag.EMPTY
 
