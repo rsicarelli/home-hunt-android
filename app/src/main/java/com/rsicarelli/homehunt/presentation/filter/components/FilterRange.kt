@@ -1,9 +1,6 @@
 package com.rsicarelli.homehunt.presentation.filter.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,7 +12,7 @@ import com.rsicarelli.homehunt.ui.theme.*
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun FilterRange(
+fun ColumnScope.FilterRange(
     title: String,
     range: ClosedFloatingPointRange<Float>,
     rangeText: String,

@@ -1,15 +1,20 @@
 package com.rsicarelli.homehunt.presentation.filter.components
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.rsicarelli.homehunt.R
+import com.rsicarelli.homehunt.presentation.filter.FilterEvents
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_X_Small
 
 @Composable
-fun LongTermRentalSelector(
+fun ColumnScope.LongTermRentalSelector(
     isChecked: Boolean,
     onChange: (Boolean) -> Unit,
 ) {
@@ -20,4 +25,24 @@ fun LongTermRentalSelector(
         isChecked = isChecked,
         onCheckedChange = onChange
     )
+}
+
+@Composable
+@Preview
+private fun LongTermRentalSelectorCheckedPreview() {
+    HomeHuntTheme {
+        Column {
+            LongTermRentalSelector(isChecked = true, onChange = {})
+        }
+    }
+}
+
+@Composable
+@Preview
+private fun LongTermRentalSelectorUncheckedPreview() {
+    HomeHuntTheme {
+        Column {
+            LongTermRentalSelector(isChecked = false, onChange = {})
+        }
+    }
 }
