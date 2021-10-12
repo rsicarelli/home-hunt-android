@@ -18,14 +18,16 @@ fun PropertyDetailScreen(
 ) {
     PropertyDetailContent(
         state = viewModel.state.value,
-        events = viewModel::onEvent
+        events = viewModel::onEvent,
+        scaffoldDelegate = scaffoldDelegate
     )
 }
 
 @Composable
 private fun PropertyDetailContent(
     state: PropertyDetailState,
-    events: (PropertyDetailEvents) -> Unit
+    events: (PropertyDetailEvents) -> Unit,
+    scaffoldDelegate: ScaffoldDelegate
 ) {
     state.property?.let { property ->
         Box(modifier = Modifier.fillMaxSize()) {
@@ -47,6 +49,9 @@ private fun PropertyDetailContent(
                             isFavourited = !property.isFavourited
                         )
                     )
+                },
+                onBackClicked = {
+                    scaffoldDelegate.navigateUp()
                 }
             )
             GalleryBottomSheet(

@@ -25,6 +25,8 @@ val BorderSizeLarge = Size_Medium
 
 /* Components */
 val IconSizeSmall = 16.dp
+val IconSizeLarge = 32.dp
+
 val BottomBarSize = 40.dp
 val GalleryItemSize = 200.dp
 val GalleryItemSizeLarger = 256.dp
