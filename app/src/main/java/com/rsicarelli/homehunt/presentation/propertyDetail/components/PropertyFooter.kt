@@ -32,13 +32,13 @@ fun PropertyFooter(reference: String, propertyUrl: String, pdfUrl: String?) {
 
         CustomClickableText(
             propertyUrl = propertyUrl,
-            placeholder = R.string.see_on_web
+            placeholderRes = R.string.see_on_web
         )
 
         pdfUrl?.let {
             CustomClickableText(
                 propertyUrl = it,
-                placeholder = R.string.see_pdf
+                placeholderRes = R.string.see_pdf
             )
         }
     }

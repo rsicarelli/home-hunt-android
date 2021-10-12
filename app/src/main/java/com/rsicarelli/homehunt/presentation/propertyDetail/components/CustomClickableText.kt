@@ -10,14 +10,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.rsicarelli.homehunt.R
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.rally_blue_100
 
 @Composable
 fun CustomClickableText(
     propertyUrl: String,
-    @StringRes placeholder: Int = R.string.see_on_web,
+    @StringRes placeholderRes: Int = R.string.see_on_web,
 ) {
     val annotatedText = buildAnnotatedString {
         pushStringAnnotation(
@@ -30,7 +32,7 @@ fun CustomClickableText(
                 color = rally_blue_100
             ).toSpanStyle()
         ) {
-            append(stringResource(id = placeholder))
+            append(stringResource(id = placeholderRes))
         }
         pop()
     }
@@ -46,4 +48,12 @@ fun CustomClickableText(
                 }
         }
     )
+}
+
+@Composable
+@Preview
+private fun CustomClickableTextPreview() {
+    HomeHuntTheme(isPreview = true) {
+        CustomClickableText(propertyUrl = "")
+    }
 }
