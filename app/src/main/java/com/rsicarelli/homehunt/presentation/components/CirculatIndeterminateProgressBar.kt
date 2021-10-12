@@ -8,8 +8,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.rsicarelli.homehunt.core.model.ProgressBarState
 import com.rsicarelli.homehunt.core.model.isLoading
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 
 @Composable
 fun CircularIndeterminateProgressBar(progressBarState: ProgressBarState) {
@@ -24,5 +26,13 @@ fun CircularIndeterminateProgressBar(progressBarState: ProgressBarState) {
             modifier = Modifier,
             color = MaterialTheme.colors.primary
         )
+    }
+}
+
+@Composable
+@Preview
+private fun CircularIndeterminateProgressBarPreview() {
+    HomeHuntTheme {
+        CircularIndeterminateProgressBar(progressBarState = ProgressBarState.Loading)
     }
 }
