@@ -29,6 +29,8 @@
     <string name="show_longer_term_only">Show long term only</string>
     <string name="loading_app">Loading app</string>
     <string name="of">of</string>
+    <string name="see_less">See less</string>
+    <string name="see_more">" &#8230; See more"</string>
     <plurals name="see_results_plurals">
         <item quantity="one">See %d result</item>
         <item quantity="other">See %d results</item>

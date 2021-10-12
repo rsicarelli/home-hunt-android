@@ -1,9 +1,7 @@
 package com.rsicarelli.homehunt.presentation.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -13,14 +11,19 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
+import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.ui.theme.rally_blue
 import com.rsicarelli.homehunt.ui.theme.Blue_200
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 
-// from https://stackoverflow.com/a/68894858/1945754
+// adapted from https://stackoverflow.com/a/68894858/1945754
 @Composable
 fun ExpandableText(
     text: String,
@@ -73,7 +76,7 @@ fun ExpandableText(
             if (!expanded) {
                 val density = LocalDensity.current
                 Text(
-                    "... See more",
+                    stringResource(id = R.string.see_more),
                     onTextLayout = { seeMoreSizeState.value = it.size },
                     style = textStyle.copy(rally_blue),
                     modifier = Modifier
@@ -97,7 +100,7 @@ fun ExpandableText(
 
         if (expanded) {
             Text(
-                "See less",
+                stringResource(id = R.string.see_less),
                 modifier = Modifier
                     .clickable {
                         expanded = false
@@ -107,5 +110,12 @@ fun ExpandableText(
             )
         }
     }
+}
 
+@Composable
+@Preview
+fun ExpandableTextPreview() {
+    HomeHuntTheme {
+        ExpandableText(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis, nulla ut condimentum posuere, arcu risus lobortis purus, et consectetur tortor dolor sit amet nibh. Phasellus id venenatis nisl, sit amet eleifend lectus. Proin id viverra est. Curabitur a porta.")
+    }
 }
