@@ -6,15 +6,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.rsicarelli.homehunt.R
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 
 @Composable
 fun FavouritableIconButton(
     modifier: Modifier = Modifier,
-    onFavouriteClick: () -> Unit,
+    onClick: () -> Unit,
     isFavourited: Boolean
 ) {
-    IconButton(onClick = onFavouriteClick) {
+    IconButton(onClick = onClick) {
         if (isFavourited) {
             Icon(
                 modifier = modifier,
@@ -32,5 +34,21 @@ fun FavouritableIconButton(
                 )
             )
         }
+    }
+}
+
+@Composable
+@Preview
+private fun FavouritableIconButtonFavouritedPreview() {
+    HomeHuntTheme {
+        FavouritableIconButton(onClick = { }, isFavourited = true)
+    }
+}
+
+@Composable
+@Preview
+private fun FavouritableIconButtonUnFavouritedPreview() {
+    HomeHuntTheme {
+        FavouritableIconButton(onClick = { }, isFavourited = false)
     }
 }

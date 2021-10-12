@@ -32,7 +32,7 @@ fun PropertyTopBar(
         )
 
         FavouritableIconButton(
-            onFavouriteClick = onFavouriteClick,
+            onClick = onFavouriteClick,
             isFavourited = isFavourited
         )
     }

@@ -64,7 +64,7 @@ fun PropertyListItem(
                         modifier = Modifier.padding(Size_Small)
                     ) {
                         FavouritableIconButton(
-                            onFavouriteClick = onFavouriteClick,
+                            onClick = onFavouriteClick,
                             isFavourited = property.isFavourited
                         )
                     }
