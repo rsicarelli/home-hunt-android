@@ -70,7 +70,7 @@ fun SeeResultsButton(
 @Composable
 @Preview
 private fun SeeResultsButtonCalculatingPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         SeeResultsButton(onClick = { }, previewResultCount = null)
     }
 }
@@ -78,7 +78,7 @@ private fun SeeResultsButtonCalculatingPreview() {
 @Composable
 @Preview
 private fun SeeResultsButtonPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         SeeResultsButton(onClick = { }, previewResultCount = 50)
     }
 }
@@ -86,7 +86,7 @@ private fun SeeResultsButtonPreview() {
 @Composable
 @Preview
 private fun SeeResultsButtonEmptyPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         SeeResultsButton(onClick = { }, previewResultCount = 0)
     }
 }

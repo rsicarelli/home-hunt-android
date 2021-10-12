@@ -32,7 +32,7 @@ fun CircularIndeterminateProgressBar(progressBarState: ProgressBarState) {
 @Composable
 @Preview
 private fun CircularIndeterminateProgressBarPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         CircularIndeterminateProgressBar(progressBarState = ProgressBarState.Loading)
     }
 }

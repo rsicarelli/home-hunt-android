@@ -40,7 +40,7 @@ fun FavouritableIconButton(
 @Composable
 @Preview
 private fun FavouritableIconButtonFavouritedPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         FavouritableIconButton(onClick = { }, isFavourited = true)
     }
 }
@@ -48,7 +48,7 @@ private fun FavouritableIconButtonFavouritedPreview() {
 @Composable
 @Preview
 private fun FavouritableIconButtonUnFavouritedPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         FavouritableIconButton(onClick = { }, isFavourited = false)
     }
 }

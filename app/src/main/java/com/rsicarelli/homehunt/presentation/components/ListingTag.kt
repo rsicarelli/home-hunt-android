@@ -65,7 +65,7 @@ fun ListingTag(
 @Composable
 @Preview
 private fun ListingTagPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         ListingTag(
             isPropertyActive = false,
             propertyTag = Property.Tag.RENTED
@@ -76,7 +76,7 @@ private fun ListingTagPreview() {
 @Composable
 @Preview
 private fun ListingTagInactivePreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         ListingTag(
             isPropertyActive = false,
             propertyTag = Property.Tag.NEW
@@ -87,7 +87,7 @@ private fun ListingTagInactivePreview() {
 @Composable
 @Preview
 private fun ListingTagRentedPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         ListingTag(
             isPropertyActive = true,
             propertyTag = Property.Tag.RENTED
@@ -98,7 +98,7 @@ private fun ListingTagRentedPreview() {
 @Composable
 @Preview
 private fun ListingTagReservedPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         ListingTag(
             isPropertyActive = true,
             propertyTag = Property.Tag.RESERVED

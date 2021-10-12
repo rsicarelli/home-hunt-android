@@ -30,7 +30,7 @@ fun BackButton(
 @Composable
 @Preview
 private fun BackButtonPreview() {
-    HomeHuntTheme() {
+    HomeHuntTheme(isPreview = true) {
         BackButton(modifier = Modifier, onBackClick = {})
     }
 }

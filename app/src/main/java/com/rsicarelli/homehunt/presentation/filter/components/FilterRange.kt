@@ -47,7 +47,7 @@ fun ColumnScope.FilterRange(
 @Composable
 @Preview
 private fun FilterRangePreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         val range = 400f..1500f
         val valueRange = 0f..3000f
 

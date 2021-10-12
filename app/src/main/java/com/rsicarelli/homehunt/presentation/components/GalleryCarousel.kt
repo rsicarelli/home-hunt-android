@@ -59,7 +59,7 @@ fun GalleryCarousel(
 @Composable
 @Preview
 private fun GalleryCarouselPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()

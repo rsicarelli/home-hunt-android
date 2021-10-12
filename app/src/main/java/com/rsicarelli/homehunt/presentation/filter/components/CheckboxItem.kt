@@ -50,7 +50,7 @@ fun CheckboxItem(
 @Composable
 @Preview
 private fun CheckboxItemCheckedPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         CheckboxItem(
             title = "Checked",
             isChecked = true,
@@ -62,7 +62,7 @@ private fun CheckboxItemCheckedPreview() {
 @Composable
 @Preview
 private fun CheckboxItemUncheckedPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         CheckboxItem(
             title = "Unchecked",
             isChecked = false,

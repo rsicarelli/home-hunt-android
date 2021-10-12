@@ -59,23 +59,19 @@ private fun FavouritesContent(
 @Composable
 @Preview
 private fun FavouriteScreenPreview() {
-    HomeHuntTheme {
-        AppScaffold(
-            showBottomBar = true
-        ) {
-            FavouritesContent(
-                events = {},
-                state = FavouritesState(
-                    properties = Fixtures.aListOfProperty.map {
-                        it.copy(
-                            isFavourited = true,
-                            isActive = false
-                        )
-                    },
-                    emptyResults = false
-                ),
-                onNavigate = {})
-        }
+    HomeHuntTheme(isPreview = true) {
+        FavouritesContent(
+            events = {},
+            state = FavouritesState(
+                properties = Fixtures.aListOfProperty.map {
+                    it.copy(
+                        isFavourited = true,
+                        isActive = false
+                    )
+                },
+                emptyResults = false
+            ),
+            onNavigate = {})
     }
 }
 

@@ -44,7 +44,7 @@ fun AddOrRemoveItem(
 @Composable
 @Preview
 private fun AddOrRemovePreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         AddOrRemoveItem(
             text = "Hello world",
             value = 2,

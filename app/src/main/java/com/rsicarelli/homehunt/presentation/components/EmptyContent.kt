@@ -35,7 +35,7 @@ fun EmptyContent(emptyResults: Boolean) {
 @Composable
 @Preview
 private fun EmptyContentPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         EmptyContent(emptyResults = true)
     }
 }

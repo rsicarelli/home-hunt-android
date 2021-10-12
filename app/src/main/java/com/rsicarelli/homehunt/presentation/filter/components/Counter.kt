@@ -101,7 +101,7 @@ fun RoundedButton(
 @Composable
 @Preview
 private fun CounterPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         Counter(
             value = 2,
             onIncrease = { },
@@ -114,7 +114,7 @@ private fun CounterPreview() {
 @Composable
 @Preview
 private fun RoundButtonEnabledPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         RoundedButton(
             onClick = { },
             enabled = true,
@@ -127,7 +127,7 @@ private fun RoundButtonEnabledPreview() {
 @Composable
 @Preview
 private fun RoundButtonDisabledPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         RoundedButton(
             onClick = { },
             enabled = false,

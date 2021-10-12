@@ -29,7 +29,7 @@ fun ColumnScope.LongTermRentalSelector(
 @Composable
 @Preview
 private fun LongTermRentalSelectorCheckedPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         Column {
             LongTermRentalSelector(isChecked = true, onChange = {})
         }
@@ -39,7 +39,7 @@ private fun LongTermRentalSelectorCheckedPreview() {
 @Composable
 @Preview
 private fun LongTermRentalSelectorUncheckedPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         Column {
             LongTermRentalSelector(isChecked = false, onChange = {})
         }

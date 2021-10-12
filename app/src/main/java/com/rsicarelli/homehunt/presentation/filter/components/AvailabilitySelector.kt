@@ -29,7 +29,7 @@ fun ColumnScope.AvailabilitySelector(
 @Composable
 @Preview
 private fun AvailabilitySelectorCheckedPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         Column {
             AvailabilitySelector(isChecked = true, onChange = {})
         }
@@ -39,7 +39,7 @@ private fun AvailabilitySelectorCheckedPreview() {
 @Composable
 @Preview
 private fun AvailabilitySelectorUncheckedPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         Column {
             AvailabilitySelector(isChecked = false, onChange = {})
         }

@@ -131,16 +131,12 @@ private fun FilterContent(
 @Composable
 @Preview
 private fun FilterContentPreview() {
-    HomeHuntTheme {
-        AppScaffold(
-            showBottomBar = false
-        ) {
-            FilterContent(
-                state = FilterState(),
-                events = {},
-                onNavigateUp = {},
-                onNavigateSingleTop = {}
-            )
-        }
+    HomeHuntTheme(isPreview = true) {
+        FilterContent(
+            state = FilterState(),
+            events = {},
+            onNavigateUp = {},
+            onNavigateSingleTop = {}
+        )
     }
 }

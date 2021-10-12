@@ -1,12 +1,10 @@
-package com.rsicarelli.homehunt.presentation.photoGallery.components
+package com.rsicarelli.homehunt.presentation.components
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.annotation.ExperimentalCoilApi
 import com.ortiz.touchview.TouchImageView

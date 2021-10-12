@@ -30,7 +30,7 @@ fun ColumnScope.SurfaceRange(
 @Composable
 @Preview
 private fun SurfaceRangeMaxValuePreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         Column {
             SurfaceRange(range = valueRange, onValueChange = {})
         }
@@ -40,7 +40,7 @@ private fun SurfaceRangeMaxValuePreview() {
 @Composable
 @Preview
 private fun SurfaceRangeValuePreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         Column {
             SurfaceRange(range = 50F..150F, onValueChange = {})
         }

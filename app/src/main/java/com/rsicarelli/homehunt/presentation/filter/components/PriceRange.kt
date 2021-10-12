@@ -29,7 +29,7 @@ fun ColumnScope.PriceRange(
 @Composable
 @Preview
 private fun PriceRangeMaxValuePreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         Column {
             PriceRange(range = valueRange, onValueChange = {})
         }
@@ -39,7 +39,7 @@ private fun PriceRangeMaxValuePreview() {
 @Composable
 @Preview
 private fun PriceRangeValuePreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         Column {
             PriceRange(range = 500F..1500F, onValueChange = {})
         }

@@ -41,7 +41,7 @@ fun IconText(
 @Composable
 @Preview
 private fun IconTextPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         IconText(
             text = "Some text",
             leadingIcon = R.drawable.ic_round_shower

@@ -29,7 +29,7 @@ fun ColumnScope.VisibilitySelector(
 @Composable
 @Preview
 private fun VisibilitySelectorCheckedPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         Column {
             VisibilitySelector(isChecked = true, onChange = {})
         }
@@ -39,7 +39,7 @@ private fun VisibilitySelectorCheckedPreview() {
 @Composable
 @Preview
 private fun VisibilitySelectorUncheckedPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         Column {
             VisibilitySelector(isChecked = false, onChange = {})
         }

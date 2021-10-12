@@ -22,7 +22,7 @@ fun BathSelector(
 @Composable
 @Preview
 private fun BathSelectorPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         BathSelector(bathCount = 2, onValueChanged = {})
     }
 }

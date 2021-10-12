@@ -114,7 +114,7 @@ fun ExpandableText(
 @Composable
 @Preview
 fun ExpandableTextPreview() {
-    HomeHuntTheme {
+    HomeHuntTheme(isPreview = true) {
         ExpandableText(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis, nulla ut condimentum posuere, arcu risus lobortis purus, et consectetur tortor dolor sit amet nibh. Phasellus id venenatis nisl, sit amet eleifend lectus. Proin id viverra est. Curabitur a porta.")
     }
 }
