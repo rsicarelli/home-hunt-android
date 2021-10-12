@@ -7,6 +7,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
@@ -16,6 +17,8 @@ import com.rsicarelli.homehunt.presentation.home.components.FilterFab
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
 import com.rsicarelli.homehunt.ui.composition.LocalScaffoldDelegate
 import com.rsicarelli.homehunt.ui.navigation.Screen
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
+import utils.Fixtures
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -70,6 +73,18 @@ private fun HomeContent(
         }
 
         CircularIndeterminateProgressBar(state.progressBarState)
+    }
+}
+
+@Composable
+@Preview
+private fun HomeScreenPreview() {
+    HomeHuntTheme(isPreview = true) {
+        HomeContent(
+            events = {},
+            state = HomeState(properties = Fixtures.aListOfProperty, emptyResults = false),
+            onNavigate = {}
+        )
     }
 }
 
