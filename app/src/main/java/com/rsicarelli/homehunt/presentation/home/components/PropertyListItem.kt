@@ -16,9 +16,11 @@ import com.google.accompanist.pager.rememberPagerState
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.util.toCurrency
 import com.rsicarelli.homehunt.domain.model.Property
+import com.rsicarelli.homehunt.domain.model.toTag
 import com.rsicarelli.homehunt.presentation.components.FavouritableIconButton
 import com.rsicarelli.homehunt.presentation.components.GalleryCarousel
 import com.rsicarelli.homehunt.presentation.components.IconText
+import com.rsicarelli.homehunt.presentation.components.ListingTag
 import com.rsicarelli.homehunt.ui.theme.ElevationSize
 import com.rsicarelli.homehunt.ui.theme.Size_X_Small
 import com.rsicarelli.homehunt.ui.theme.Size_Small
@@ -30,7 +32,6 @@ fun PropertyListItem(
     property: Property,
     onSelectProperty: (Property) -> Unit,
     onFavouriteClick: () -> Unit,
-    extraContent: @Composable RowScope.(Property) -> Unit = {}
 ) {
     Surface(
         modifier = Modifier
@@ -62,7 +63,10 @@ fun PropertyListItem(
                     modifier = Modifier.padding(top = Size_Small, end = Size_Small),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    extraContent(property)
+                    ListingTag(
+                        isPropertyActive = property.isActive,
+                        propertyTag = property.tag.toTag()
+                    )
                     FavouritableIconButton(
                         onClick = onFavouriteClick,
                         isFavourited = property.isFavourited

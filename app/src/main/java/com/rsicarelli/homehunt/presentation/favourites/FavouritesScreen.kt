@@ -48,12 +48,6 @@ private fun FavouritesContent(
                     !property.isFavourited
                 )
             )
-        },
-        extraContent = { property ->
-            ListingTag(
-                isPropertyActive = property.isActive,
-                propertyTag = property.tag.toTag()
-            )
         }
     )
 }
