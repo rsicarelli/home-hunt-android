@@ -1,4 +1,4 @@
-package com.rsicarelli.homehunt.presentation.components
+package com.rsicarelli.homehunt.presentation.propertyDetail.components
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration

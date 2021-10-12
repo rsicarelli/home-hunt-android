@@ -1,4 +1,4 @@
-package com.rsicarelli.homehunt.presentation.components
+package com.rsicarelli.homehunt.presentation.propertyDetail.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

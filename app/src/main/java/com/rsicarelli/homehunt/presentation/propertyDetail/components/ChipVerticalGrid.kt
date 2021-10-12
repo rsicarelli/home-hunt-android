@@ -1,4 +1,4 @@
-package com.rsicarelli.homehunt.presentation.components
+package com.rsicarelli.homehunt.presentation.propertyDetail.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -7,6 +7,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
+import com.rsicarelli.homehunt.presentation.components.Tag
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_Medium
 import com.rsicarelli.homehunt.ui.theme.Size_Regular

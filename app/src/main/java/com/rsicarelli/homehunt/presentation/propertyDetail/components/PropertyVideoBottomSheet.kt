@@ -1,12 +1,9 @@
 package com.rsicarelli.homehunt.presentation.propertyDetail.components
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.Box
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalConfiguration
-import com.rsicarelli.homehunt.presentation.components.WebContent
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

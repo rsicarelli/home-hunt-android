@@ -11,7 +11,6 @@ import coil.request.ImageRequest
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.rsicarelli.homehunt.R
-import com.rsicarelli.homehunt.presentation.components.ZoomableImage
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, com.google.accompanist.pager.ExperimentalPagerApi::class)

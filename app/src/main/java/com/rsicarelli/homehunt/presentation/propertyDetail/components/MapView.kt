@@ -1,4 +1,4 @@
-package com.rsicarelli.homehunt.presentation.components
+package com.rsicarelli.homehunt.presentation.propertyDetail.components
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable
