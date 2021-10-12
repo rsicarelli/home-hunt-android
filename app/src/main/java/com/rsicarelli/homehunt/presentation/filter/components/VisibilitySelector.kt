@@ -1,15 +1,19 @@
 package com.rsicarelli.homehunt.presentation.filter.components
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.rsicarelli.homehunt.R
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_Small
 
 @Composable
-fun VisibilitySelector(
+fun ColumnScope.VisibilitySelector(
     isChecked: Boolean,
     onChange: (Boolean) -> Unit
 ) {
@@ -20,4 +24,24 @@ fun VisibilitySelector(
         isChecked = isChecked,
         onCheckedChange = onChange
     )
+}
+
+@Composable
+@Preview
+private fun VisibilitySelectorCheckedPreview() {
+    HomeHuntTheme {
+        Column {
+            VisibilitySelector(isChecked = true, onChange = {})
+        }
+    }
+}
+
+@Composable
+@Preview
+private fun VisibilitySelectorUncheckedPreview() {
+    HomeHuntTheme {
+        Column {
+            VisibilitySelector(isChecked = false, onChange = {})
+        }
+    }
 }
