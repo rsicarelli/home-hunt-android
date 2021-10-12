@@ -11,7 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import com.rsicarelli.homehunt.R
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_X_Small
 
 @Composable
@@ -19,7 +22,7 @@ fun IconText(
     modifier: Modifier = Modifier,
     text: String,
     textStyle: TextStyle = MaterialTheme.typography.body1,
-    paddingLeadingIconEnd: Dp = Size_X_Small,
+    paddingIconStart: Dp = Size_X_Small,
     @DrawableRes leadingIcon: Int,
 ) {
     Row(
@@ -28,9 +31,20 @@ fun IconText(
     ) {
         Icon(painter = painterResource(id = leadingIcon), contentDescription = text)
         Text(
-            modifier = modifier.padding(start = paddingLeadingIconEnd),
+            modifier = modifier.padding(start = paddingIconStart),
             text = text,
             style = textStyle
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun IconTextPreview() {
+    HomeHuntTheme {
+        IconText(
+            text = "Some text",
+            leadingIcon = R.drawable.ic_round_shower
         )
     }
 }
