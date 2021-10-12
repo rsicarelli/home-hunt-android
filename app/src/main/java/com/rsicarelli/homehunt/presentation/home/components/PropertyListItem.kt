@@ -117,7 +117,7 @@ fun PropertyListItem(
                 )
                 Spacer(modifier = Modifier.width(Size_Regular))
                 IconText(
-                    text = "${property.surface}",
+                    text = "${property.surface} m²",
                     leadingIcon = R.drawable.ic_round_ruler
                 )
             }
