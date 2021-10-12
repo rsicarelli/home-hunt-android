@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_Small
 import com.rsicarelli.homehunt.ui.theme.Size_X_Small
 
@@ -41,6 +43,30 @@ fun CheckboxItem(
             colors = colors(
                 checkedColor = MaterialTheme.colors.primary
             )
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun CheckboxItemCheckedPreview() {
+    HomeHuntTheme {
+        CheckboxItem(
+            title = "Checked",
+            isChecked = true,
+            onCheckedChange = {}
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun CheckboxItemUncheckedPreview() {
+    HomeHuntTheme {
+        CheckboxItem(
+            title = "Unchecked",
+            isChecked = false,
+            onCheckedChange = {}
         )
     }
 }
