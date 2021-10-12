@@ -25,8 +25,8 @@ class ScaffoldDelegate(
         }
     }
 
-    fun navigateSingleTop(uiEvent: UiEvent.Navigate) {
-        navController.navigate(uiEvent.route) {
+    fun navigateSingleTop(route: String) {
+        navController.navigate(route) {
             launchSingleTop = true
         }
     }

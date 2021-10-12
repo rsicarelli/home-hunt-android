@@ -1,18 +1,26 @@
 package com.rsicarelli.homehunt.presentation.filter
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
+import com.rsicarelli.homehunt.presentation.components.AppScaffold
 import com.rsicarelli.homehunt.presentation.components.BackButton
 import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
 import com.rsicarelli.homehunt.presentation.filter.components.*
-import com.rsicarelli.homehunt.ui.theme.*
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
+import com.rsicarelli.homehunt.ui.theme.Size_Large
+import com.rsicarelli.homehunt.ui.theme.Size_Regular
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -20,17 +28,22 @@ fun FilterScreen(
     scaffoldDelegate: ScaffoldDelegate,
     viewModel: FilterViewModel = hiltViewModel()
 ) {
-    FilterContent(viewModel.state.value, scaffoldDelegate, viewModel::onEvent)
+    FilterContent(
+        state = viewModel.state.value,
+        events = viewModel::onEvent,
+        onNavigateSingleTop = { scaffoldDelegate.navigateSingleTop(it) },
+        onNavigateUp = { scaffoldDelegate.navigateUp() })
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FilterContent(
     state: FilterState,
-    scaffoldDelegate: ScaffoldDelegate,
-    events: (FilterEvents) -> Unit
+    events: (FilterEvents) -> Unit,
+    onNavigateUp: () -> Unit,
+    onNavigateSingleTop: (String) -> Unit
 ) {
-    if (state.uiEvent is UiEvent.Navigate) scaffoldDelegate.navigateSingleTop(state.uiEvent)
+    if (state.uiEvent is UiEvent.Navigate) onNavigateSingleTop(state.uiEvent.route)
 
     LifecycleEffect { event ->
         events(FilterEvents.LifecycleEvent(event))
@@ -49,7 +62,8 @@ private fun FilterContent(
             stickyHeader {
                 BackButton(
                     modifier = Modifier.padding(top = Size_Regular),
-                    onBackClick = { scaffoldDelegate.navigateUp() })
+                    onBackClick = onNavigateUp
+                )
             }
             item {
                 PriceRange(
@@ -115,5 +129,26 @@ private fun FilterContent(
                 events(FilterEvents.SaveFilter)
             }
         )
+    }
+}
+
+@Composable
+@Preview
+private fun FilterContentPreview() {
+    val state = rememberScaffoldState()
+    val navController = rememberNavController()
+    HomeHuntTheme {
+        AppScaffold(
+            navController = navController,
+            state = state,
+            showBottomBar = true
+        ) {
+            FilterContent(
+                state = FilterState(),
+                events = {},
+                onNavigateUp = {},
+                onNavigateSingleTop = {}
+            )
+        }
     }
 }

@@ -22,9 +22,9 @@ import com.rsicarelli.homehunt.core.model.UiEvent
 @Composable
 fun SplashScreen(
     scaffoldDelegate: ScaffoldDelegate,
-    viewModel : SplashViewModel = hiltViewModel()
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
-    SplashContent(viewModel.state.value, scaffoldDelegate,viewModel::onEvent)
+    SplashContent(viewModel.state.value, scaffoldDelegate, viewModel::onEvent)
 }
 
 @Composable
@@ -35,7 +35,7 @@ private fun SplashContent(
 ) {
     when (state.uiEvent) {
         is UiEvent.MessageToUser -> scaffoldDelegate.showMessageToUser(state.uiEvent.uiText)
-        is UiEvent.Navigate -> scaffoldDelegate.navigateSingleTop(state.uiEvent)
+        is UiEvent.Navigate -> scaffoldDelegate.navigateSingleTop(state.uiEvent.route)
         UiEvent.NavigateUp -> scaffoldDelegate.navigateUp()
     }
 

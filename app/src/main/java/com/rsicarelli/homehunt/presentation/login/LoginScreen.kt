@@ -45,7 +45,7 @@ private fun HomeContent(
 ) {
     when (state.uiEvent) {
         is UiEvent.MessageToUser -> scaffoldDelegate.showMessageToUser(state.uiEvent.uiText)
-        is UiEvent.Navigate -> scaffoldDelegate.navigateSingleTop(state.uiEvent)
+        is UiEvent.Navigate -> scaffoldDelegate.navigateSingleTop(state.uiEvent.route)
         UiEvent.NavigateUp -> scaffoldDelegate.navigateUp()
     }
 
