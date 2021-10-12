@@ -23,8 +23,7 @@ class FilterLocalDataSourceImpl(
                 putInt(Mapper.bathCount, bathCount)
                 putBoolean(Mapper.showSeen, showSeen)
                 putBoolean(Mapper.longTermOnly, longTermOnly)
-                putBoolean(Mapper.showRented, showRented)
-                putBoolean(Mapper.showReserved, showReserved)
+                putBoolean(Mapper.availableOnly, availableOnly)
             }
         }
     }
@@ -39,8 +38,7 @@ class FilterLocalDataSourceImpl(
             val bathSelection = getInt(Mapper.bathCount, 0)
             val showNotSeen = getBoolean(Mapper.showSeen, false)
             val longTermOnly = getBoolean(Mapper.longTermOnly, false)
-            val showReserved = getBoolean(Mapper.showReserved, false)
-            val showRented = getBoolean(Mapper.showRented, false)
+            val showRented = getBoolean(Mapper.availableOnly, false)
 
             return SearchOption(
                 priceRange = Pair(minPrice, maxPrice),
@@ -49,8 +47,7 @@ class FilterLocalDataSourceImpl(
                 bathCount = bathSelection,
                 showSeen = showNotSeen,
                 longTermOnly = longTermOnly,
-                showRented = showRented,
-                showReserved = showReserved
+                availableOnly = showRented,
             )
         }
     }
@@ -64,7 +61,6 @@ class FilterLocalDataSourceImpl(
         const val bathCount = "PREF_BATH_COUNT"
         const val longTermOnly = "PREF_LONG_TERM_ONLY"
         const val showSeen = "PREF_SHOW_SEEN"
-        const val showReserved = "PREF_SHOW_RESERVED"
-        const val showRented = "PREF_SHOW_RENTED"
+        const val availableOnly = "PREF_AVAILABLE_ONLY"
     }
 }

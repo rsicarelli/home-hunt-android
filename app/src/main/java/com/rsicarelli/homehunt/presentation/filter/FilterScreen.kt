@@ -99,6 +99,14 @@ private fun FilterContent(
                     }
                 )
             }
+            item {
+                AvailabilitySelector(
+                    isChecked = state.availableOnly,
+                    onChange = {
+                        events(FilterEvents.AvailabilitySelectionChanged(it))
+                    }
+                )
+            }
         }
 
         SeeResultsButton(

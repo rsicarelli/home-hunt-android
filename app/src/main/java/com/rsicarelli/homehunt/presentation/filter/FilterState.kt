@@ -11,8 +11,7 @@ data class FilterState(
     val bathCount: Int = 0,
     val showSeen: Boolean = false,
     val longTermOnly: Boolean = false,
-    val showReserved: Boolean = false,
-    val showRented: Boolean = false,
+    val availableOnly: Boolean = false,
     val previewResultCount: Int? = null,
 ) {
 
@@ -23,11 +22,10 @@ data class FilterState(
         bathCount = bathCount,
         showSeen = showSeen,
         longTermOnly = longTermOnly,
-        showReserved = showReserved,
-        showRented = showRented
+        availableOnly = availableOnly,
     )
 
-    fun fromFilter(searchOption: SearchOption): FilterState = with(searchOption){
+    fun fromFilter(searchOption: SearchOption): FilterState = with(searchOption) {
         return FilterState(
             priceRange = priceRange.first.toFloat()..priceRange.second.toFloat(),
             surfaceRange = surfaceRange.first.toFloat()..surfaceRange.second.toFloat(),
@@ -35,8 +33,7 @@ data class FilterState(
             dormCount = dormCount,
             showSeen = showSeen,
             longTermOnly = longTermOnly,
-            showRented = showRented,
-            showReserved = showReserved
+            availableOnly = availableOnly
         )
     }
 }

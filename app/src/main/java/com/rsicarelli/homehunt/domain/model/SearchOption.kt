@@ -12,8 +12,7 @@ data class SearchOption(
     val bathCount: Int,
     val showSeen: Boolean,
     val longTermOnly: Boolean,
-    val showRented: Boolean,
-    val showReserved: Boolean
+    val availableOnly: Boolean
 ) {
     private val filters: List<Filter> = allFilters
     val userId = Firebase.auth.uid //should not be here, refactor later

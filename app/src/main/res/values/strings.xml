@@ -32,6 +32,7 @@
     <string name="see_less">See less</string>
     <string name="see_more">" &#8230; See more"</string>
     <string name="no_results">No results found</string>
+    <string name="show_only_available">Show only available</string>
     <plurals name="see_results_plurals">
         <item quantity="one">See %d result</item>
         <item quantity="other">See %d results</item>

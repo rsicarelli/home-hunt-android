@@ -16,8 +16,7 @@ val allFilters = listOf(
     Bath,
     Visibility,
     LongTermOnly,
-    Rented,
-    Reserved
+    Availability
 )
 
 private object Price : Filter {
@@ -78,18 +77,12 @@ private object LongTermOnly : Filter {
     }
 }
 
-private object Reserved : Filter {
+private object Availability : Filter {
     override fun applyFilter(searchOption: SearchOption, property: Property): Boolean {
-        if (!searchOption.showReserved) return true
+        if (searchOption.availableOnly) {
+            return property.tag.toTag() != Tag.RESERVED && property.tag.toTag() != Tag.RENTED
+        }
 
-        return property.tag.toTag() == Tag.RESERVED
-    }
-}
-
-private object Rented : Filter {
-    override fun applyFilter(searchOption: SearchOption, property: Property): Boolean {
-        if (!searchOption.showRented) return true
-
-        return property.tag.toTag() == Tag.RENTED
+        return true
     }
 }

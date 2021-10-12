@@ -31,25 +31,18 @@ class FilterViewModel @Inject constructor(
 
     fun onEvent(events: FilterEvents) {
         when (events) {
+            is FilterEvents.LifecycleEvent -> handleLifecycle(events.event)
             FilterEvents.ClearFilter -> TODO()
             FilterEvents.SaveFilter -> onSaveFilter()
             is FilterEvents.PriceRangeChanged -> priceRangeChanged(events)
             is FilterEvents.DormsSelectionChanged -> dormsSelectionChanged(events)
             is FilterEvents.SurfaceRangeChanged -> surfaceRangeChanged(events)
             is FilterEvents.BathSelectionChanged -> bathSelectionChanged(events)
-            is FilterEvents.LifecycleEvent -> handleLifecycle(events.event)
             is FilterEvents.VisibilitySelectionChanged -> handleVisibilityChanged(events.newValue)
             is FilterEvents.LongerTermRentalSelectionChanged -> handleLongTermChanged(events.newValue)
+            is FilterEvents.AvailabilitySelectionChanged -> handleAvailabilityChanged(events.newValue)
         }
         previewResults()
-    }
-
-    private fun handleLongTermChanged(newValue: Boolean) {
-        _state.value = state.value.copy(longTermOnly = newValue)
-    }
-
-    private fun handleVisibilityChanged(newValue: Boolean) {
-        _state.value = state.value.copy(showSeen = newValue)
     }
 
     private fun handleLifecycle(event: Lifecycle.Event) {
@@ -61,6 +54,18 @@ class FilterViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun handleAvailabilityChanged(newValue: Boolean) {
+        _state.value = state.value.copy(availableOnly = newValue)
+    }
+
+    private fun handleLongTermChanged(newValue: Boolean) {
+        _state.value = state.value.copy(longTermOnly = newValue)
+    }
+
+    private fun handleVisibilityChanged(newValue: Boolean) {
+        _state.value = state.value.copy(showSeen = newValue)
     }
 
     private fun onSaveFilter() {
