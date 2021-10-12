@@ -3,11 +3,9 @@ package com.rsicarelli.homehunt
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
@@ -28,11 +26,8 @@ import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-@ExperimentalComposeUiApi
-@ExperimentalAnimationApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -66,15 +61,15 @@ private fun MainContent(
                 startDestination = Screen.Home.route, //Test only
                 modifier = Modifier.fillMaxSize()
             ) {
-                composable(Screen.Splash.route) {
+                composable(route = Screen.Splash.route) {
                     SplashScreen()
                 }
 
-                composable(Screen.Login.route) {
+                composable(route = Screen.Login.route) {
                     LoginScreen()
                 }
 
-                composable(Screen.Home.route) {
+                composable(route = Screen.Home.route) {
                     HomeScreen()
                 }
 
@@ -85,10 +80,10 @@ private fun MainContent(
                     PropertyDetailScreen()
                 }
 
-                composable(Screen.Filter.route) {
+                composable(route = Screen.Filter.route) {
                     FilterScreen()
                 }
-                composable(Screen.Favourites.route) {
+                composable(route = Screen.Favourites.route) {
                     FavouritesScreen()
                 }
             }
