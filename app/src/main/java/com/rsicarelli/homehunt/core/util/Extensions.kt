@@ -1,8 +1,6 @@
 package com.rsicarelli.homehunt.core.util
 
 import android.content.Context
-import android.content.Intent
-import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -15,7 +13,6 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.UiText
-import com.rsicarelli.homehunt.presentation.login.LoginEvents
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.text.NumberFormat

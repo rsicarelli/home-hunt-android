@@ -17,6 +17,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.systemBarsPadding
@@ -30,6 +31,7 @@ import com.rsicarelli.homehunt.presentation.propertyDetail.PropertyDetailScreen
 import com.rsicarelli.homehunt.presentation.splash.SplashScreen
 import com.rsicarelli.homehunt.ui.navigation.NavArguments
 import com.rsicarelli.homehunt.ui.navigation.Screen
+import com.rsicarelli.homehunt.ui.navigation.bottomBarDestinations
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -86,10 +88,14 @@ private fun MainContent(
     scaffoldState: ScaffoldState,
     scaffoldDelegate: ScaffoldDelegate,
 ) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val showBottomBar = navBackStackEntry?.destination?.route in bottomBarDestinations
+
     AppScaffold(
         navController = navController,
         state = scaffoldState,
         modifier = Modifier.fillMaxSize(),
+        showBottomBar = showBottomBar
     ) {
         NavHost(
             navController = navController,

@@ -19,28 +19,25 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.ui.navigation.BottomNavItem
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.navigation.bottomBarDestinations
-import com.rsicarelli.homehunt.ui.theme.Secondary
-import com.rsicarelli.homehunt.ui.theme.Size_Regular
-import com.rsicarelli.homehunt.ui.theme.Size_Small
-import com.rsicarelli.homehunt.ui.theme.Size_2X_Small
+import com.rsicarelli.homehunt.ui.theme.*
 
 @Composable
 fun AppScaffold(
     modifier: Modifier = Modifier,
     navController: NavController,
     state: ScaffoldState,
+    showBottomBar: Boolean,
     content: @Composable () -> Unit
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val showBottomBar = navBackStackEntry?.destination?.route in bottomBarDestinations
-
     SystemBarEffect()
 
     Scaffold(
@@ -148,5 +145,15 @@ fun HomeHuntBottomNavigation(navController: NavController) {
                 }
             )
         }
+    }
+}
+
+@Composable
+@Preview
+private fun AppScaffoldPreview() {
+    val state = rememberScaffoldState()
+    val navController = rememberNavController()
+    HomeHuntTheme {
+        AppScaffold(navController = navController, state = state, showBottomBar = true) {}
     }
 }
