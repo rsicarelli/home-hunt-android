@@ -59,7 +59,11 @@ private fun FilterContent(
                 .fillMaxWidth()
                 .weight(1.0f)
         ) {
-            stickyHeader { BackButton(scaffoldDelegate = scaffoldDelegate) }
+            stickyHeader {
+                BackButton(
+                    modifier = Modifier.padding(top = Size_Regular),
+                    onBackClick = { scaffoldDelegate.navigateUp() })
+            }
             item { PriceRange(state = state, events = events) }
             item { SurfaceRange(state = state, events = events) }
             item { DormSelector(state = state, events = events) }
