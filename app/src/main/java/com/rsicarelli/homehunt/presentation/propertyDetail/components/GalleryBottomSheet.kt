@@ -39,8 +39,6 @@ fun GalleryBottomSheet(
                 val request = ImageRequest.Builder(LocalContext.current)
                     .data(photosGalleryUrls[page])
                     .crossfade(true)
-                    .placeholder(R.drawable.ic_round_image)
-                    .error(R.drawable.ic_round_image_broken)
                     .build()
 
                 LaunchedEffect(key1 = "imageLoader", block = {

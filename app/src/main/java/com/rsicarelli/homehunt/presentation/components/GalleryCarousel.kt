@@ -42,8 +42,6 @@ fun GalleryCarousel(
                         data = photoGallery[page],
                         builder = {
                             crossfade(true)
-                            placeholder(R.drawable.ic_round_image)
-                            error(R.drawable.ic_round_image_broken)
                         }
                     ),
                     contentDescription = null,
