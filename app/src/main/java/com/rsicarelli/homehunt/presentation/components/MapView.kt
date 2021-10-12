@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -17,13 +18,14 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.ktx.awaitMap
 import com.rsicarelli.homehunt.R
+import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 /*
-* From https://medium.com/geekculture/google-maps-in-jetpack-compose-android-ae7b1ad84e9
+* Adapted from https://medium.com/geekculture/google-maps-in-jetpack-compose-android-ae7b1ad84e9
 * */
 @Composable
 fun MapView(
@@ -62,7 +64,6 @@ fun rememberMapViewWithLifecycle(isLiteMode: Boolean): MapView {
             .liteMode(isLiteMode)
         MapView(context, options).apply {
             id = R.id.map
-//            isClickable = false
         }
     }
 
