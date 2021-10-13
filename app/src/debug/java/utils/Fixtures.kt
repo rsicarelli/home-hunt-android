@@ -1,5 +1,6 @@
 package utils
 
+import com.rsicarelli.homehunt.domain.model.Location
 import com.rsicarelli.homehunt.domain.model.Property
 
 object Fixtures {
@@ -8,7 +9,13 @@ object Fixtures {
         reference = "XXXXXXX",
         price = 1000.0,
         title = "A beautiful apartment",
-        location = "Valencia",
+        location = Location(
+            name = "Valencia",
+            lat = 0.0,
+            lng = 0.0,
+            isApproximated = false,
+            isUnknown = false
+        ),
         surface = 60,
         dormCount = 2,
         description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas placerat euismod risus, eu blandit turpis euismod id. Nulla eget enim fermentum, fermentum leo ut, faucibus dui. Aenean fringilla porta nisl. In a volutpat turpis. Mauris aliquam ac diam quis elementum. Cras iaculis ex ante, ac pretium ex eleifend in. Vivamus elit sem, ornare vel fringilla ut, faucibus at erat. Aenean dui arcu, auctor eu malesuada eget, convallis at elit. Pellentesque eu mi neque. Sed faucibus quam id lacus venenatis, vitae porttitor urna laoreet.",
@@ -34,8 +41,6 @@ object Fixtures {
             "Furnished"
         ),
         photoGalleryUrls = listOf("https://aimage.com", "https://anotherimage.com"),
-        lat = 4.0,
-        lng = 2.0,
         pdfUrl = "https://apdf.com",
         origin = "",
         viewedBy = emptyList(),

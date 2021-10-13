@@ -1,5 +1,6 @@
 package com.rsicarelli.homehunt.presentation.propertyDetail.components
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -13,6 +14,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.ktx.awaitMap
@@ -30,6 +32,7 @@ fun MapView(
     modifier: Modifier = Modifier,
     lat: Double,
     lng: Double,
+    drawRadius: Boolean,
     isLiteMode: Boolean = false
 ) {
     val mapView = rememberMapViewWithLifecycle(isLiteMode)
@@ -49,8 +52,21 @@ fun MapView(
                     .position(propertyLocation)
 
                 addMarker(markerOptions)
+                if (true) {
+                    addCircle(getCircleOptions(propertyLocation))
+                }
             }
         }
+    }
+}
+
+private fun getCircleOptions(point: LatLng): CircleOptions {
+    return CircleOptions().apply {
+        center(point)
+        radius(500.0)
+        strokeColor(Color.BLACK)
+        fillColor(0x30ff0000)
+        strokeWidth(2f)
     }
 }
 

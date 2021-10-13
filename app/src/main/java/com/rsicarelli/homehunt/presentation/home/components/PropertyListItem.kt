@@ -96,7 +96,7 @@ fun LazyItemScope.PropertyListItem(
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(top = Size_X_Small, start = Size_X_Small),
-                    text = property.location,
+                    text = property.location.name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.subtitle2,

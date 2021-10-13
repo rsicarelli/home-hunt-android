@@ -19,6 +19,7 @@ import com.rsicarelli.homehunt.ui.theme.MapSize
 fun PropertyMap(
     lat: Double?,
     lng: Double?,
+    isApproximated: Boolean,
     onMapClick: () -> Unit
 ) {
     if (lat == null || lng == null || lat == 0.0 || lng == 0.0) return
@@ -40,6 +41,7 @@ fun PropertyMap(
                     .clickable { onMapClick() },
                 lat = lat,
                 lng = lng,
+                drawRadius = isApproximated,
                 isLiteMode = true
             )
         }

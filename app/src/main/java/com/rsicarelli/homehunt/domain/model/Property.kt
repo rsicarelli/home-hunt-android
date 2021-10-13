@@ -4,7 +4,7 @@ data class Property(
     val reference: String,
     val price: Double,
     val title: String,
-    val location: String,
+    val location: Location,
     val surface: Int,
     val dormCount: Int?,
     val description: String,
@@ -17,19 +17,12 @@ data class Property(
     val locationDescription: String?,
     val characteristics: List<String>,
     val photoGalleryUrls: List<String>,
-    val lat: Double?,
-    val lng: Double?,
     val pdfUrl: String?,
     val origin: String,
     val viewedBy: List<String?>,
     val isFavourited: Boolean,
     val isActive: Boolean
 ) {
-
-    sealed class Type(val tag: String) {
-        object APROPERTIES : Type("aProperties")
-        object ENGELS : Type("engels")
-    }
 
     sealed class Tag(val identifier: String) {
         object EMPTY : Tag("")
@@ -38,6 +31,14 @@ data class Property(
         object RENTED : Tag("RENTED")
     }
 }
+
+data class Location(
+    val lat: Double,
+    val lng: Double,
+    val name: String,
+    val isApproximated: Boolean,
+    val isUnknown: Boolean
+)
 
 fun String?.toTag(): Property.Tag = this?.let {
     return@let when (it.uppercase()) {
@@ -53,7 +54,7 @@ fun Map<String, Any?>.toProperty() =
         reference = asString(Mapper.REFERENCE),
         price = asDouble(Mapper.PRICE),
         title = asString(Mapper.TITLE),
-        location = asString(Mapper.LOCATION),
+        location = asLocation(Mapper.LOCATION),
         surface = asInt(Mapper.SURFACE),
         dormCount = asNullableInt(Mapper.DORM_COUNT),
         description = asString(Mapper.DESCRIPTION),
@@ -65,8 +66,6 @@ fun Map<String, Any?>.toProperty() =
         fullDescription = asNullableString(Mapper.FULL_DESCRIPTION),
         characteristics = asStringList(Mapper.CHARACTERISTICS),
         photoGalleryUrls = asStringList(Mapper.PHOTO_GALLERY_URLS),
-        lat = asNullableDouble(Mapper.LAT),
-        lng = asNullableDouble(Mapper.LNG),
         pdfUrl = asNullableString(Mapper.PDF_URL),
         locationDescription = asNullableString(Mapper.LOCATION_DESCRIPTION),
         origin = asString(Mapper.ORIGIN),
@@ -101,12 +100,22 @@ object Mapper {
     const val IS_ACTIVE = "isActive"
 }
 
+private fun Map<String, Any?>.asLocation(token: String): Location {
+    val locationMap = this[token] as HashMap<String, Any?>
+    return Location(
+        name = locationMap.asString("name"),
+        lat = locationMap.asDouble("lat"),
+        lng = locationMap.asDouble("lng"),
+        isApproximated = locationMap.asBoolean("approximated"),
+        isUnknown = locationMap.asBoolean("unknown"),
+    )
+}
+
 private fun Map<String, Any?>.asString(token: String) = this[token] as String
 private fun Map<String, Any?>.asNullableString(token: String, default: String? = null) =
     (this[token] as String?) ?: default
 
 private fun Map<String, Any?>.asDouble(token: String) = this[token] as Double
-private fun Map<String, Any?>.asNullableDouble(token: String) = this[token] as Double?
 private fun Map<String, Any?>.asNullableInt(token: String, default: Int? = null) =
     (this[token] as Long?)?.toInt() ?: default
 

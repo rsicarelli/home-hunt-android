@@ -44,7 +44,7 @@ fun PropertyHeader(
                 modifier = Modifier.constrainAs(location) {
                     top.linkTo(title.bottom, Size_X_Small)
                 },
-                text = property.location,
+                text = property.location.name,
                 textStyle = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primaryVariant),
                 leadingIcon = R.drawable.ic_round_location,
             )

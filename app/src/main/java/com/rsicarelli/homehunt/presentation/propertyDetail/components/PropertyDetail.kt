@@ -50,8 +50,9 @@ fun PropertyDetail(
         }
         item {
             PropertyMap(
-                lat = property.lat,
-                lng = property.lng,
+                lat = property.location.lat,
+                lng = property.location.lng,
+                isApproximated = property.location.isApproximated,
                 onMapClick = {
                     //TODO
                 }
