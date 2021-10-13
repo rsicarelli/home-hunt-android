@@ -52,7 +52,7 @@ fun MapView(
                     .position(propertyLocation)
 
                 addMarker(markerOptions)
-                if (true) {
+                if (drawRadius) {
                     addCircle(getCircleOptions(propertyLocation))
                 }
             }
