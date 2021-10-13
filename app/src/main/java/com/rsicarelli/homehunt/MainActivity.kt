@@ -19,8 +19,6 @@ import com.rsicarelli.homehunt.presentation.login.LoginScreen
 import com.rsicarelli.homehunt.presentation.propertyDetail.PropertyDetailScreen
 import com.rsicarelli.homehunt.presentation.splash.SplashScreen
 import com.rsicarelli.homehunt.ui.components.AppScaffold
-import com.rsicarelli.homehunt.ui.composition.LocalScaffoldDelegate
-import com.rsicarelli.homehunt.ui.composition.ProvideHomeHuntCompositionLocals
 import com.rsicarelli.homehunt.ui.navigation.NavArguments
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
@@ -36,9 +34,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             HomeHuntTheme {
                 ProvideWindowInsets {
-                    ProvideHomeHuntCompositionLocals {
-                        MainContent()
-                    }
+                    MainContent()
                 }
             }
         }
@@ -46,45 +42,42 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun MainContent(
-) {
+private fun MainContent() {
     Surface(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding(top = false)
     ) {
-        val scaffoldDelegate = LocalScaffoldDelegate.current
-
-        AppScaffold {
+        AppScaffold { scaffoldDelegate ->
             NavHost(
                 navController = scaffoldDelegate.navController,
                 startDestination = Screen.Home.route, //Test only
                 modifier = Modifier.fillMaxSize()
             ) {
                 composable(route = Screen.Splash.route) {
-                    SplashScreen()
+                    SplashScreen(scaffoldDelegate)
                 }
 
                 composable(route = Screen.Login.route) {
-                    LoginScreen()
+                    LoginScreen(scaffoldDelegate)
                 }
 
                 composable(route = Screen.Home.route) {
-                    HomeScreen()
+                    HomeScreen(scaffoldDelegate)
                 }
 
                 composable(
                     route = Screen.PropertyDetail.route + "/{${NavArguments.PROPERTY_DETAIL}}",
                     arguments = Screen.PropertyDetail.arguments
                 ) {
-                    PropertyDetailScreen()
+                    PropertyDetailScreen(scaffoldDelegate)
                 }
 
                 composable(route = Screen.Filter.route) {
-                    FilterScreen()
+                    FilterScreen(scaffoldDelegate)
                 }
                 composable(route = Screen.Favourites.route) {
-                    FavouritesScreen()
+                    FavouritesScreen(scaffoldDelegate)
                 }
             }
         }

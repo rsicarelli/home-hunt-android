@@ -9,22 +9,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.core.model.UiText
 import com.rsicarelli.homehunt.core.model.isLoading
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.login.components.GoogleSignInOption
 import com.rsicarelli.homehunt.presentation.login.components.Welcome
-import com.rsicarelli.homehunt.ui.composition.LocalScaffoldDelegate
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_2X_Large
 
 @Composable
 fun LoginScreen(
+    scaffoldDelegate: ScaffoldDelegate,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    val scaffoldDelegate = LocalScaffoldDelegate.current
-
     LoginContent(
         state = viewModel.state.value,
         events = viewModel::onEvent,

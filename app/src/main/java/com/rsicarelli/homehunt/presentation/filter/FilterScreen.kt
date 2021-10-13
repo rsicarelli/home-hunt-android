@@ -12,21 +12,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
-import com.rsicarelli.homehunt.ui.components.AppScaffold
 import com.rsicarelli.homehunt.presentation.components.BackButton
 import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
 import com.rsicarelli.homehunt.presentation.filter.components.*
-import com.rsicarelli.homehunt.ui.composition.LocalScaffoldDelegate
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_Large
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FilterScreen(
+    scaffoldDelegate: ScaffoldDelegate,
     viewModel: FilterViewModel = hiltViewModel()
 ) {
-    val scaffoldDelegate = LocalScaffoldDelegate.current
-
     FilterContent(
         state = viewModel.state.value,
         events = viewModel::onEvent,

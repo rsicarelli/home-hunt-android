@@ -22,30 +22,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rsicarelli.homehunt.R
-import com.rsicarelli.homehunt.ui.composition.LocalScaffoldDelegate
+import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.rsicarelli.homehunt.core.model.rememberScaffoldDelegate
 import com.rsicarelli.homehunt.ui.navigation.BottomNavItem
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.*
 
 @Composable
 fun AppScaffold(
-    showBottomBar: Boolean = LocalScaffoldDelegate.current.showStatusBar, //To provide previews
-    content: @Composable () -> Unit
+    scaffoldDelegate: ScaffoldDelegate = rememberScaffoldDelegate(),
+    content: @Composable (ScaffoldDelegate) -> Unit
 ) {
-    val scaffoldDelegate = LocalScaffoldDelegate.current
-
     SystemBarEffect()
 
     Scaffold(
         bottomBar = {
-            if (showBottomBar) {
+            if (scaffoldDelegate.showBottomBar()) {
                 HomeHuntBottomNavigation(scaffoldDelegate.navController)
             }
         },
         scaffoldState = scaffoldDelegate.scaffoldState,
         modifier = Modifier.fillMaxSize()
     ) {
-        content()
+        content(scaffoldDelegate)
     }
 }
 
@@ -148,8 +147,9 @@ fun HomeHuntBottomNavigation(navController: NavController) {
 @Preview
 private fun AppScaffoldPreview() {
     HomeHuntTheme {
-        AppScaffold(showBottomBar = true, content = {
+        AppScaffold(
+            content = {
 
-        })
+            })
     }
 }
