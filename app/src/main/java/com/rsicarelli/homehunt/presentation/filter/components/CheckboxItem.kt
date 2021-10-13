@@ -35,7 +35,7 @@ fun CheckboxItem(
         Text(
             modifier = Modifier.weight(1.0f),
             text = title,
-            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.W400),
+            style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.W400),
         )
         Checkbox(
             checked = isChecked,

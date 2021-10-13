@@ -30,7 +30,7 @@ fun AddOrRemoveItem(
         Text(
             modifier = Modifier.weight(1.0f),
             text = text,
-            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.W400),
+            style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.W400),
         )
         Counter(
             value,

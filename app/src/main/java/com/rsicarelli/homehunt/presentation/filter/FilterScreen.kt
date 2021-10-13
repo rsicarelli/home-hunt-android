@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.insets.statusBarsPadding
 import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
 import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.presentation.components.BackButton
@@ -48,6 +49,7 @@ private fun FilterContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .statusBarsPadding()
     ) {
         BackButton(
             modifier = Modifier,
