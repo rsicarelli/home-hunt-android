@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.MailOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
@@ -17,6 +18,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
@@ -78,7 +80,12 @@ fun HomeHuntBottomNavigation(navController: NavController) {
             route = Screen.Favourites.route,
             icon = Icons.Rounded.Favorite,
             contentDescription = stringResource(id = R.string.favourites)
-        )
+        ),
+        BottomNavItem(
+            route = Screen.Map.route,
+            painter = painterResource(id = R.drawable.ic_round_map_24),
+            contentDescription = stringResource(id = R.string.map)
+        ),
     )
 
     BottomNavigation(
@@ -125,6 +132,13 @@ fun HomeHuntBottomNavigation(navController: NavController) {
                         if (item.icon != null) {
                             Icon(
                                 imageVector = item.icon,
+                                contentDescription = item.contentDescription,
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                            )
+                        } else if (item.painter != null) {
+                            Icon(
+                                painter = item.painter,
                                 contentDescription = item.contentDescription,
                                 modifier = Modifier
                                     .align(Alignment.Center)

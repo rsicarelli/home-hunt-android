@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 * Adapted from https://medium.com/geekculture/google-maps-in-jetpack-compose-android-ae7b1ad84e9
 * */
 @Composable
-fun MapView(
+fun StaticMapView(
     modifier: Modifier = Modifier,
     lat: Double,
     lng: Double,

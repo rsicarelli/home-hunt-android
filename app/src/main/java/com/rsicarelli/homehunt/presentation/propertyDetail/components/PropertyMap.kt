@@ -35,7 +35,7 @@ fun PropertyMap(
                 .height(MapSize)
                 .clip(shape = MaterialTheme.shapes.large)
         ) {
-            MapView(
+            StaticMapView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onMapClick() },

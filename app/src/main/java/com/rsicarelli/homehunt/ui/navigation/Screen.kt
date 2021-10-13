@@ -11,7 +11,8 @@ sealed class Screen(val route: String, val arguments: List<NamedNavArgument> = e
 
     object Home : Screen(route = "home")
     object Favourites : Screen(route = "favourites")
-    object Filter : Screen("filter", emptyList())
+    object Filter : Screen("filter")
+    object Map : Screen(route = "map")
 
     object PropertyDetail :
         Screen(
@@ -29,5 +30,6 @@ object NavArguments {
 
 val bottomBarDestinations = listOf(
     Screen.Home.route,
-    Screen.Favourites.route
+    Screen.Favourites.route,
+    Screen.Map.route
 )

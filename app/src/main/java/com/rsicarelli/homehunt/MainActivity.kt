@@ -16,6 +16,7 @@ import com.rsicarelli.homehunt.presentation.favourites.FavouritesScreen
 import com.rsicarelli.homehunt.presentation.filter.FilterScreen
 import com.rsicarelli.homehunt.presentation.home.HomeScreen
 import com.rsicarelli.homehunt.presentation.login.LoginScreen
+import com.rsicarelli.homehunt.presentation.map.MapScreen
 import com.rsicarelli.homehunt.presentation.propertyDetail.PropertyDetailScreen
 import com.rsicarelli.homehunt.presentation.splash.SplashScreen
 import com.rsicarelli.homehunt.ui.components.AppScaffold
@@ -51,7 +52,7 @@ private fun MainContent() {
         AppScaffold { scaffoldDelegate ->
             NavHost(
                 navController = scaffoldDelegate.navController,
-                startDestination = Screen.Home.route, //Test only
+                startDestination = Screen.Splash.route, //Test only
                 modifier = Modifier.fillMaxSize()
             ) {
                 composable(route = Screen.Splash.route) {
@@ -78,6 +79,9 @@ private fun MainContent() {
                 }
                 composable(route = Screen.Favourites.route) {
                     FavouritesScreen(scaffoldDelegate)
+                }
+                composable(route = Screen.Map.route) {
+                    MapScreen(scaffoldDelegate)
                 }
             }
         }

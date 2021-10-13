@@ -1,4 +1,4 @@
-package com.rsicarelli.homehunt.presentation.home.components
+package com.rsicarelli.homehunt.presentation.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
