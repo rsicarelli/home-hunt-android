@@ -1,8 +1,6 @@
 package com.rsicarelli.homehunt.presentation.filter.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
@@ -18,6 +16,7 @@ import com.google.accompanist.insets.systemBarsPadding
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_2X_Large
+import com.rsicarelli.homehunt.ui.theme.Size_Regular
 import com.rsicarelli.homehunt.ui.theme.rally_green_500
 
 @Composable
@@ -25,16 +24,14 @@ fun SeeResultsButton(
     onClick: () -> Unit,
     previewResultCount: Int?,
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .systemBarsPadding(),
-        contentAlignment = Alignment.BottomCenter
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(Size_Regular))
         val hasResults = previewResultCount != null
         Button(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
                 .height(Size_2X_Large),
             shape = MaterialTheme.shapes.large,
             enabled = hasResults,
@@ -64,6 +61,7 @@ fun SeeResultsButton(
                 style = MaterialTheme.typography.button.copy(fontSize = 16.sp)
             )
         }
+        Spacer(modifier = Modifier.height(Size_Regular))
     }
 }
 
