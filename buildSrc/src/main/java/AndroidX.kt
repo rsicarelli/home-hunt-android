@@ -7,4 +7,8 @@ object AndroidX {
 
     private const val androidxXKTXVersion = "1.6.0"
     const val androidXKTX = "androidx.core:core-ktx:$androidxXKTXVersion"
+
+    private const val lifecycleRuntimeKtxVersion = "2.4.0-rc01"
+    const val lifecycleRuntimeKtx =
+        "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleRuntimeKtxVersion"
 }

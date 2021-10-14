@@ -55,6 +55,7 @@ dependencies {
     implementation(AndroidX.androidXCore)
     implementation(AndroidX.androidXAppCompat)
     implementation(AndroidX.androidXKTX)
+    runtimeOnly(AndroidX.lifecycleRuntimeKtx)
 
     implementation(Coil.coil)
 
@@ -71,7 +72,6 @@ dependencies {
 
     implementation(Dependencies.coroutines)
     implementation(Dependencies.touchImageView)
-    implementation(Dependencies.heulerDataBinding)
     implementation(Dependencies.timber)
 
     implementation(platform(Firebase.bom))
