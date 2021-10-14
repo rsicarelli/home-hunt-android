@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 class FilterPropertiesUseCase {
-    suspend operator fun invoke(request: Request): Flow<DataState<List<Property>>> =
+    operator fun invoke(request: Request): Flow<DataState<List<Property>>> =
         flow<DataState<List<Property>>> {
             val (searchOption, properties) = request
 

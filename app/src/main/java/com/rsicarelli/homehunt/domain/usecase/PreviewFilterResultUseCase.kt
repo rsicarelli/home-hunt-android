@@ -13,11 +13,10 @@ import kotlinx.coroutines.flow.flowOn
 
 class PreviewFilterResultUseCase(
     private val propertyRepository: PropertyRepository,
-    private val userRepository: UserRepository,
     private val filterPropertiesUseCase: FilterPropertiesUseCase
 ) {
     @OptIn(FlowPreview::class)
-    suspend operator fun invoke(request: Request): Flow<DataState<List<Property>>> =
+    operator fun invoke(request: Request): Flow<DataState<List<Property>>> =
         propertyRepository.getActiveProperties().flatMapConcat {
             filterPropertiesUseCase.invoke(
                 FilterPropertiesUseCase.Request(
@@ -25,7 +24,7 @@ class PreviewFilterResultUseCase(
                     properties = it
                 )
             )
-        }.flowOn(Dispatchers.Default)
+        }.flowOn(Dispatchers.IO)
 
     data class Request(
         val searchOption: SearchOption

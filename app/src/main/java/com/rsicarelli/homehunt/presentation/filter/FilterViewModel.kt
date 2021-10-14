@@ -1,9 +1,5 @@
 package com.rsicarelli.homehunt.presentation.filter
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rsicarelli.homehunt.core.model.DataState
@@ -14,6 +10,8 @@ import com.rsicarelli.homehunt.domain.usecase.SaveFilterPreferencesUseCase
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -26,12 +24,12 @@ class FilterViewModel @Inject constructor(
     private val saveFilter: SaveFilterPreferencesUseCase
 ) : ViewModel() {
 
-    private val _state: MutableState<FilterState> = mutableStateOf(FilterState())
-    val state: State<FilterState> = _state
+    private val _state: MutableStateFlow<FilterState> = MutableStateFlow(FilterState())
+    val state: StateFlow<FilterState> = _state
 
     fun onEvent(events: FilterEvents) {
         when (events) {
-            is FilterEvents.LifecycleEvent -> handleLifecycle(events.event)
+            is FilterEvents.GetFilter -> handleLifecycle()
             FilterEvents.ClearFilter -> TODO()
             FilterEvents.SaveFilter -> onSaveFilter()
             is FilterEvents.PriceRangeChanged -> priceRangeChanged(events)
@@ -45,13 +43,11 @@ class FilterViewModel @Inject constructor(
         previewResults()
     }
 
-    private fun handleLifecycle(event: Lifecycle.Event) {
-        if (event == Lifecycle.Event.ON_CREATE) {
-            viewModelScope.launch {
-                val result = getFilter().first()
-                (result as DataState.Data).data?.let {
-                    _state.value = state.value.fromFilter(it)
-                }
+    private fun handleLifecycle() {
+        viewModelScope.launch {
+            val result = getFilter().first()
+            (result as DataState.Data).data?.let {
+                _state.value = state.value.fromFilter(it)
             }
         }
     }

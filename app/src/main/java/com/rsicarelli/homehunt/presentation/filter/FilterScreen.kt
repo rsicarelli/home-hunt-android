@@ -7,15 +7,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.google.accompanist.insets.statusBarsPadding
 import com.rsicarelli.homehunt.core.model.HomeHuntState
 import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.presentation.components.BackButton
 import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
 import com.rsicarelli.homehunt.presentation.filter.components.*
+import com.rsicarelli.homehunt.presentation.home.HomeEvents
+import com.rsicarelli.homehunt.presentation.home.HomeState
+import com.rsicarelli.homehunt.presentation.home.HomeViewModel
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_Large
 
@@ -23,10 +32,19 @@ import com.rsicarelli.homehunt.ui.theme.Size_Large
 @Composable
 fun FilterScreen(
     homeHuntState: HomeHuntState,
-    viewModel: FilterViewModel = hiltViewModel()
 ) {
+    val viewModel: FilterViewModel = hiltViewModel()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    val stateFlowLifecycleAware = remember(viewModel, lifecycleOwner) {
+        viewModel.onEvent(FilterEvents.GetFilter)
+        viewModel.state.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    }
+
+    val state by stateFlowLifecycleAware.collectAsState(FilterState())
+
     FilterContent(
-        state = viewModel.state.value,
+        state = state,
         events = viewModel::onEvent,
         onNavigateSingleTop = { homeHuntState.navigateSingleTop(it) },
         onNavigateUp = { homeHuntState.navigateUp() })
@@ -41,10 +59,6 @@ private fun FilterContent(
     onNavigateSingleTop: (String) -> Unit
 ) {
     if (state.uiEvent is UiEvent.Navigate) onNavigateSingleTop(state.uiEvent.route)
-
-    LifecycleEffect { event ->
-        events(FilterEvents.LifecycleEvent(event))
-    }
 
     Column(
         modifier = Modifier

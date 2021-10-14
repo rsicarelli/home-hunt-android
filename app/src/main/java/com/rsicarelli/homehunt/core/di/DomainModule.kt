@@ -62,9 +62,8 @@ object DomainModule {
     @Singleton
     fun providesPreviewFilterResultUseCase(
         propertyRepository: PropertyRepository,
-        userRepository: UserRepository,
         filterPropertiesUseCase: FilterPropertiesUseCase
-    ) = PreviewFilterResultUseCase(propertyRepository, userRepository, filterPropertiesUseCase)
+    ) = PreviewFilterResultUseCase(propertyRepository, filterPropertiesUseCase)
 
     @Provides
     @Singleton
