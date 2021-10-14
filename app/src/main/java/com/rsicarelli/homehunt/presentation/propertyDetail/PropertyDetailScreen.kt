@@ -3,6 +3,7 @@ package com.rsicarelli.homehunt.presentation.propertyDetail
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rsicarelli.homehunt.core.model.HomeHuntState
@@ -13,11 +14,13 @@ import com.rsicarelli.homehunt.presentation.propertyDetail.components.PropertyVi
 
 @Composable
 fun PropertyDetailScreen(
-    homeHuntState: HomeHuntState,
-    viewModel: PropertyDetailViewModel = hiltViewModel()
+    homeHuntState: HomeHuntState
 ) {
+    val viewModel: PropertyDetailViewModel = hiltViewModel()
+    val state = viewModel.state.collectAsState()
+
     PropertyDetailContent(
-        state = viewModel.state.value,
+        state = state.value,
         events = viewModel::onEvent,
         homeHuntState = homeHuntState
     )

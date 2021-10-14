@@ -1,23 +1,17 @@
 package com.rsicarelli.homehunt.presentation.propertyDetail
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.core.model.ProgressBarState
-import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.usecase.GetSinglePropertyUseCase
 import com.rsicarelli.homehunt.domain.usecase.MarkAsViewedUseCase
 import com.rsicarelli.homehunt.domain.usecase.ToggleFavouriteUseCase
-import com.rsicarelli.homehunt.presentation.home.HomeState
 import com.rsicarelli.homehunt.ui.navigation.NavArguments
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,8 +23,9 @@ class PropertyDetailViewModel @Inject constructor(
     private val markAsViewed: MarkAsViewedUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val _state: MutableState<PropertyDetailState> = mutableStateOf(PropertyDetailState())
-    val state: State<PropertyDetailState> = _state
+    private val _state: MutableStateFlow<PropertyDetailState> =
+        MutableStateFlow(PropertyDetailState())
+    val state: StateFlow<PropertyDetailState> = _state
 
     init {
         savedStateHandle.get<String>(NavArguments.PROPERTY_DETAIL)?.let { referenceId ->
@@ -70,20 +65,12 @@ class PropertyDetailViewModel @Inject constructor(
 
     private fun getPropertyFromCache(referenceId: String) {
         viewModelScope.launch {
-            getSingleProperty(GetSinglePropertyUseCase.Request(referenceId)).onEach { dataState ->
-                println(dataState)
-                when (dataState) {
-                    is DataState.Data -> state.updateProperty(dataState.data!!)
-                }
-            }.launchIn(viewModelScope)
+            val property = getSingleProperty(GetSinglePropertyUseCase.Request(referenceId)).first()
+            _state.value = state.value.copy(
+                property = property,
+                progressBarState = ProgressBarState.Idle
+            )
         }
-    }
-
-    private fun State<PropertyDetailState>.updateProperty(property: Property) {
-        _state.value = this.value.copy(
-            property = property,
-            progressBarState = ProgressBarState.Idle
-        )
     }
 
 }

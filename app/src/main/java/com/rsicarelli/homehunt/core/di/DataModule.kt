@@ -15,6 +15,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
@@ -24,7 +26,7 @@ object DataModule {
     @Provides
     @Singleton
     fun providesFirestoreDataSource(firestore: FirebaseFirestore): FirestoreDataSource =
-        FirestoreDataSourceImpl(firestore)
+        FirestoreDataSourceImpl(firestore, CoroutineScope(Dispatchers.IO))
 
     @Provides
     @Singleton

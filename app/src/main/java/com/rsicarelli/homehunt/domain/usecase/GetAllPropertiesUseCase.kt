@@ -14,7 +14,7 @@ class GetAllPropertiesUseCase(
 ) {
     suspend operator fun invoke(): Flow<DataState<List<Property>>> =
         flow<DataState<List<Property>>> {
-            propertiesRepository.getNewProperties(userRepository.getUserId())
+            propertiesRepository.getActiveProperties()
                 .onStart {
                     emit(DataState.Loading(ProgressBarState.Loading))
                 }

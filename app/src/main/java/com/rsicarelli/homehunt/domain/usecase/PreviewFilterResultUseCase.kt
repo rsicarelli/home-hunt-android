@@ -18,7 +18,7 @@ class PreviewFilterResultUseCase(
 ) {
     @OptIn(FlowPreview::class)
     suspend operator fun invoke(request: Request): Flow<DataState<List<Property>>> =
-        propertyRepository.getNewProperties(userRepository.getUserId()).flatMapConcat {
+        propertyRepository.getActiveProperties().flatMapConcat {
             filterPropertiesUseCase.invoke(
                 FilterPropertiesUseCase.Request(
                     searchOption = request.searchOption,

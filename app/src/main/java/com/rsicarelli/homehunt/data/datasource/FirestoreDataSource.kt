@@ -5,29 +5,37 @@ import com.rsicarelli.homehunt.data.datasource.FirestoreDataSourceImpl.Firestore
 import com.rsicarelli.homehunt.domain.model.Mapper
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.model.toProperty
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 
 interface FirestoreDataSource {
-    suspend fun getActiveProperties(userId: String): Flow<List<Property>>
-    suspend fun getById(referenceId: String): Flow<Property>
-    suspend fun getFavourites(): Flow<List<Property>>
+    fun getActiveProperties(): Flow<List<Property>>
+    fun getById(referenceId: String): Flow<Property>
     fun toggleFavourite(referenceId: String, isFavourited: Boolean)
     fun markAsViewed(referenceId: String, userId: String)
+    val activeProperties: StateFlow<List<Property>>
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FirestoreDataSourceImpl(
-    private val db: FirebaseFirestore
+    private val db: FirebaseFirestore,
+    coroutinesScope: CoroutineScope
 ) : FirestoreDataSource {
 
-    override suspend fun getActiveProperties(userId: String): Flow<List<Property>> {
+    private val _activeProperties = MutableStateFlow<List<Property>>(emptyList())
+    override val activeProperties = _activeProperties
+
+    init {
+        coroutinesScope.launch {
+            getActiveProperties().collect {
+                _activeProperties.emit(it)
+            }
+        }
+    }
+
+    override fun getActiveProperties(): Flow<List<Property>> {
         return callbackFlow {
             val propertiesDocument = db.collection(PROPERTY_COLLECTION)
                 .whereEqualTo(Mapper.IS_ACTIVE, true)
@@ -52,7 +60,7 @@ class FirestoreDataSourceImpl(
         }.flowOn(Dispatchers.IO)
     }
 
-    override suspend fun getById(referenceId: String): Flow<Property> {
+    override fun getById(referenceId: String): Flow<Property> {
         return callbackFlow {
             val document = db.collection(PROPERTY_COLLECTION).document(referenceId)
 
@@ -97,30 +105,6 @@ class FirestoreDataSourceImpl(
             }
         }
     }
-
-    override suspend fun getFavourites(): Flow<List<Property>> {
-        return callbackFlow {
-            val propertiesDocument = db.collection(PROPERTY_COLLECTION)
-                .whereEqualTo(Mapper.IS_FAVOURITED, true)
-
-            val subscription = propertiesDocument.addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    cancel(
-                        message = "error fetching collection data at path",
-                        cause = error
-                    )
-                    return@addSnapshotListener
-                }
-
-                snapshot?.documents?.mapNotNull { it.data!!.toProperty() }
-                    ?.let { trySend(it) }
-                    ?: close(Exception("Something wrong is not right"))
-            }
-
-            awaitClose { subscription.remove() }
-        }.flowOn(Dispatchers.IO)
-    }
-
 
     private object FirestoreMap {
         const val PROPERTY_COLLECTION = "properties"
