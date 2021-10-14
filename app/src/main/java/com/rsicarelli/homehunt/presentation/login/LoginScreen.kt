@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -14,6 +16,7 @@ import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.core.model.UiText
 import com.rsicarelli.homehunt.core.model.isLoading
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
+import com.rsicarelli.homehunt.presentation.filter.FilterState
 import com.rsicarelli.homehunt.presentation.login.components.GoogleSignInOption
 import com.rsicarelli.homehunt.presentation.login.components.Welcome
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
@@ -21,11 +24,14 @@ import com.rsicarelli.homehunt.ui.theme.Size_2X_Large
 
 @Composable
 fun LoginScreen(
-    homeHuntState: HomeHuntState,
-    viewModel: LoginViewModel = hiltViewModel()
+    homeHuntState: HomeHuntState
 ) {
+    val viewModel: LoginViewModel = hiltViewModel()
+
+    val state by viewModel.state.collectAsState(LoginState())
+
     LoginContent(
-        state = viewModel.state.value,
+        state = state,
         events = viewModel::onEvent,
         onShowMessageToUser = {
             homeHuntState.showMessageToUser(it)

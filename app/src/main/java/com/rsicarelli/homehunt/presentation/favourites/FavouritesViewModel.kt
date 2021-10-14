@@ -36,8 +36,8 @@ class FavouritesViewModel @Inject constructor(
 
     private fun getFavouritesFromCache() {
         viewModelScope.launch {
-            getFavourites().onEach { dataState ->
-                updateProperty(dataState)
+            getFavourites(Unit).onEach { outcome ->
+                updateProperty(outcome.properties)
             }.launchIn(viewModelScope)
         }
     }

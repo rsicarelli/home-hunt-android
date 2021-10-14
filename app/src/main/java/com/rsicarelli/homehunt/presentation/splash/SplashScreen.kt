@@ -6,9 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -22,10 +20,16 @@ import com.rsicarelli.homehunt.core.model.UiEvent
 @Composable
 fun SplashScreen(
     homeHuntState: HomeHuntState,
-    viewModel: SplashViewModel = hiltViewModel()
 ) {
+    val viewModel: SplashViewModel = hiltViewModel()
 
-    SplashContent(viewModel.state.value, homeHuntState, viewModel::onEvent)
+    val state by viewModel.state.collectAsState(SplashState())
+
+    SplashContent(
+        state = state,
+        homeHuntState = homeHuntState,
+        events = viewModel::onEvent
+    )
 }
 
 @Composable

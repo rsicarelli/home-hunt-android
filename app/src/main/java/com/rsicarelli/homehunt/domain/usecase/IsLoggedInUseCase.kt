@@ -1,17 +1,23 @@
 package com.rsicarelli.homehunt.domain.usecase
 
-import com.rsicarelli.homehunt.core.model.DataState
+import com.rsicarelli.homehunt.core.model.UseCase
 import com.rsicarelli.homehunt.domain.repository.UserRepository
-import kotlinx.coroutines.Dispatchers
+import com.rsicarelli.homehunt.domain.usecase.IsLoggedInUseCase.Outcome
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 
 class IsLoggedInUseCase(
     private val userRepository: UserRepository
-) {
+) : UseCase<Unit, Outcome> {
+    override fun invoke(request: Unit) = flow {
+        userRepository.isLoggedIn()
+            .takeIf { it }
+            ?.let { emit(Outcome.LoggedIn) }
+            ?: emit(Outcome.LoggedOut)
+    }
 
-    operator fun invoke() = flow {
-        emit(DataState.Data(userRepository.isLoggedIn()))
-    }.flowOn(Dispatchers.Default)
+    sealed class Outcome {
+        object LoggedIn : Outcome()
+        object LoggedOut : Outcome()
+    }
 
 }

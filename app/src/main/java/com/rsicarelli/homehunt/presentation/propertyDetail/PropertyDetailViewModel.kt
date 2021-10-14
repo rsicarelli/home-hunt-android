@@ -65,11 +65,12 @@ class PropertyDetailViewModel @Inject constructor(
 
     private fun getPropertyFromCache(referenceId: String) {
         viewModelScope.launch {
-            val property = getSingleProperty(GetSinglePropertyUseCase.Request(referenceId)).first()
-            _state.value = state.value.copy(
-                property = property,
-                progressBarState = ProgressBarState.Idle
-            )
+            getSingleProperty(GetSinglePropertyUseCase.Request(referenceId)).first().run {
+                _state.value = state.value.copy(
+                    property = this.property,
+                    progressBarState = ProgressBarState.Idle
+                )
+            }
         }
     }
 
