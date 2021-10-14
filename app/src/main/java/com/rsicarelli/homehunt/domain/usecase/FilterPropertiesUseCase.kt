@@ -1,25 +1,29 @@
 package com.rsicarelli.homehunt.domain.usecase
 
-import com.rsicarelli.homehunt.core.model.DataState
-import com.rsicarelli.homehunt.domain.model.SearchOption
+import com.rsicarelli.homehunt.core.model.UseCase
 import com.rsicarelli.homehunt.domain.model.Property
-import kotlinx.coroutines.Dispatchers
+import com.rsicarelli.homehunt.domain.model.SearchOption
+import com.rsicarelli.homehunt.domain.usecase.FilterPropertiesUseCase.Outcome
+import com.rsicarelli.homehunt.domain.usecase.FilterPropertiesUseCase.Request
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 
-class FilterPropertiesUseCase {
-    operator fun invoke(request: Request): Flow<DataState<List<Property>>> =
-        flow<DataState<List<Property>>> {
+class FilterPropertiesUseCase(
+) : UseCase<Request, Outcome> {
+
+    override fun invoke(request: Request): Flow<Outcome> {
+        return flow {
             val (searchOption, properties) = request
 
-            val result = searchOption.applyFilter(properties)
-
-            emit(DataState.Data(result))
-        }.flowOn(Dispatchers.IO)
+            emit(Outcome(searchOption.applyFilter(properties)))
+        }
+    }
 
     data class Request(
         val searchOption: SearchOption,
         val properties: List<Property>
     )
+
+    data class Outcome(val properties: List<Property>)
+
 }

@@ -2,7 +2,6 @@ package com.rsicarelli.homehunt.presentation.filter
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rsicarelli.homehunt.core.model.DataState
 import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.domain.usecase.GetFilterPreferencesUseCase
 import com.rsicarelli.homehunt.domain.usecase.PreviewFilterResultUseCase
@@ -29,7 +28,7 @@ class FilterViewModel @Inject constructor(
 
     fun onEvent(events: FilterEvents) {
         when (events) {
-            is FilterEvents.GetFilter -> handleLifecycle()
+            is FilterEvents.GetFilter -> getFilter()
             FilterEvents.ClearFilter -> TODO()
             FilterEvents.SaveFilter -> onSaveFilter()
             is FilterEvents.PriceRangeChanged -> priceRangeChanged(events)
@@ -43,12 +42,10 @@ class FilterViewModel @Inject constructor(
         previewResults()
     }
 
-    private fun handleLifecycle() {
+    private fun getFilter() {
         viewModelScope.launch {
-            val result = getFilter().first()
-            (result as DataState.Data).data?.let {
-                _state.value = state.value.fromFilter(it)
-            }
+            val result = getFilter(Unit).first()
+            _state.value = state.value.fromFilter(result.searchOption)
         }
     }
 
@@ -98,7 +95,7 @@ class FilterViewModel @Inject constructor(
             ).first()
 
             _state.value =
-                state.value.copy(previewResultCount = (single as DataState.Data).data!!.size)
+                state.value.copy(previewResultCount = (single.properties.size))
         }
     }
 }

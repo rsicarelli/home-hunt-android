@@ -34,6 +34,7 @@
     <string name="no_results">No results found</string>
     <string name="show_only_available">Show only available</string>
     <string name="map">Map</string>
+    <string name="error_loading_properties">Error trying to load properties</string>
     <plurals name="see_results_plurals">
         <item quantity="one">See %d result</item>
         <item quantity="other">See %d results</item>

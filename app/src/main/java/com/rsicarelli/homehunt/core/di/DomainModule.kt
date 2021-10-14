@@ -26,11 +26,6 @@ object DomainModule {
 
     @Provides
     @Singleton
-    fun providesGetPropertiesUseCase(propertiesRepository: PropertyRepository) =
-        GetAllPropertiesUseCase(propertiesRepository)
-
-    @Provides
-    @Singleton
     fun providesGetSinglePropertyUseCase(propertiesRepository: PropertyRepository) =
         GetSinglePropertyUseCase(propertiesRepository)
 
@@ -74,12 +69,12 @@ object DomainModule {
 
     @Provides
     fun providesGetFilteredPropertiesUseCase(
-        getAllAllProperties: GetAllPropertiesUseCase,
+        propertyRepository: PropertyRepository,
         getFilterPreferences: GetFilterPreferencesUseCase,
         filterProperties: FilterPropertiesUseCase,
     ) = GetFilteredPropertiesUseCase(
-        getAllAllProperties,
-        getFilterPreferences,
-        filterProperties
+        propertiesRepository = propertyRepository,
+        getFilterPreferences = getFilterPreferences,
+        filterProperties = filterProperties
     )
 }
