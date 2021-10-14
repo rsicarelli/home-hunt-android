@@ -10,14 +10,13 @@ import com.rsicarelli.homehunt.core.model.UiText
 import com.rsicarelli.homehunt.core.util.await
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 class SignInUseCase(
     private val firebaseAuth: FirebaseAuth
 ) {
-    suspend operator fun invoke(request: Request) = flow<DataState<FirebaseUser>> {
+    operator fun invoke(request: Request) = flow<DataState<FirebaseUser>> {
         try {
             emit(DataState.Loading(ProgressBarState.Loading))
 

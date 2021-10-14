@@ -12,7 +12,7 @@ class GetFilterPreferencesUseCase(
     private val filterLocalDataSource: FilterLocalDataSource
 ) {
 
-    suspend operator fun invoke(): Flow<DataState<SearchOption>> =
+    operator fun invoke(): Flow<DataState<SearchOption>> =
         flow<DataState<SearchOption>> {
             emit(DataState.Data(filterLocalDataSource.get()))
         }.flowOn(Dispatchers.Default)

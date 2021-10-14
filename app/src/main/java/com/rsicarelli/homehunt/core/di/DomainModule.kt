@@ -26,11 +26,8 @@ object DomainModule {
 
     @Provides
     @Singleton
-    fun providesGetPropertiesUseCase(
-        propertiesRepository: PropertyRepository,
-        userRepository: UserRepository
-    ) =
-        GetAllPropertiesUseCase(propertiesRepository, userRepository)
+    fun providesGetPropertiesUseCase(propertiesRepository: PropertyRepository) =
+        GetAllPropertiesUseCase(propertiesRepository)
 
     @Provides
     @Singleton

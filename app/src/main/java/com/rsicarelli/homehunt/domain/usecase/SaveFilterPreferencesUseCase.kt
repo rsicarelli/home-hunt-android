@@ -12,7 +12,7 @@ class SaveFilterPreferencesUseCase(
     private val filterLocalDataSource: FilterLocalDataSource
 ) {
 
-    suspend operator fun invoke(request: Request): Flow<DataState<Boolean>> =
+    operator fun invoke(request: Request): Flow<DataState<Boolean>> =
         flow<DataState<Boolean>> {
             filterLocalDataSource.save(request.searchOption)
             emit(DataState.Data(true))

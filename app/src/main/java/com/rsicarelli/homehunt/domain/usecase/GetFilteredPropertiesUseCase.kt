@@ -14,7 +14,7 @@ class GetFilteredPropertiesUseCase(
 ) {
 
     @OptIn(FlowPreview::class)
-    suspend operator fun invoke(): Flow<DataState<List<Property>>> {
+    operator fun invoke(): Flow<DataState<List<Property>>> {
         return getAllProperties()
             .filter { it is DataState.Data }
             .mapNotNull { (it as DataState.Data).data }
@@ -35,7 +35,7 @@ class GetFilteredPropertiesUseCase(
                     )
                 )
             }
-            .filter { it is DataState.Data }.flowOn(Dispatchers.Default)
+            .filter { it is DataState.Data }.flowOn(Dispatchers.IO)
     }
 
 

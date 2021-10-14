@@ -10,9 +10,8 @@ import kotlinx.coroutines.flow.*
 
 class GetAllPropertiesUseCase(
     private val propertiesRepository: PropertyRepository,
-    private val userRepository: UserRepository
 ) {
-    suspend operator fun invoke(): Flow<DataState<List<Property>>> =
+    operator fun invoke(): Flow<DataState<List<Property>>> =
         flow<DataState<List<Property>>> {
             propertiesRepository.getActiveProperties()
                 .onStart {
