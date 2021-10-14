@@ -12,9 +12,6 @@ import androidx.lifecycle.flowWithLifecycle
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.HomeHuntState
 import com.rsicarelli.homehunt.presentation.components.EmptyContent
-import com.rsicarelli.homehunt.presentation.home.HomeEvents
-import com.rsicarelli.homehunt.presentation.home.HomeState
-import com.rsicarelli.homehunt.presentation.home.HomeViewModel
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import utils.Fixtures
@@ -54,11 +51,10 @@ private fun FavouritesContent(
         properties = state.properties,
         headerPrefixRes = R.string.favourites,
         onNavigate = onNavigate,
-        onToggleFavourite = { property ->
+        onToggleFavourite = { referenceId, isFavourited ->
             events(
                 FavouritesEvents.ToggleFavourite(
-                    property.reference,
-                    !property.isFavourited
+                    referenceId, isFavourited
                 )
             )
         }

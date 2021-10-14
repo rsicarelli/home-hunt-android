@@ -4,10 +4,7 @@ import com.rsicarelli.homehunt.core.model.UseCase
 import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.repository.PropertyRepository
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 
 class GetFilteredPropertiesUseCase(
     private val propertiesRepository: PropertyRepository,
@@ -24,7 +21,8 @@ class GetFilteredPropertiesUseCase(
                 Pair(filterOutcome.searchOption, properties)
             }.flatMapConcat {
                 filterProperties(FilterPropertiesUseCase.Request(it.first, it.second))
-            }.map {
+            }
+            .map {
                 Outcome(it.properties)
             }
 

@@ -14,7 +14,7 @@ import com.rsicarelli.homehunt.core.model.isLoading
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 
 @Composable
-fun CircularIndeterminateProgressBar(progressBarState: ProgressBarState) {
+fun CircularIndeterminateProgressBar(progressBarState: ProgressBarState = ProgressBarState.Loading) {
     if (!progressBarState.isLoading()) return
 
     Row(

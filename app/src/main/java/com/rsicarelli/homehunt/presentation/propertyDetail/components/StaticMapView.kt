@@ -76,6 +76,7 @@ fun rememberMapViewWithLifecycle(isLiteMode: Boolean): MapView {
     val mapView = remember {
         val options = GoogleMapOptions()
             .liteMode(isLiteMode)
+
         MapView(context, options).apply {
             id = R.id.map
         }

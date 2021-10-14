@@ -22,7 +22,7 @@ fun PropertyList(
     properties: List<Property>,
     scrollState: LazyListState = rememberLazyListState(),
     onNavigate: (String) -> Unit,
-    onToggleFavourite: (Property) -> Unit,
+    onToggleFavourite: (String, Boolean) -> Unit,
     @StringRes headerPrefixRes: Int,
 ) {
     if (properties.isEmpty()) return
@@ -52,7 +52,12 @@ fun PropertyList(
                     PropertyListItem(
                         property = property,
                         onSelectProperty = { onNavigate("${Screen.PropertyDetail.route}/${property.reference}") },
-                        onFavouriteClick = { onToggleFavourite(property) }
+                        onFavouriteClick = {
+                            onToggleFavourite(
+                                property.reference,
+                                !property.isFavourited
+                            )
+                        }
                     )
                 }
                 item { Spacer(modifier = Modifier.height(Size_Small)) }
@@ -70,7 +75,7 @@ private fun PropertyListPreview() {
         PropertyList(
             properties = Fixtures.aListOfProperty,
             onNavigate = {},
-            onToggleFavourite = {},
+            onToggleFavourite = { _, _ -> },
             headerPrefixRes = R.string.results
         )
     }

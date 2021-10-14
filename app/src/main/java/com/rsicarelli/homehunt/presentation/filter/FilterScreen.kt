@@ -20,11 +20,7 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.rsicarelli.homehunt.core.model.HomeHuntState
 import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.presentation.components.BackButton
-import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
 import com.rsicarelli.homehunt.presentation.filter.components.*
-import com.rsicarelli.homehunt.presentation.home.HomeEvents
-import com.rsicarelli.homehunt.presentation.home.HomeState
-import com.rsicarelli.homehunt.presentation.home.HomeViewModel
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_Large
 
