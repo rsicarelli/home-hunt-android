@@ -11,8 +11,6 @@ import kotlinx.coroutines.flow.*
 import timber.log.Timber
 
 interface FirestoreDataSource {
-    fun getActiveProperties(): Flow<List<Property>>
-    fun getById(referenceId: String): Flow<Property>
     fun toggleFavourite(referenceId: String, isFavourited: Boolean)
     fun markAsViewed(referenceId: String, userId: String)
     val activeProperties: StateFlow<List<Property>>
@@ -29,13 +27,13 @@ class FirestoreDataSourceImpl(
 
     init {
         coroutinesScope.launch {
-            getActiveProperties().collect {
+            observeActiveProperties().collect {
                 _activeProperties.emit(it)
             }
         }
     }
 
-    override fun getActiveProperties(): Flow<List<Property>> {
+    private fun observeActiveProperties(): Flow<List<Property>> {
         return callbackFlow {
             val propertiesDocument = db.collection(PROPERTY_COLLECTION)
                 .whereEqualTo(Mapper.IS_ACTIVE, true)
@@ -54,28 +52,6 @@ class FirestoreDataSourceImpl(
                         .mapNotNull { it.data?.toProperty() }
                         .run { trySend(this) }
                 } ?: cancel("Document is null", RuntimeException())
-            }
-
-            awaitClose { subscription.remove() }
-        }.flowOn(Dispatchers.IO)
-    }
-
-    override fun getById(referenceId: String): Flow<Property> {
-        return callbackFlow {
-            val document = db.collection(PROPERTY_COLLECTION).document(referenceId)
-
-            val subscription = document.addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    cancel(
-                        message = "error fetching collection data at path",
-                        cause = error
-                    )
-                    return@addSnapshotListener
-                }
-
-                snapshot?.data?.let {
-                    trySend(it.toProperty())
-                } ?: cancel("Could not locate property reference")
             }
 
             awaitClose { subscription.remove() }
