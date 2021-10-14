@@ -90,24 +90,27 @@ object Mapper {
     const val FULL_DESCRIPTION = "fullDescription"
     const val CHARACTERISTICS = "characteristics"
     const val PHOTO_GALLERY_URLS = "photoGalleryUrls"
-    const val LAT = "lat"
-    const val LNG = "lng"
     const val PDF_URL = "pdfUrl"
     const val LOCATION_DESCRIPTION = "locationDescription"
     const val ORIGIN = "origin"
     const val VIEWED_BY = "viewedBy"
     const val IS_FAVOURITED = "isFavourited"
     const val IS_ACTIVE = "isActive"
+    const val LOCATION_LAT = "lat"
+    const val LOCATION_LNG = "lng"
+    const val LOCATION_NAME = "name"
+    const val LOCATION_APPROXIMATED = "approximated"
+    const val LOCATION_UNKNOWN = "unknown"
 }
 
 private fun Map<String, Any?>.asLocation(token: String): Location {
     val locationMap = this[token] as HashMap<String, Any?>
     return Location(
-        name = locationMap.asString("name"),
-        lat = locationMap.asDouble("lat"),
-        lng = locationMap.asDouble("lng"),
-        isApproximated = locationMap.asBoolean("approximated"),
-        isUnknown = locationMap.asBoolean("unknown"),
+        name = locationMap.asString(Mapper.LOCATION_NAME),
+        lat = locationMap.asDouble(Mapper.LOCATION_LAT),
+        lng = locationMap.asDouble(Mapper.LOCATION_LNG),
+        isApproximated = locationMap.asBoolean(Mapper.LOCATION_APPROXIMATED),
+        isUnknown = locationMap.asBoolean(Mapper.LOCATION_UNKNOWN),
     )
 }
 
