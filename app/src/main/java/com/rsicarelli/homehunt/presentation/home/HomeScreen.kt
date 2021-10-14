@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rsicarelli.homehunt.R
-import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.rsicarelli.homehunt.core.model.HomeHuntState
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.components.EmptyContent
 import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
@@ -23,14 +23,14 @@ import utils.Fixtures
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
-    scaffoldDelegate: ScaffoldDelegate,
+    homeHuntState: HomeHuntState,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     HomeContent(
         events = viewModel::onEvent,
         state = viewModel.state.value,
         onNavigate = { route ->
-            scaffoldDelegate.navigate(route)
+            homeHuntState.navigate(route)
         }
     )
 }

@@ -9,7 +9,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.MailOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
@@ -24,29 +23,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rsicarelli.homehunt.R
-import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
-import com.rsicarelli.homehunt.core.model.rememberScaffoldDelegate
+import com.rsicarelli.homehunt.core.model.HomeHuntState
+import com.rsicarelli.homehunt.core.model.rememberHomeHuntState
 import com.rsicarelli.homehunt.ui.navigation.BottomNavItem
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.*
 
 @Composable
 fun AppScaffold(
-    scaffoldDelegate: ScaffoldDelegate = rememberScaffoldDelegate(),
-    content: @Composable (ScaffoldDelegate) -> Unit
+    homeHuntState: HomeHuntState = rememberHomeHuntState(),
+    content: @Composable (HomeHuntState) -> Unit
 ) {
     SystemBarEffect()
 
     Scaffold(
         bottomBar = {
-            if (scaffoldDelegate.showBottomBar()) {
-                HomeHuntBottomNavigation(scaffoldDelegate.navController)
+            if (homeHuntState.shouldShowBottomBar) {
+                HomeHuntBottomNavigation(homeHuntState.navController)
             }
         },
-        scaffoldState = scaffoldDelegate.scaffoldState,
+        scaffoldState = homeHuntState.scaffoldState,
         modifier = Modifier.fillMaxSize()
     ) {
-        content(scaffoldDelegate)
+        content(homeHuntState)
     }
 }
 

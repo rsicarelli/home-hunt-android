@@ -16,28 +16,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rsicarelli.homehunt.R
-import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.rsicarelli.homehunt.core.model.HomeHuntState
 import com.rsicarelli.homehunt.core.model.UiEvent
 
 @Composable
 fun SplashScreen(
-    scaffoldDelegate: ScaffoldDelegate,
+    homeHuntState: HomeHuntState,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
 
-    SplashContent(viewModel.state.value, scaffoldDelegate, viewModel::onEvent)
+    SplashContent(viewModel.state.value, homeHuntState, viewModel::onEvent)
 }
 
 @Composable
 private fun SplashContent(
     state: SplashState,
-    scaffoldDelegate: ScaffoldDelegate,
+    homeHuntState: HomeHuntState,
     events: (SplashEvents) -> Unit
 ) {
     when (state.uiEvent) {
-        is UiEvent.MessageToUser -> scaffoldDelegate.showMessageToUser(state.uiEvent.uiText)
-        is UiEvent.Navigate -> scaffoldDelegate.navigateSingleTop(state.uiEvent.route)
-        UiEvent.NavigateUp -> scaffoldDelegate.navigateUp()
+        is UiEvent.MessageToUser -> homeHuntState.showMessageToUser(state.uiEvent.uiText)
+        is UiEvent.Navigate -> homeHuntState.navigateSingleTop(state.uiEvent.route)
+        UiEvent.NavigateUp -> homeHuntState.navigateUp()
     }
 
     val scale = remember {

@@ -14,40 +14,18 @@ import com.rsicarelli.homehunt.ui.navigation.bottomBarDestinations
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Composable
-fun rememberScaffoldDelegate(): ScaffoldDelegate {
-    val navController = rememberNavController()
-    val scaffoldState = rememberScaffoldState()
-    val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-
-    val scaffoldDelegate by remember {
-        mutableStateOf(
-            ScaffoldDelegate(
-                coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState,
-                navController = navController,
-                context = context,
-            )
-        )
-    }
-
-    return scaffoldDelegate
-}
-
-//TODO find a better approach, this class looks a "utils" one :face_palm:
-class ScaffoldDelegate(
-    val coroutineScope: CoroutineScope,
+class HomeHuntState(
+    private val coroutineScope: CoroutineScope,
     val scaffoldState: ScaffoldState,
     val navController: NavHostController,
     val context: Context,
 ) {
 
-    @Composable
-    fun showBottomBar(): Boolean {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        return navBackStackEntry?.destination?.route in bottomBarDestinations
-    }
+    val shouldShowBottomBar: Boolean
+        @Composable get() {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            return navBackStackEntry?.destination?.route in bottomBarDestinations
+        }
 
     fun showMessageToUser(uiText: UiText) {
         coroutineScope.launch {
@@ -75,4 +53,14 @@ class ScaffoldDelegate(
     fun navigateUp() {
         navController.navigateUp()
     }
+}
+
+@Composable
+fun rememberHomeHuntState(
+    navController: NavHostController = rememberNavController(),
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    context: Context = LocalContext.current,
+): HomeHuntState = remember(navController, scaffoldState, coroutineScope, context) {
+    HomeHuntState(coroutineScope, scaffoldState, navController, context)
 }

@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.statusBarsPadding
-import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.rsicarelli.homehunt.core.model.HomeHuntState
 import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.presentation.components.BackButton
 import com.rsicarelli.homehunt.presentation.components.LifecycleEffect
@@ -22,14 +22,14 @@ import com.rsicarelli.homehunt.ui.theme.Size_Large
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FilterScreen(
-    scaffoldDelegate: ScaffoldDelegate,
+    homeHuntState: HomeHuntState,
     viewModel: FilterViewModel = hiltViewModel()
 ) {
     FilterContent(
         state = viewModel.state.value,
         events = viewModel::onEvent,
-        onNavigateSingleTop = { scaffoldDelegate.navigateSingleTop(it) },
-        onNavigateUp = { scaffoldDelegate.navigateUp() })
+        onNavigateSingleTop = { homeHuntState.navigateSingleTop(it) },
+        onNavigateUp = { homeHuntState.navigateUp() })
 }
 
 @OptIn(ExperimentalFoundationApi::class)

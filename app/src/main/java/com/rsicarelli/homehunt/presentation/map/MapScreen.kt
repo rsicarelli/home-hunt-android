@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.rsicarelli.homehunt.core.model.HomeHuntState
 import com.rsicarelli.homehunt.presentation.components.FilterFab
 import com.rsicarelli.homehunt.presentation.map.components.PropertiesMapView
 import com.rsicarelli.homehunt.ui.navigation.Screen
@@ -14,7 +14,7 @@ import com.rsicarelli.homehunt.ui.navigation.Screen
 
 @Composable
 fun MapScreen(
-    scaffoldDelegate: ScaffoldDelegate,
+    homeHuntState: HomeHuntState,
     viewModel: MapViewModel = hiltViewModel(),
 ) {
     MapContent(state = viewModel.state.value) {

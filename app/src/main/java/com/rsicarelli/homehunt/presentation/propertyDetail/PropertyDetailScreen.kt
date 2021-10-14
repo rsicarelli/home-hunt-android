@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.rsicarelli.homehunt.core.model.HomeHuntState
 import com.rsicarelli.homehunt.presentation.propertyDetail.components.GalleryBottomSheet
 import com.rsicarelli.homehunt.presentation.propertyDetail.components.PropertyDetail
 import com.rsicarelli.homehunt.presentation.propertyDetail.components.PropertyTopBar
@@ -13,13 +13,13 @@ import com.rsicarelli.homehunt.presentation.propertyDetail.components.PropertyVi
 
 @Composable
 fun PropertyDetailScreen(
-    scaffoldDelegate: ScaffoldDelegate,
+    homeHuntState: HomeHuntState,
     viewModel: PropertyDetailViewModel = hiltViewModel()
 ) {
     PropertyDetailContent(
         state = viewModel.state.value,
         events = viewModel::onEvent,
-        scaffoldDelegate = scaffoldDelegate
+        homeHuntState = homeHuntState
     )
 }
 
@@ -27,7 +27,7 @@ fun PropertyDetailScreen(
 private fun PropertyDetailContent(
     state: PropertyDetailState,
     events: (PropertyDetailEvents) -> Unit,
-    scaffoldDelegate: ScaffoldDelegate
+    homeHuntState: HomeHuntState
 ) {
     state.property?.let { property ->
         Box(modifier = Modifier.fillMaxSize()) {
@@ -51,7 +51,7 @@ private fun PropertyDetailContent(
                     )
                 },
                 onBackClicked = {
-                    scaffoldDelegate.navigateUp()
+                    homeHuntState.navigateUp()
                 }
             )
             GalleryBottomSheet(

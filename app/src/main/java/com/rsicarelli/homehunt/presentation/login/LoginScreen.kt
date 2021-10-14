@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.rsicarelli.homehunt.core.model.ScaffoldDelegate
+import com.rsicarelli.homehunt.core.model.HomeHuntState
 import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.core.model.UiText
 import com.rsicarelli.homehunt.core.model.isLoading
@@ -21,17 +21,17 @@ import com.rsicarelli.homehunt.ui.theme.Size_2X_Large
 
 @Composable
 fun LoginScreen(
-    scaffoldDelegate: ScaffoldDelegate,
+    homeHuntState: HomeHuntState,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     LoginContent(
         state = viewModel.state.value,
         events = viewModel::onEvent,
         onShowMessageToUser = {
-            scaffoldDelegate.showMessageToUser(it)
+            homeHuntState.showMessageToUser(it)
         },
         onNavigateSingleTop = {
-            scaffoldDelegate.navigateSingleTop(it)
+            homeHuntState.navigateSingleTop(it)
         }
     )
 }
