@@ -6,6 +6,7 @@ import com.rsicarelli.homehunt.domain.repository.PropertyRepository
 import com.rsicarelli.homehunt.domain.usecase.GetSinglePropertyUseCase.Outcome
 import com.rsicarelli.homehunt.domain.usecase.GetSinglePropertyUseCase.Request
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 
 class GetSinglePropertyUseCase(
@@ -14,6 +15,7 @@ class GetSinglePropertyUseCase(
 
     override operator fun invoke(request: Request): Flow<Outcome> =
         propertiesRepository.getActiveProperties()
+            .filterNotNull()
             .map { properties -> properties.first { it.reference == request.referenceId } }
             .map { Outcome(it) }
 

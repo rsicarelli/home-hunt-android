@@ -39,6 +39,7 @@ class FavouritesViewModel @Inject constructor(
             state.value = state.value.copy(
                 properties = outcome.properties,
                 progressBarState = ProgressBarState.Idle,
+                isEmpty = outcome.properties.isEmpty()
             )
         }.launchIn(viewModelScope)
 

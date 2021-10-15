@@ -62,16 +62,17 @@ private fun HomeContent(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomEnd
     ) {
-        state.properties.takeIf { it.isNotEmpty() }
-            ?.let {
-                PropertyList(
-                    scrollState = scrollState,
-                    properties = it,
-                    headerPrefixRes = R.string.results,
-                    onNavigate = actions.onNavigate,
-                    onToggleFavourite = actions.onToggleFavourite
-                )
-            } ?: EmptyContent()
+        if (state.properties.isNotEmpty()) {
+            PropertyList(
+                scrollState = scrollState,
+                properties = state.properties,
+                headerPrefixRes = R.string.results,
+                onNavigate = actions.onNavigate,
+                onToggleFavourite = actions.onToggleFavourite
+            )
+        } else if (state.isEmpty) {
+            EmptyContent()
+        }
 
         FilterFab(isScrollInProgress = scrollState.isScrollInProgress) {
             actions.onNavigate(Screen.Filter.route)

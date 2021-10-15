@@ -11,7 +11,6 @@ import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.HomeHuntState
 import com.rsicarelli.homehunt.presentation.components.EmptyContent
 import com.rsicarelli.homehunt.presentation.components.rememberOnLifecycle
-import com.rsicarelli.homehunt.presentation.filter.FilterActions
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import utils.Fixtures
@@ -47,15 +46,16 @@ private fun FavouritesContent(
     actions: FavouriteActions,
     state: FavouritesState,
 ) {
-    state.properties.takeIf { it.isNotEmpty() }
-        ?.let {
-            PropertyList(
-                properties = state.properties,
-                headerPrefixRes = R.string.favourites,
-                onNavigate = actions.onNavigate,
-                onToggleFavourite = actions.onToggleFavourite
-            )
-        } ?: EmptyContent()
+    if (state.properties.isNotEmpty()) {
+        PropertyList(
+            properties = state.properties,
+            headerPrefixRes = R.string.favourites,
+            onNavigate = actions.onNavigate,
+            onToggleFavourite = actions.onToggleFavourite
+        )
+    } else if (state.isEmpty) {
+        EmptyContent()
+    }
 }
 
 @Composable

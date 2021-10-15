@@ -13,7 +13,7 @@ import timber.log.Timber
 interface FirestoreDataSource {
     fun toggleFavourite(referenceId: String, isFavourited: Boolean)
     fun markAsViewed(referenceId: String, userId: String)
-    val activeProperties: StateFlow<List<Property>>
+    val activeProperties: StateFlow<List<Property>?>
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -22,7 +22,7 @@ class FirestoreDataSourceImpl(
     coroutinesScope: CoroutineScope
 ) : FirestoreDataSource {
 
-    private val _activeProperties = MutableStateFlow<List<Property>>(emptyList())
+    private val _activeProperties = MutableStateFlow<List<Property>?>(null)
     override val activeProperties = _activeProperties
 
     init {

@@ -9,7 +9,7 @@ import javax.inject.Inject
 class PropertyRepositoryImpl @Inject constructor(
     private val firestoreDataSource: FirestoreDataSource
 ) : PropertyRepository {
-    override fun getActiveProperties(): Flow<List<Property>> =
+    override fun getActiveProperties(): Flow<List<Property>?> =
         firestoreDataSource.activeProperties
 
     override fun toggleFavourite(referenceId: String, isFavourited: Boolean) =

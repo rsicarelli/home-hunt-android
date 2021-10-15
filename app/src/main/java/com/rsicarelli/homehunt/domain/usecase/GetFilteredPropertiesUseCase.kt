@@ -17,9 +17,11 @@ class GetFilteredPropertiesUseCase(
     @OptIn(FlowPreview::class)
     override fun invoke(request: Unit): Flow<Outcome> =
         propertiesRepository.getActiveProperties()
+            .filterNotNull()
             .combine(getFilterPreferences(request)) { properties, filterOutcome ->
                 Pair(filterOutcome.searchOption, properties)
-            }.flatMapConcat {
+            }
+            .flatMapConcat {
                 filterProperties(FilterPropertiesUseCase.Request(it.first, it.second))
             }
             .map {

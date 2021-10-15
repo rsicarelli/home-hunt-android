@@ -25,7 +25,8 @@ class HomeViewModel @Inject constructor(
             .onEach {
                 state.value = state.value.copy(
                     properties = it.properties,
-                    progressBarState = ProgressBarState.Idle
+                    progressBarState = ProgressBarState.Idle,
+                    isEmpty = it.properties.isEmpty()
                 )
             }.launchIn(viewModelScope)
     }
