@@ -15,6 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.HomeHuntState
+import com.rsicarelli.homehunt.core.model.ProgressBarState
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.components.EmptyContent
 import com.rsicarelli.homehunt.presentation.components.FilterFab
@@ -32,22 +33,17 @@ fun HomeScreen(
 
 ) {
     val stateFlowLifecycleAware = viewModel.rememberOnLifecycle {
-        viewModel.loadProperties().flowWithLifecycle(
+        viewModel.init().flowWithLifecycle(
             lifecycle = it.lifecycle,
-            minActiveState = Lifecycle.State.RESUMED
+            minActiveState = Lifecycle.State.STARTED
         )
     }
 
-    val state by stateFlowLifecycleAware.collectAsState(initial = HomeState.Idle)
+    val state by stateFlowLifecycleAware.collectAsState(initial = HomeState())
 
     val actions = HomeActions(
-        onNavigate = { route -> homeHuntState.navigate(route) },
-        onToggleFavourite = { referenceId, isFavourited ->
-            viewModel.toggleFavourite(
-                referenceId = referenceId,
-                isFavourited = isFavourited
-            )
-        }
+        onNavigate = homeHuntState::navigate,
+        onToggleFavourite = viewModel::toggleFavourite
     )
 
     HomeContent(
@@ -67,23 +63,28 @@ private fun HomeContent(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomEnd
     ) {
-        when (state) {
-            is HomeState.Loaded -> PropertyList(
-                scrollState = scrollState,
-                properties = state.properties,
-                headerPrefixRes = R.string.results,
-                onNavigate = actions.onNavigate,
-                onToggleFavourite = actions.onToggleFavourite
-            )
-            HomeState.EmptyResults -> EmptyContent(true)
-            HomeState.Loading -> CircularIndeterminateProgressBar()
-            HomeState.Idle -> Unit
-        }
+        state.properties.takeIf { it.isNotEmpty() }
+            ?.let {
+                PropertyList(
+                    scrollState = scrollState,
+                    properties = it,
+                    headerPrefixRes = R.string.results,
+                    onNavigate = actions.onNavigate,
+                    onToggleFavourite = actions.onToggleFavourite
+                )
+            } ?: EmptyState(state)
 
         FilterFab(isScrollInProgress = scrollState.isScrollInProgress) {
             actions.onNavigate(Screen.Filter.route)
         }
+
+        CircularIndeterminateProgressBar(state.progressBarState)
     }
+}
+
+@Composable
+private fun EmptyState(state: HomeState) {
+    EmptyContent(emptyResults = state.emptyResults)
 }
 
 @Composable
@@ -92,7 +93,7 @@ private fun HomeScreenPreview() {
     HomeHuntTheme(isPreview = true) {
         HomeContent(
             actions = HomeActions({ _, _ -> }, { }),
-            state = HomeState.Loaded(properties = Fixtures.aListOfProperty),
+            state = HomeState(properties = Fixtures.aListOfProperty),
         )
     }
 }
