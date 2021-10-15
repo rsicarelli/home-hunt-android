@@ -42,7 +42,8 @@ fun HomeScreen(
 
     val actions = HomeActions(
         onNavigate = homeHuntState::navigate,
-        onToggleFavourite = viewModel::toggleFavourite
+        onToggleFavourite = viewModel::toggleFavourite,
+        onPropertyViewed = viewModel::onPropertyViewed
     )
 
     HomeContent(
@@ -68,7 +69,8 @@ private fun HomeContent(
                 properties = state.properties,
                 headerPrefixRes = R.string.results,
                 onNavigate = actions.onNavigate,
-                onToggleFavourite = actions.onToggleFavourite
+                onToggleFavourite = actions.onToggleFavourite,
+                onPropertyViewed = actions.onPropertyViewed
             )
         } else if (state.isEmpty) {
             EmptyContent()
@@ -87,7 +89,7 @@ private fun HomeContent(
 private fun HomeScreenPreview() {
     HomeHuntTheme(isPreview = true) {
         HomeContent(
-            actions = HomeActions({ _, _ -> }, { }),
+            actions = HomeActions({ _, _ -> }, { }, { }),
             state = HomeState(properties = Fixtures.aListOfProperty),
         )
     }

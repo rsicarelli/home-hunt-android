@@ -51,7 +51,7 @@ private fun FavouritesContent(
             properties = state.properties,
             headerPrefixRes = R.string.favourites,
             onNavigate = actions.onNavigate,
-            onToggleFavourite = actions.onToggleFavourite
+            onToggleFavourite = actions.onToggleFavourite,
         )
     } else if (state.isEmpty) {
         EmptyContent()

@@ -3,7 +3,7 @@ package com.rsicarelli.homehunt.presentation.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -27,10 +27,18 @@ fun GalleryCarousel(
     photoGallery: List<String>,
     onOpenGallery: () -> Unit,
     imageSize: Dp = GalleryItemSize,
+    onSecondPage: () -> Unit = { },
     footer: @Composable BoxScope.(Int) -> Unit = {}
 ) {
+    var nextPageNotified by remember { mutableStateOf(false) }
+
     Box(contentAlignment = Alignment.BottomEnd) {
         HorizontalPager(count = photoGallery.size, state = state) { page ->
+            if (page == 2 && !nextPageNotified) {
+                onSecondPage()
+                nextPageNotified = true
+            }
+
             Box(
                 modifier = Modifier.clickable { onOpenGallery() }
             ) {
@@ -69,6 +77,7 @@ private fun GalleryCarouselPreview() {
                 state = pagerState,
                 photoGallery = listOf("a", "b", "d"),
                 onOpenGallery = { },
+                onSecondPage = {}
             ) {
                 Tag(text = "A footer", modifier = Modifier.padding(Size_Medium))
             }
