@@ -14,24 +14,28 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.firebase.auth.AuthCredential
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.util.extractAuthCredentials
 import com.rsicarelli.homehunt.core.util.getGoogleSignInOptions
-import com.rsicarelli.homehunt.presentation.login.LoginEvents
 import com.rsicarelli.homehunt.ui.theme.BorderSizeSmallest
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_2X_Large
 import com.rsicarelli.homehunt.ui.theme.Size_Large
 
 @Composable
-fun GoogleSignInOption(events: (LoginEvents) -> Unit) {
+fun GoogleSignInOption(
+    onDoLogin: (AuthCredential) -> Unit,
+    onError: (Exception) -> Unit,
+) {
     val context = LocalContext.current
 
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
             activityResult.extractAuthCredentials(
-                onSuccess = { authCredential -> events(LoginEvents.Login(authCredential)) },
-                onError = { exception -> events(LoginEvents.Error(exception)) })
+                onSuccess = onDoLogin,
+                onError = onError
+            )
         }
 
     Box(
@@ -78,6 +82,6 @@ fun GoogleSignInOption(events: (LoginEvents) -> Unit) {
 @Preview
 private fun GoogleSignInOptionPreview() {
     HomeHuntTheme(isPreview = true) {
-        GoogleSignInOption(events = {})
+        GoogleSignInOption({ }, {})
     }
 }

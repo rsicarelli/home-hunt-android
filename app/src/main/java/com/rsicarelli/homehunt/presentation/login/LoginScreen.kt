@@ -13,10 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rsicarelli.homehunt.core.model.HomeHuntState
 import com.rsicarelli.homehunt.core.model.UiEvent
-import com.rsicarelli.homehunt.core.model.UiText
 import com.rsicarelli.homehunt.core.model.isLoading
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
-import com.rsicarelli.homehunt.presentation.filter.FilterState
 import com.rsicarelli.homehunt.presentation.login.components.GoogleSignInOption
 import com.rsicarelli.homehunt.presentation.login.components.Welcome
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
@@ -30,28 +28,27 @@ fun LoginScreen(
 
     val state by viewModel.state.collectAsState(LoginState())
 
+    val loginActions = LoginActions(
+        onDoLogin = viewModel::onDoLogin,
+        onError = viewModel::onError,
+        onShowMessageToUser = homeHuntState::showMessageToUser,
+        onNavigateSingleTop = homeHuntState::navigateSingleTop
+
+    )
     LoginContent(
         state = state,
-        events = viewModel::onEvent,
-        onShowMessageToUser = {
-            homeHuntState.showMessageToUser(it)
-        },
-        onNavigateSingleTop = {
-            homeHuntState.navigateSingleTop(it)
-        }
+        actions = loginActions
     )
 }
 
 @Composable
 private fun LoginContent(
     state: LoginState,
-    events: (LoginEvents) -> Unit,
-    onShowMessageToUser: (UiText) -> Unit,
-    onNavigateSingleTop: (String) -> Unit,
+    actions: LoginActions,
 ) {
     when (state.uiEvent) {
-        is UiEvent.MessageToUser -> onShowMessageToUser(state.uiEvent.uiText)
-        is UiEvent.Navigate -> onNavigateSingleTop(state.uiEvent.route)
+        is UiEvent.MessageToUser -> actions.onShowMessageToUser(state.uiEvent.uiText)
+        is UiEvent.Navigate -> actions.onNavigateSingleTop(state.uiEvent.route)
     }
 
     Column(
@@ -63,7 +60,10 @@ private fun LoginContent(
         Spacer(modifier = Modifier.height(Size_2X_Large))
 
         if (!state.progressBarState.isLoading()) {
-            GoogleSignInOption(events)
+            GoogleSignInOption(
+                onDoLogin = actions.onDoLogin,
+                onError = actions.onError
+            )
         } else {
             CircularIndeterminateProgressBar(state.progressBarState)
         }
@@ -76,9 +76,12 @@ private fun LoginScreenPreview() {
     HomeHuntTheme(isPreview = true) {
         LoginContent(
             state = LoginState(),
-            events = {},
-            onShowMessageToUser = {},
-            onNavigateSingleTop = {}
+            actions = LoginActions(
+                onDoLogin = {},
+                onError = {},
+                onShowMessageToUser = {},
+                onNavigateSingleTop = {}
+            )
         )
     }
 }

@@ -2,18 +2,19 @@ package com.rsicarelli.homehunt.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.AuthCredential
 import com.rsicarelli.homehunt.core.model.ProgressBarState
 import com.rsicarelli.homehunt.core.model.UiEvent.MessageToUser
 import com.rsicarelli.homehunt.core.model.UiEvent.Navigate
 import com.rsicarelli.homehunt.core.model.UiText
 import com.rsicarelli.homehunt.domain.usecase.SignInUseCase
-import com.rsicarelli.homehunt.domain.usecase.SignInUseCase.Request
-import com.rsicarelli.homehunt.presentation.login.LoginEvents.Login
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
+import com.rsicarelli.homehunt.domain.usecase.SignInUseCase.Request as SignInRequest
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -23,22 +24,15 @@ class LoginViewModel @Inject constructor(
     private val _state: MutableStateFlow<LoginState> = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state
 
-    fun onEvent(events: LoginEvents) {
-        when (events) {
-            is Login -> doLogin(events)
-            is LoginEvents.Error -> showError()
-        }
-    }
-
-    private fun doLogin(events: Login) {
+    fun onDoLogin(authCredential: AuthCredential) {
         viewModelScope.launch {
-            signIn(Request(events.credential))
+            signIn(SignInRequest(authCredential))
                 .onStart { toggleLoading(ProgressBarState.Loading) }
                 .onCompletion { toggleLoading(ProgressBarState.Idle) }
-                .catch { showError() }
+                .catch { onError(it) }
                 .collectLatest { outcome ->
                     when (outcome) {
-                        SignInUseCase.Outcome.Error -> showError()
+                        SignInUseCase.Outcome.Error -> onError()
                         SignInUseCase.Outcome.Success -> navigate(Navigate(Screen.Home.route))
                     }
                 }
@@ -53,7 +47,8 @@ class LoginViewModel @Inject constructor(
         _state.value = state.value.copy(uiEvent = Navigate(navigate.route))
     }
 
-    private fun showError(messageToUiEvent: MessageToUser = MessageToUser(UiText.unknownError())) {
-        _state.value = state.value.copy(uiEvent = messageToUiEvent)
+    fun onError(exception: Throwable? = null) {
+        Timber.e(exception)
+        _state.value = state.value.copy(uiEvent = MessageToUser(UiText.unknownError()))
     }
 }
