@@ -19,10 +19,7 @@ class FavouritesViewModel @Inject constructor(
 
     private val state: MutableStateFlow<FavouritesState> = MutableStateFlow(FavouritesState())
 
-    fun init(): Flow<FavouritesState> {
-        loadFavourites()
-        return state
-    }
+    fun init() = state.also { loadFavourites() }
 
     fun onToggleFavourite(referenceId: String, isFavourited: Boolean) {
         viewModelScope.launch {

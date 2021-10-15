@@ -18,9 +18,16 @@ class HomeViewModel @Inject constructor(
 
     private val state: MutableStateFlow<HomeState> = MutableStateFlow(HomeState())
 
-    fun init(): Flow<HomeState> {
-        loadProperties()
-        return state
+    fun init() = state.also { loadProperties() }
+
+    private fun loadProperties() {
+        getFilteredPropertiesUseCase.invoke(Unit)
+            .onEach {
+                state.value = state.value.copy(
+                    properties = it.properties,
+                    progressBarState = ProgressBarState.Idle
+                )
+            }.launchIn(viewModelScope)
     }
 
     fun toggleFavourite(referenceId: String, isFavourited: Boolean) {
@@ -32,16 +39,6 @@ class HomeViewModel @Inject constructor(
                 )
             ).single()
         }
-    }
-
-    private fun loadProperties() {
-        getFilteredPropertiesUseCase.invoke(Unit)
-            .onEach {
-                state.value = state.value.copy(
-                    properties = it.properties,
-                    progressBarState = ProgressBarState.Idle
-                )
-            }.launchIn(viewModelScope)
     }
 
 }
