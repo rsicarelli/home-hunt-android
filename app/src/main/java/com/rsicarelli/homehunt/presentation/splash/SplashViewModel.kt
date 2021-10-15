@@ -22,15 +22,7 @@ class SplashViewModel @Inject constructor(
     private val _state: MutableStateFlow<SplashState> = MutableStateFlow(SplashState())
     val state: StateFlow<SplashState> = _state
 
-    fun onEvent(events: SplashEvents) {
-        when (events) {
-            SplashEvents.AnimationEnded -> {
-                routeUser()
-            }
-        }
-    }
-
-    private fun routeUser() {
+    fun onAnimationEnded() {
         viewModelScope.launch {
             isLoggedIn(Unit).collect { outcome ->
                 when (outcome) {

@@ -20,47 +20,40 @@ import com.rsicarelli.homehunt.core.model.UiEvent
 @Composable
 fun SplashScreen(
     homeHuntState: HomeHuntState,
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
-    val viewModel: SplashViewModel = hiltViewModel()
-
     val state by viewModel.state.collectAsState(SplashState())
+
+    val splashActions = SplashActions(
+        onAnimationEnded = viewModel::onAnimationEnded,
+        onNavigateSingleTop = homeHuntState::navigateSingleTop
+    )
 
     SplashContent(
         state = state,
-        homeHuntState = homeHuntState,
-        events = viewModel::onEvent
+        actions = splashActions
     )
 }
 
 @Composable
 private fun SplashContent(
     state: SplashState,
-    homeHuntState: HomeHuntState,
-    events: (SplashEvents) -> Unit
+    actions: SplashActions
 ) {
-    when (state.uiEvent) {
-        is UiEvent.MessageToUser -> homeHuntState.showMessageToUser(state.uiEvent.uiText)
-        is UiEvent.Navigate -> homeHuntState.navigateSingleTop(state.uiEvent.route)
-        UiEvent.NavigateUp -> homeHuntState.navigateUp()
-    }
+    if (state.uiEvent is UiEvent.Navigate) actions.onNavigateSingleTop(state.uiEvent.route)
 
-    val scale = remember {
-        Animatable(0f)
-    }
-    val overshootInterpolator = remember {
-        OvershootInterpolator(2f)
-    }
+    val scale = remember { Animatable(0f) }
+    val overshootInterpolator = remember { OvershootInterpolator(2f) }
+
     LaunchedEffect(key1 = true) {
         scale.animateTo(
             targetValue = 0.5f,
             animationSpec = tween(
                 durationMillis = 500,
-                easing = {
-                    overshootInterpolator.getInterpolation(it)
-                }
+                easing = { overshootInterpolator.getInterpolation(it) }
             )
         )
-        events(SplashEvents.AnimationEnded)
+        actions.onAnimationEnded()
     }
 
     Box(
