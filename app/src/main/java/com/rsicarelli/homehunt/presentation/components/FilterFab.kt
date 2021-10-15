@@ -27,8 +27,7 @@ fun FilterFab(isScrollInProgress: Boolean, onClick: () -> Unit) {
         exit = shrinkVertically(shrinkTowards = Alignment.Top)
     ) {
         Box(
-            modifier = Modifier
-                .padding(bottom = BottomBarSize, end = Size_Small)
+            modifier = Modifier.padding(end = Size_Small, bottom = Size_Small)
         ) {
             FloatingActionButton(
                 onClick = onClick,

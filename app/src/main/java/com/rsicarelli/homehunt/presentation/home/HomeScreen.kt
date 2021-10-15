@@ -2,6 +2,8 @@ package com.rsicarelli.homehunt.presentation.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
@@ -21,6 +23,7 @@ import com.rsicarelli.homehunt.presentation.components.FilterFab
 import com.rsicarelli.homehunt.presentation.components.rememberOnLifecycle
 import com.rsicarelli.homehunt.presentation.home.components.PropertyList
 import com.rsicarelli.homehunt.ui.navigation.Screen
+import com.rsicarelli.homehunt.ui.theme.BottomBarSize
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import utils.Fixtures
 
@@ -59,10 +62,7 @@ private fun HomeContent(
 ) {
     val scrollState = rememberLazyListState()
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd
-    ) {
+    Box(contentAlignment = Alignment.BottomEnd) {
         if (state.properties.isNotEmpty()) {
             PropertyList(
                 scrollState = scrollState,

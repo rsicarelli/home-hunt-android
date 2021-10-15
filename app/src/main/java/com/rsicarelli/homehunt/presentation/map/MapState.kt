@@ -7,5 +7,6 @@ import com.rsicarelli.homehunt.domain.model.Property
 data class MapState(
     val properties: List<Property> = emptyList(),
     val progressBarState: ProgressBarState = ProgressBarState.Idle,
-    val uiEvent: UiEvent = UiEvent.Idle
+    val uiEvent: UiEvent = UiEvent.Idle,
+    val propertySnippet: Property? = null
 )

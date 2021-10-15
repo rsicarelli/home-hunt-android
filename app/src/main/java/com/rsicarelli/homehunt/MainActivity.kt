@@ -45,9 +45,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun MainContent() {
     Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding(top = false)
+        modifier = Modifier.systemBarsPadding(top = false)
     ) {
         AppScaffold { scaffoldDelegate ->
             NavHost(

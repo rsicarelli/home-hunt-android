@@ -30,40 +30,30 @@ fun PropertyList(
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
             .statusBarsPadding()
             .padding(
                 start = Size_Regular,
-                end = Size_Regular,
-                bottom = Size_Regular
+                end = Size_Regular
             )
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = Size_Large),
-            contentAlignment = Alignment.BottomEnd
+        LazyColumn(
+            state = scrollState
         ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                state = scrollState
-            ) {
-                item { Spacer(modifier = Modifier.height(Size_3X_Large)) }
-                items(properties) { property ->
-                    PropertyListItem(
-                        property = property,
-                        onSelectProperty = { onNavigate("${Screen.PropertyDetail.route}/${property.reference}") },
-                        onFavouriteClick = {
-                            onToggleFavourite(
-                                property.reference,
-                                !property.isFavourited
-                            )
-                        },
-                        onViewedGallery = { onPropertyViewed(property) }
-                    )
-                }
-                item { Spacer(modifier = Modifier.height(Size_Large)) }
+            item { Spacer(modifier = Modifier.height(Size_3X_Large)) }
+            items(properties) { property ->
+                PropertyListItem(
+                    property = property,
+                    onSelectProperty = { onNavigate("${Screen.PropertyDetail.route}/${property.reference}") },
+                    onFavouriteClick = {
+                        onToggleFavourite(
+                            property.reference,
+                            !property.isFavourited
+                        )
+                    },
+                    onViewedGallery = { onPropertyViewed(property) }
+                )
             }
+            item { Spacer(modifier = Modifier.height(Size_Small)) }
         }
 
         ResultsHeader(scrollState.isScrollInProgress, properties.size, headerPrefixRes)

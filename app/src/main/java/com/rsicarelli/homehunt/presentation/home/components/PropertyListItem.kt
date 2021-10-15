@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
@@ -41,7 +42,8 @@ fun PropertyListItem(
     property: Property,
     onSelectProperty: (Property) -> Unit,
     onFavouriteClick: () -> Unit,
-    onViewedGallery: () -> Unit
+    onViewedGallery: () -> Unit,
+    gallerySize: Dp = GalleryItemSize
 ) {
     Surface(
         modifier = Modifier
@@ -68,7 +70,8 @@ fun PropertyListItem(
                     state = pagerState,
                     photoGallery = property.photoGalleryUrls,
                     onOpenGallery = { onSelectProperty(property) },
-                    onSecondPage = onViewedGallery
+                    onSecondPage = onViewedGallery,
+                    imageSize = gallerySize
                 )
                 Row(
                     modifier = Modifier.padding(top = Size_Small, end = Size_Small),

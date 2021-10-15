@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.HomeHuntState
@@ -43,9 +44,10 @@ fun AppScaffold(
             }
         },
         scaffoldState = homeHuntState.scaffoldState,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        content(homeHuntState)
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            content(homeHuntState)
+        }
     }
 }
 
