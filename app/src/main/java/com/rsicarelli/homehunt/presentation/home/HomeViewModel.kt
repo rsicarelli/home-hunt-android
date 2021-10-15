@@ -15,7 +15,7 @@ class HomeViewModel @Inject constructor(
     private val toggleFavourite: ToggleFavouriteUseCase,
 ) : ViewModel() {
 
-    fun getProperties() = flow {
+    fun loadProperties() = flow {
         getFilteredPropertiesUseCase(Unit)
             .onStart { emit(HomeState.Loading) }
             .collect { outcome ->
