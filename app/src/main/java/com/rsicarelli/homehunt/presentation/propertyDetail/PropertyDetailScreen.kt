@@ -4,9 +4,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import com.rsicarelli.homehunt.core.model.HomeHuntState
+import com.rsicarelli.homehunt.presentation.components.rememberOnLifecycle
 import com.rsicarelli.homehunt.presentation.propertyDetail.components.GalleryBottomSheet
 import com.rsicarelli.homehunt.presentation.propertyDetail.components.PropertyDetail
 import com.rsicarelli.homehunt.presentation.propertyDetail.components.PropertyTopBar
@@ -17,59 +21,61 @@ fun PropertyDetailScreen(
     homeHuntState: HomeHuntState
 ) {
     val viewModel: PropertyDetailViewModel = hiltViewModel()
-    val state = viewModel.state.collectAsState()
+    val stateFlowLifecycleAware = viewModel.rememberOnLifecycle {
+        viewModel.init().flowWithLifecycle(
+            lifecycle = it.lifecycle,
+            minActiveState = Lifecycle.State.STARTED
+        )
+    }
+
+    val state by stateFlowLifecycleAware.collectAsState(PropertyDetailState())
+
+    val actions = PropertyDetailActions(
+        onOpenVideoPreview = viewModel::onOpenVideoPreview,
+        onCloseVideoPreview = viewModel::onCloseVideoPreview,
+        onOpenGallery = viewModel::onOpenGallery,
+        onCloseGallery = viewModel::onCloseGallery,
+        onToggleFavourite = viewModel::onToggleFavourite,
+        onNavigateUp = homeHuntState::navigateUp
+    )
 
     PropertyDetailContent(
-        state = state.value,
-        events = viewModel::onEvent,
-        homeHuntState = homeHuntState
+        state = state,
+        actions = actions,
     )
 }
 
 @Composable
 private fun PropertyDetailContent(
     state: PropertyDetailState,
-    events: (PropertyDetailEvents) -> Unit,
-    homeHuntState: HomeHuntState
+    actions: PropertyDetailActions,
 ) {
     state.property?.let { property ->
         Box(modifier = Modifier.fillMaxSize()) {
             PropertyDetail(
                 property = property,
-                onOpenGallery = {
-                    events(PropertyDetailEvents.OpenGallery)
-                },
-                onPlayVideo = {
-                    events(PropertyDetailEvents.OpenVideoPreview)
-                }
+                onOpenGallery = actions.onOpenGallery,
+                onPlayVideo = actions.onOpenVideoPreview
             )
             PropertyTopBar(
                 isFavourited = property.isFavourited,
+                onBackClicked = actions.onNavigateUp,
                 onFavouriteClick = {
-                    events(
-                        PropertyDetailEvents.ToggleFavourite(
-                            referenceId = property.reference,
-                            isFavourited = !property.isFavourited
-                        )
+                    actions.onToggleFavourite(
+                        property.reference,
+                        !property.isFavourited
                     )
-                },
-                onBackClicked = {
-                    homeHuntState.navigateUp()
                 }
             )
             GalleryBottomSheet(
                 photosGalleryUrls = property.photoGalleryUrls,
                 isEnabled = state.openGallery,
-                onCollapsed = {
-                    events(PropertyDetailEvents.CloseGallery)
-                }
+                onCollapsed = actions.onCloseGallery
             )
             PropertyVideoBottomSheet(
                 videoUrl = property.videoUrl,
                 isEnabled = state.openVideoPreview,
-                onCollapsed = {
-                    events(PropertyDetailEvents.CloseVideoPreview)
-                }
+                onCollapsed = actions.onCloseVideoPreview
             )
         }
     }
