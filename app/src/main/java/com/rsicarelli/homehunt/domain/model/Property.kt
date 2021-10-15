@@ -1,5 +1,8 @@
 package com.rsicarelli.homehunt.domain.model
 
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+
 data class Property(
     val reference: String,
     val price: Double,
@@ -23,6 +26,11 @@ data class Property(
     val isFavourited: Boolean,
     val isActive: Boolean
 ) {
+
+    //TODO Refactor, should not be here
+    fun viewedByMe(): Boolean {
+        return Firebase.auth.currentUser?.uid in viewedBy
+    }
 
     sealed class Tag(val identifier: String) {
         object EMPTY : Tag("")
