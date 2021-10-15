@@ -15,7 +15,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.core.model.HomeHuntState
-import com.rsicarelli.homehunt.core.model.ProgressBarState
 import com.rsicarelli.homehunt.presentation.components.CircularIndeterminateProgressBar
 import com.rsicarelli.homehunt.presentation.components.EmptyContent
 import com.rsicarelli.homehunt.presentation.components.FilterFab
@@ -72,7 +71,7 @@ private fun HomeContent(
                     onNavigate = actions.onNavigate,
                     onToggleFavourite = actions.onToggleFavourite
                 )
-            } ?: EmptyState(state)
+            } ?: EmptyContent()
 
         FilterFab(isScrollInProgress = scrollState.isScrollInProgress) {
             actions.onNavigate(Screen.Filter.route)
@@ -80,11 +79,6 @@ private fun HomeContent(
 
         CircularIndeterminateProgressBar(state.progressBarState)
     }
-}
-
-@Composable
-private fun EmptyState(state: HomeState) {
-    EmptyContent(emptyResults = state.emptyResults)
 }
 
 @Composable

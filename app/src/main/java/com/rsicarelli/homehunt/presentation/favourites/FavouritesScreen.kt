@@ -45,20 +45,21 @@ private fun FavouritesContent(
     state: FavouritesState,
     onNavigate: (String) -> Unit,
 ) {
-    EmptyContent(state.emptyResults)
-
-    PropertyList(
-        properties = state.properties,
-        headerPrefixRes = R.string.favourites,
-        onNavigate = onNavigate,
-        onToggleFavourite = { referenceId, isFavourited ->
-            events(
-                FavouritesEvents.ToggleFavourite(
-                    referenceId, isFavourited
-                )
+    state.properties.takeIf { it.isEmpty() }
+        ?.let {
+            PropertyList(
+                properties = state.properties,
+                headerPrefixRes = R.string.favourites,
+                onNavigate = onNavigate,
+                onToggleFavourite = { referenceId, isFavourited ->
+                    events(
+                        FavouritesEvents.ToggleFavourite(
+                            referenceId, isFavourited
+                        )
+                    )
+                }
             )
-        }
-    )
+        } ?: EmptyContent()
 }
 
 @Composable

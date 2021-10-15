@@ -14,9 +14,7 @@ import com.rsicarelli.homehunt.R
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 
 @Composable
-fun EmptyContent(emptyResults: Boolean) {
-    if (!emptyResults) return
-
+fun EmptyContent() {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -36,6 +34,6 @@ fun EmptyContent(emptyResults: Boolean) {
 @Preview
 private fun EmptyContentPreview() {
     HomeHuntTheme(isPreview = true) {
-        EmptyContent(emptyResults = true)
+        EmptyContent()
     }
 }

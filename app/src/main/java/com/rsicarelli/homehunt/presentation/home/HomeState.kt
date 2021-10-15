@@ -7,5 +7,4 @@ import com.rsicarelli.homehunt.domain.model.Property
 data class HomeState(
     val properties: List<Property> = emptyList(),
     val progressBarState: ProgressBarState = ProgressBarState.Loading,
-    val emptyResults: Boolean = false
 )
