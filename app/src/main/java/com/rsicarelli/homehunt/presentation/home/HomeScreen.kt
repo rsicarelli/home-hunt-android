@@ -34,7 +34,7 @@ fun HomeScreen(
     val stateFlowLifecycleAware = viewModel.rememberOnLifecycle {
         viewModel.init().flowWithLifecycle(
             lifecycle = it.lifecycle,
-            minActiveState = Lifecycle.State.RESUMED
+            minActiveState = Lifecycle.State.STARTED
         )
     }
 
