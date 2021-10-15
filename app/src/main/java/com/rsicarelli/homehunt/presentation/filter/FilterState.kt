@@ -15,7 +15,7 @@ data class FilterState(
     val previewResultCount: Int? = null,
 ) {
 
-    fun toFilter() = SearchOption(
+    fun toSearchOption() = SearchOption(
         priceRange = Pair(priceRange.start.toDouble(), priceRange.endInclusive.toDouble()),
         surfaceRange = Pair(surfaceRange.start.toInt(), surfaceRange.endInclusive.toInt()),
         dormCount = dormCount,
@@ -24,16 +24,14 @@ data class FilterState(
         longTermOnly = longTermOnly,
         availableOnly = availableOnly,
     )
-
-    fun fromFilter(searchOption: SearchOption): FilterState = with(searchOption) {
-        return FilterState(
-            priceRange = priceRange.first.toFloat()..priceRange.second.toFloat(),
-            surfaceRange = surfaceRange.first.toFloat()..surfaceRange.second.toFloat(),
-            bathCount = bathCount,
-            dormCount = dormCount,
-            showSeen = showSeen,
-            longTermOnly = longTermOnly,
-            availableOnly = availableOnly
-        )
-    }
 }
+
+internal fun SearchOption.toState(): FilterState = FilterState(
+    priceRange = priceRange.first.toFloat()..priceRange.second.toFloat(),
+    surfaceRange = surfaceRange.first.toFloat()..surfaceRange.second.toFloat(),
+    bathCount = bathCount,
+    dormCount = dormCount,
+    showSeen = showSeen,
+    longTermOnly = longTermOnly,
+    availableOnly = availableOnly
+)

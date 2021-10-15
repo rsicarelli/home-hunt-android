@@ -8,11 +8,9 @@ import com.rsicarelli.homehunt.domain.usecase.PreviewFilterResultUseCase
 import com.rsicarelli.homehunt.domain.usecase.SaveFilterPreferencesUseCase
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,79 +21,60 @@ class FilterViewModel @Inject constructor(
     private val saveFilter: SaveFilterPreferencesUseCase
 ) : ViewModel() {
 
-    private val _state: MutableStateFlow<FilterState> = MutableStateFlow(FilterState())
-    val state: StateFlow<FilterState> = _state
+    private val state: MutableStateFlow<FilterState> = MutableStateFlow(FilterState())
 
-    fun onEvent(events: FilterEvents) {
-        when (events) {
-            is FilterEvents.GetFilter -> getFilter()
-            FilterEvents.ClearFilter -> TODO()
-            FilterEvents.SaveFilter -> onSaveFilter()
-            is FilterEvents.PriceRangeChanged -> priceRangeChanged(events)
-            is FilterEvents.DormsSelectionChanged -> dormsSelectionChanged(events)
-            is FilterEvents.SurfaceRangeChanged -> surfaceRangeChanged(events)
-            is FilterEvents.BathSelectionChanged -> bathSelectionChanged(events)
-            is FilterEvents.VisibilitySelectionChanged -> handleVisibilityChanged(events.newValue)
-            is FilterEvents.LongerTermRentalSelectionChanged -> handleLongTermChanged(events.newValue)
-            is FilterEvents.AvailabilitySelectionChanged -> handleAvailabilityChanged(events.newValue)
-        }
-        previewResults()
+    @OptIn(FlowPreview::class)
+    fun init(): Flow<FilterState> = getFilter.invoke(Unit)
+        .onEach { state.value = it.searchOption.toState() }
+        .flatMapConcat { state }
+        .onEach { previewResults() }
+
+    fun onAvailabilitySelectionChanged(newValue: Boolean) {
+        state.value = state.value.copy(availableOnly = newValue)
     }
 
-    private fun getFilter() {
-        viewModelScope.launch {
-            val result = getFilter(Unit).first()
-            _state.value = state.value.fromFilter(result.searchOption)
-        }
+    fun onLongTermRentalSelectionChanged(newValue: Boolean) {
+        state.value = state.value.copy(longTermOnly = newValue)
     }
 
-    private fun handleAvailabilityChanged(newValue: Boolean) {
-        _state.value = state.value.copy(availableOnly = newValue)
+    fun onVisibilitySelectionChanged(newValue: Boolean) {
+        state.value = state.value.copy(showSeen = newValue)
     }
 
-    private fun handleLongTermChanged(newValue: Boolean) {
-        _state.value = state.value.copy(longTermOnly = newValue)
+    fun onBathSelectionChanged(newValue: Int) {
+        state.value = state.value.copy(bathCount = newValue)
     }
 
-    private fun handleVisibilityChanged(newValue: Boolean) {
-        _state.value = state.value.copy(showSeen = newValue)
+    fun onSurfaceRangeChanged(newRange: ClosedFloatingPointRange<Float>) {
+        state.value = state.value.copy(surfaceRange = newRange)
     }
 
-    private fun onSaveFilter() {
-        viewModelScope.launch {
-            saveFilter(SaveFilterPreferencesUseCase.Request(state.value.toFilter())).collect {
-                _state.value = state.value.copy(uiEvent = UiEvent.Navigate(Screen.Home.route))
-            }
-        }
+    fun onDormsSelectionChanged(newValue: Int) {
+        state.value = state.value.copy(dormCount = newValue)
     }
 
-    private fun bathSelectionChanged(events: FilterEvents.BathSelectionChanged) {
-        _state.value = state.value.copy(bathCount = events.newValue)
-    }
-
-    private fun surfaceRangeChanged(events: FilterEvents.SurfaceRangeChanged) {
-        _state.value = state.value.copy(surfaceRange = events.range)
-    }
-
-    private fun dormsSelectionChanged(events: FilterEvents.DormsSelectionChanged) {
-        _state.value = state.value.copy(dormCount = events.newValue)
-    }
-
-    private fun priceRangeChanged(events: FilterEvents.PriceRangeChanged) {
-        _state.value = state.value.copy(priceRange = events.range)
+    fun onPriceRangeChanged(newRange: ClosedFloatingPointRange<Float>) {
+        state.value = state.value.copy(priceRange = newRange)
     }
 
     private fun previewResults() {
         viewModelScope.launch {
             delay(1000)
-            val single = previewFilterResult(
-                PreviewFilterResultUseCase.Request(
-                    state.value.toFilter()
-                )
-            ).first()
-
-            _state.value =
-                state.value.copy(previewResultCount = (single.properties.size))
+            previewFilterResult(
+                request = PreviewFilterResultUseCase.Request(state.value.toSearchOption())
+            ).first().run {
+                state.value = state.value.copy(previewResultCount = properties.size)
+            }
         }
     }
+
+    fun onSaveFilter() {
+        viewModelScope.launch {
+            saveFilter(request = SaveFilterPreferencesUseCase.Request(state.value.toSearchOption()))
+                .collect {
+                    state.value = state.value.copy(uiEvent = UiEvent.Navigate(Screen.Home.route))
+                }
+        }
+    }
+
 }

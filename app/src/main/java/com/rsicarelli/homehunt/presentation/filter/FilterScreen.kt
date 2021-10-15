@@ -9,9 +9,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -20,6 +18,7 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.rsicarelli.homehunt.core.model.HomeHuntState
 import com.rsicarelli.homehunt.core.model.UiEvent
 import com.rsicarelli.homehunt.presentation.components.BackButton
+import com.rsicarelli.homehunt.presentation.components.rememberOnLifecycle
 import com.rsicarelli.homehunt.presentation.filter.components.*
 import com.rsicarelli.homehunt.ui.theme.HomeHuntTheme
 import com.rsicarelli.homehunt.ui.theme.Size_Large
@@ -30,31 +29,39 @@ fun FilterScreen(
     homeHuntState: HomeHuntState,
 ) {
     val viewModel: FilterViewModel = hiltViewModel()
-    val lifecycleOwner = LocalLifecycleOwner.current
 
-    val stateFlowLifecycleAware = remember(viewModel, lifecycleOwner) {
-        viewModel.onEvent(FilterEvents.GetFilter)
-        viewModel.state.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    val stateFlowLifecycleAware = viewModel.rememberOnLifecycle {
+        viewModel.init().flowWithLifecycle(it.lifecycle, Lifecycle.State.STARTED)
     }
 
     val state by stateFlowLifecycleAware.collectAsState(FilterState())
 
+    val filterActions = FilterActions(
+        onPriceRangeChanged = viewModel::onPriceRangeChanged,
+        onSurfaceRangeChanged = viewModel::onSurfaceRangeChanged,
+        onDormsSelectionChanged = viewModel::onDormsSelectionChanged,
+        onBathSelectionChanged = viewModel::onBathSelectionChanged,
+        onVisibilitySelectionChanged = viewModel::onVisibilitySelectionChanged,
+        onLongTermRentalSelectionChanged = viewModel::onLongTermRentalSelectionChanged,
+        onAvailabilitySelectionChanged = viewModel::onAvailabilitySelectionChanged,
+        onSaveFilter = viewModel::onSaveFilter,
+        onNavigateUp = homeHuntState::navigateUp,
+        onNavigateSingleTop = homeHuntState::navigateSingleTop
+    )
+
     FilterContent(
         state = state,
-        events = viewModel::onEvent,
-        onNavigateSingleTop = { homeHuntState.navigateSingleTop(it) },
-        onNavigateUp = { homeHuntState.navigateUp() })
+        actions = filterActions
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FilterContent(
     state: FilterState,
-    events: (FilterEvents) -> Unit,
-    onNavigateUp: () -> Unit,
-    onNavigateSingleTop: (String) -> Unit
+    actions: FilterActions,
 ) {
-    if (state.uiEvent is UiEvent.Navigate) onNavigateSingleTop(state.uiEvent.route)
+    if (state.uiEvent is UiEvent.Navigate) actions.onNavigateSingleTop(state.uiEvent.route)
 
     Column(
         modifier = Modifier
@@ -63,7 +70,7 @@ private fun FilterContent(
     ) {
         BackButton(
             modifier = Modifier,
-            onBackClick = onNavigateUp
+            onBackClick = actions.onNavigateUp
         )
 
         LazyColumn(
@@ -75,66 +82,50 @@ private fun FilterContent(
             item {
                 PriceRange(
                     range = state.priceRange,
-                    onValueChange = {
-                        events(FilterEvents.PriceRangeChanged(it))
-                    }
+                    onValueChange = actions.onPriceRangeChanged
                 )
             }
             item {
                 SurfaceRange(
                     range = state.surfaceRange,
-                    onValueChange = {
-                        events(FilterEvents.SurfaceRangeChanged(it))
-                    }
+                    onValueChange = actions.onSurfaceRangeChanged
                 )
             }
             item {
                 DormSelector(
                     dormCount = state.dormCount,
-                    onValueChanged = { newValue ->
-                        events(FilterEvents.DormsSelectionChanged(newValue))
-                    }
+                    onValueChanged = actions.onDormsSelectionChanged
                 )
             }
             item {
                 BathSelector(
                     bathCount = state.bathCount,
-                    onValueChanged = { newValue ->
-                        events(FilterEvents.BathSelectionChanged(newValue))
-                    }
+                    onValueChanged = actions.onBathSelectionChanged
                 )
             }
             item {
                 VisibilitySelector(
                     isChecked = state.showSeen,
-                    onChange = {
-                        events(FilterEvents.VisibilitySelectionChanged(it))
-                    }
+                    onChange = actions.onVisibilitySelectionChanged
                 )
             }
             item {
                 LongTermRentalSelector(
                     isChecked = state.longTermOnly,
-                    onChange = {
-                        events(FilterEvents.LongerTermRentalSelectionChanged(it))
-                    }
+                    onChange = actions.onLongTermRentalSelectionChanged
                 )
             }
             item {
                 AvailabilitySelector(
                     isChecked = state.availableOnly,
-                    onChange = {
-                        events(FilterEvents.AvailabilitySelectionChanged(it))
-                    }
+                    onChange = actions.onAvailabilitySelectionChanged
                 )
             }
         }
 
         SeeResultsButton(
             previewResultCount = state.previewResultCount,
-            onClick = {
-                events(FilterEvents.SaveFilter)
-            }
+            onClick = actions.onSaveFilter
         )
     }
 }
@@ -145,9 +136,18 @@ private fun FilterContentPreview() {
     HomeHuntTheme(isPreview = true) {
         FilterContent(
             state = FilterState(),
-            events = {},
-            onNavigateUp = {},
-            onNavigateSingleTop = {}
+            actions = FilterActions(
+                onPriceRangeChanged = {},
+                onSurfaceRangeChanged = {},
+                onDormsSelectionChanged = {},
+                onBathSelectionChanged = {},
+                onVisibilitySelectionChanged = {},
+                onLongTermRentalSelectionChanged = {},
+                onAvailabilitySelectionChanged = {},
+                onSaveFilter = {},
+                onNavigateUp = {},
+                onNavigateSingleTop = {}
+            )
         )
     }
 }

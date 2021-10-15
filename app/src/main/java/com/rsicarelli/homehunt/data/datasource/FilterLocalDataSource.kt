@@ -31,9 +31,9 @@ class FilterLocalDataSourceImpl(
     override fun get(): SearchOption {
         with(sharedPreferences) {
             val minPrice = getFloat(Mapper.minPrice, 0.0f).toDouble()
-            val maxPrice = getFloat(Mapper.maxPrice, 99999.0F).toDouble()
+            val maxPrice = getFloat(Mapper.maxPrice, 1600.0F).toDouble()
             val minSurface = getInt(Mapper.minSurface, 0)
-            val maxSurface = getInt(Mapper.maxSurface, 99999)
+            val maxSurface = getInt(Mapper.maxSurface, 300)
             val dormSelection = getInt(Mapper.dormCount, 0)
             val bathSelection = getInt(Mapper.bathCount, 0)
             val showNotSeen = getBoolean(Mapper.showSeen, false)
