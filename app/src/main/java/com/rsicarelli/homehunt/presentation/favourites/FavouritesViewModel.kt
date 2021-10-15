@@ -3,14 +3,11 @@ package com.rsicarelli.homehunt.presentation.favourites
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rsicarelli.homehunt.core.model.ProgressBarState
-import com.rsicarelli.homehunt.domain.model.Property
 import com.rsicarelli.homehunt.domain.usecase.GetFavouritedPropertiesUseCase
 import com.rsicarelli.homehunt.domain.usecase.ToggleFavouriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,35 +16,31 @@ class FavouritesViewModel @Inject constructor(
     private val getFavourites: GetFavouritedPropertiesUseCase,
     private val toggleFavourite: ToggleFavouriteUseCase,
 ) : ViewModel() {
-    private val _state: MutableStateFlow<FavouritesState> = MutableStateFlow(FavouritesState())
-    val state: StateFlow<FavouritesState> = _state
 
-    fun onEvent(event: FavouritesEvents) {
-        when (event) {
-            is FavouritesEvents.GetPropertiesFromCache -> getFavouritesFromCache()
-            is FavouritesEvents.ToggleFavourite -> toggleFavourite(
-                request = ToggleFavouriteUseCase.Request(
-                    event.referenceId,
-                    event.isFavourited
-                )
-            )
-        }
+    private val state: MutableStateFlow<FavouritesState> = MutableStateFlow(FavouritesState())
+
+    fun init(): Flow<FavouritesState> {
+        loadFavourites()
+        return state
     }
 
-    private fun getFavouritesFromCache() {
+    fun onToggleFavourite(referenceId: String, isFavourited: Boolean) {
         viewModelScope.launch {
-            getFavourites(Unit).onEach { outcome ->
-                updateProperty(outcome.properties)
-            }.launchIn(viewModelScope)
+            toggleFavourite(
+                ToggleFavouriteUseCase.Request(
+                    referenceId = referenceId,
+                    isFavourited = isFavourited
+                )
+            ).single()
         }
     }
 
-    private fun updateProperty(properties: List<Property>) {
-        _state.value = state.value.copy(
-            properties = properties,
-            progressBarState = ProgressBarState.Idle,
-            emptyResults = properties.isEmpty()
-        )
-    }
+    private fun loadFavourites() = getFavourites(Unit)
+        .onEach { outcome ->
+            state.value = state.value.copy(
+                properties = outcome.properties,
+                progressBarState = ProgressBarState.Idle,
+            )
+        }.launchIn(viewModelScope)
 
 }

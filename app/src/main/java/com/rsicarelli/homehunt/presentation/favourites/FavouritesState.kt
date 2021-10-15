@@ -6,5 +6,4 @@ import com.rsicarelli.homehunt.domain.model.Property
 data class FavouritesState(
     val properties: List<Property> = emptyList(),
     val progressBarState: ProgressBarState = ProgressBarState.Idle,
-    val emptyResults: Boolean = true
 )
