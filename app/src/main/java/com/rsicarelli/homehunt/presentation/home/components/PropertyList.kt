@@ -60,7 +60,7 @@ fun PropertyList(
                         }
                     )
                 }
-                item { Spacer(modifier = Modifier.height(Size_Small)) }
+                item { Spacer(modifier = Modifier.height(Size_Large)) }
             }
         }
 

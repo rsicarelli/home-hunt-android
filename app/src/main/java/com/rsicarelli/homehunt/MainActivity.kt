@@ -52,8 +52,7 @@ private fun MainContent() {
         AppScaffold { scaffoldDelegate ->
             NavHost(
                 navController = scaffoldDelegate.navController,
-                startDestination = Screen.Splash.route, //Test only
-                modifier = Modifier.fillMaxSize()
+                startDestination = Screen.Splash.route,
             ) {
                 composable(route = Screen.Splash.route) {
                     SplashScreen(scaffoldDelegate)
