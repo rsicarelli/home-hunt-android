@@ -39,7 +39,7 @@ fun PropertyList(
         LazyColumn(
             state = scrollState
         ) {
-            item { Spacer(modifier = Modifier.height(Size_3X_Large)) }
+            item { Spacer(modifier = Modifier.height(Size_4X_Large)) }
             items(properties) { property ->
                 PropertyListItem(
                     property = property,
@@ -53,7 +53,7 @@ fun PropertyList(
                     onViewedGallery = { onPropertyViewed(property) }
                 )
             }
-            item { Spacer(modifier = Modifier.height(Size_Small)) }
+            item { Spacer(modifier = Modifier.height(Size_Medium)) }
         }
 
         ResultsHeader(scrollState.isScrollInProgress, properties.size, headerPrefixRes)

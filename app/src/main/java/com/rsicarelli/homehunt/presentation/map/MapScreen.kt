@@ -19,6 +19,7 @@ import com.rsicarelli.homehunt.presentation.home.components.PropertyListItem
 import com.rsicarelli.homehunt.presentation.map.components.PropertiesMapView
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.BottomBarSize
+import com.rsicarelli.homehunt.ui.theme.Size_Large
 import com.rsicarelli.homehunt.ui.theme.Size_Regular
 
 
@@ -72,7 +73,11 @@ private fun MapContent(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(Size_Regular)
+                    .padding(
+                        end = Size_Regular,
+                        start = Size_Regular,
+                        bottom = Size_Regular
+                    )
             ) {
                 item {
                     PropertyListItem(

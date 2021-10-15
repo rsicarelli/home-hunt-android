@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -45,18 +46,16 @@ fun PropertyListItem(
     onViewedGallery: () -> Unit,
     gallerySize: Dp = GalleryItemSize
 ) {
-    Surface(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = Size_Regular,
+                top = Size_Medium,
                 bottom = Size_Small
             )
-            .clip(MaterialTheme.shapes.large)
             .clickable {
                 onSelectProperty(property)
             },
-        color = MaterialTheme.colors.surface,
         elevation = ElevationSize
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {

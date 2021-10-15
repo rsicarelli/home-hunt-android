@@ -16,7 +16,7 @@ val Size_3X_Large = 64.dp
 val Size_4X_Large = 68.dp
 
 /* Shapes */
-val ElevationSize = Size_Small
+val ElevationSize = Size_X_Small
 val DividerSize = Size_Minimum
 val BorderSizeSmallest = Size_Minimum
 val BorderSizeSmall = Size_X_Small
