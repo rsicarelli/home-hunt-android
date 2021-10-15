@@ -5,9 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.rsicarelli.homehunt.core.model.ProgressBarState
 import com.rsicarelli.homehunt.domain.usecase.GetFilteredPropertiesUseCase
 import com.rsicarelli.homehunt.domain.usecase.ToggleFavouriteUseCase
-import com.rsicarelli.homehunt.presentation.filter.FilterState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
