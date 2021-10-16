@@ -82,6 +82,7 @@ dependencies {
     implementation(Google.material)
     implementation(Google.maps)
     implementation(Google.mapsKtx)
+    implementation(Google.mapsUtilsKtx)
 
     implementation(Hilt.android)
     kapt(Hilt.compiler)

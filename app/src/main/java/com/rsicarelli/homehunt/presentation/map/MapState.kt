@@ -8,5 +8,6 @@ data class MapState(
     val properties: List<Property> = emptyList(),
     val progressBarState: ProgressBarState = ProgressBarState.Idle,
     val uiEvent: UiEvent = UiEvent.Idle,
-    val propertySnippet: Property? = null
+    val showPreview: Boolean = false,
+    val propertySnippet: Property? = null,
 )

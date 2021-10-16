@@ -6,9 +6,7 @@ object Google {
 
     // KTX for the Maps SDK for Android library
     const val mapsKtx = "com.google.maps.android:maps-ktx:$mapsKtsVersion"
-
-//    // KTX for the Maps SDK for Android Utility Library
-//    'com.google.maps.android:maps-utils-ktx:3.2.0'
+    const val mapsUtilsKtx = "com.google.maps.android:maps-utils-ktx:$mapsKtsVersion"
 
     // It is recommended to also include the latest Maps SDK and/or Utility Library versions
     // as well to ensure that you have the latest features and bug fixes.

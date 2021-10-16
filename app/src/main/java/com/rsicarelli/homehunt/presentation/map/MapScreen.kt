@@ -77,7 +77,7 @@ private fun MapContent(
         }
 
         AnimatedVisibility(
-            visible = state.propertySnippet != null,
+            visible = state.showPreview,
             enter = expandVertically(expandFrom = Alignment.Top),
             exit = shrinkVertically(shrinkTowards = Alignment.Top)
         ) {
@@ -92,7 +92,6 @@ private fun MapContent(
                         )
                 ) {
                     item {
-
                         PropertyListItem(
                             property = property,
                             onSelectProperty = { actions.onNavigate("${Screen.PropertyDetail.route}/${property.reference}") },
@@ -102,7 +101,7 @@ private fun MapContent(
                                     !property.isFavourited
                                 )
                             },
-                            onViewedGallery = { actions.onPropertyViewed(property) },
+                            onViewedGallery = { },
                             gallerySize = 160.dp
                         )
                     }

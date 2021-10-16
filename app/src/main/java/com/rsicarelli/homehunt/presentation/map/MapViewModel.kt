@@ -8,6 +8,7 @@ import com.rsicarelli.homehunt.domain.usecase.GetFilteredPropertiesUseCase
 import com.rsicarelli.homehunt.domain.usecase.MarkAsViewedUseCase
 import com.rsicarelli.homehunt.domain.usecase.ToggleFavouriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -29,10 +30,15 @@ class MapViewModel @Inject constructor(
 
     private fun loadProperties() {
         getFilteredPropertiesUseCase.invoke(Unit)
-            .onEach {
+            .onEach { outcome ->
+                val snippet = state.value.propertySnippet?.let { snippet ->
+                    outcome.properties.find { it.reference == snippet.reference }
+                }
+
                 state.value = state.value.copy(
-                    properties = it.properties,
+                    properties = outcome.properties,
                     progressBarState = ProgressBarState.Idle,
+                    propertySnippet = snippet
                 )
             }.launchIn(viewModelScope)
     }
@@ -57,10 +63,16 @@ class MapViewModel @Inject constructor(
     }
 
     fun onMarkerSelected(property: Property) {
-        state.value = state.value.copy(propertySnippet = property)
+        onPropertyViewed(property)
+        state.value = state.value.copy(propertySnippet = property, showPreview = true)
     }
 
     fun onMapClicked() {
-        state.value = state.value.copy(propertySnippet = null)
+        viewModelScope.launch {
+            state.value = state.value.copy(showPreview = false)
+            delay(500) //delay to animate preview on UI
+            state.value = state.value.copy(propertySnippet = null)
+        }
+
     }
 }
