@@ -64,8 +64,9 @@ fun PropertiesMapView(
                 }
 
                 setOnMarkerClickListener {
-                    it.setIcon(viewedMarker)
-                    onMarkerClick(it.tag as Property)
+                    val property = it.tag as Property
+                    markers[property.reference]?.setIcon(viewedMarker)
+                    onMarkerClick(property)
                     false //allow map to center marker on screen
                 }
 
