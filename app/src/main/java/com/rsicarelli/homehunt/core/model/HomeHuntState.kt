@@ -1,6 +1,7 @@
 package com.rsicarelli.homehunt.core.model
 
 import android.content.Context
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.rememberScaffoldState
@@ -9,6 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.rsicarelli.homehunt.core.util.asString
 import com.rsicarelli.homehunt.ui.navigation.bottomBarDestinations
 import kotlinx.coroutines.CoroutineScope
@@ -55,9 +57,10 @@ class HomeHuntState(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun rememberHomeHuntState(
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController = rememberAnimatedNavController(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     context: Context = LocalContext.current,
