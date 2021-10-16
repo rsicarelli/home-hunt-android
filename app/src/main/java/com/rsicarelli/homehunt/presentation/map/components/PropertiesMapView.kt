@@ -38,11 +38,11 @@ fun PropertiesMapView(
             map.awaitMap().apply {
                 uiSettings.isMapToolbarEnabled = false
 
-                val viewedMarker = getBitmapDescriptor(R.drawable.ic_round_marker_grey, context)
-                val notViewedMarker = getBitmapDescriptor(R.drawable.ic_round_marker_blue, context)
+                val viewedMarker = context.getBitmapDescriptor(R.drawable.ic_round_marker_grey)
+                val notViewedMarker = context.getBitmapDescriptor(R.drawable.ic_round_marker_blue)
 
                 if (markers.size != locations.size) {
-                    val markers1 = hashMapOf<String, Marker>()
+                    val markersMap = hashMapOf<String, Marker>()
                     val latLngBuilder1 = LatLngBounds.Builder()
                     locations.map { property ->
                         val latLng = LatLng(property.location.lat, property.location.lng)
@@ -56,10 +56,10 @@ fun PropertiesMapView(
                                 .icon(icon)
                         )?.let {
                             it.tag = property
-                            markers1[property.reference] = it
+                            markersMap[property.reference] = it
                         }
                     }
-                    markers.putAll(markers1)
+                    markers.putAll(markersMap)
                     moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBuilder1.build(), 100))
                 }
 
@@ -77,8 +77,8 @@ fun PropertiesMapView(
     }
 }
 
-private fun getBitmapDescriptor(id: Int, context: Context): BitmapDescriptor? {
-    return ContextCompat.getDrawable(context, id)?.let {
+private fun Context.getBitmapDescriptor(id: Int): BitmapDescriptor? {
+    return ContextCompat.getDrawable(this, id)?.let {
         it.setBounds(0, 0, it.intrinsicWidth, it.intrinsicHeight)
         val bm: Bitmap =
             Bitmap.createBitmap(it.intrinsicWidth, it.intrinsicHeight, Bitmap.Config.ARGB_8888)
