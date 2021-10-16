@@ -1,6 +1,9 @@
 package com.rsicarelli.homehunt.presentation.map
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -11,15 +14,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
-import com.google.accompanist.insets.navigationBarsPadding
 import com.rsicarelli.homehunt.core.model.HomeHuntState
 import com.rsicarelli.homehunt.presentation.components.FilterFab
 import com.rsicarelli.homehunt.presentation.components.rememberOnLifecycle
 import com.rsicarelli.homehunt.presentation.home.components.PropertyListItem
 import com.rsicarelli.homehunt.presentation.map.components.PropertiesMapView
 import com.rsicarelli.homehunt.ui.navigation.Screen
-import com.rsicarelli.homehunt.ui.theme.BottomBarSize
-import com.rsicarelli.homehunt.ui.theme.Size_Large
 import com.rsicarelli.homehunt.ui.theme.Size_Regular
 
 
@@ -41,7 +41,8 @@ fun MapScreen(
         onNavigate = homeHuntState::navigate,
         onToggleFavourite = viewModel::toggleFavourite,
         onPropertyViewed = viewModel::onPropertyViewed,
-        onMarkerSelected = viewModel::onMarkerSelected
+        onMarkerSelected = viewModel::onMarkerSelected,
+        onMapClick = viewModel::onMapClicked
     )
 
     MapContent(
@@ -65,7 +66,8 @@ private fun MapContent(
         if (state.properties.isNotEmpty()) {
             PropertiesMapView(
                 onMarkerClick = actions.onMarkerSelected,
-                locations = state.properties
+                locations = state.properties,
+                onMapClick = actions.onMapClick
             )
         }
 

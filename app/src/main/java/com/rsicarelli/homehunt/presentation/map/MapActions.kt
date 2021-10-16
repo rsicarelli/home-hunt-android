@@ -6,5 +6,6 @@ data class MapActions(
     val onToggleFavourite: (String, Boolean) -> Unit,
     val onNavigate: (String) -> Unit,
     val onPropertyViewed: (Property) -> Unit,
-    val onMarkerSelected: (Property) -> Unit
+    val onMarkerSelected: (Property) -> Unit,
+    val onMapClick: () -> Unit
 )

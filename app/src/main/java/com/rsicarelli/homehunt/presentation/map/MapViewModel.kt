@@ -59,4 +59,8 @@ class MapViewModel @Inject constructor(
     fun onMarkerSelected(property: Property) {
         state.value = state.value.copy(propertySnippet = property)
     }
+
+    fun onMapClicked() {
+        state.value = state.value.copy(propertySnippet = null)
+    }
 }

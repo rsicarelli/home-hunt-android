@@ -127,12 +127,15 @@
         <entry key="app/src/main/res/drawable/asl_drawer.xml" value="0.2675925925925926" />
         <entry key="app/src/main/res/drawable/avd_drawer_close.xml" value="0.2675925925925926" />
         <entry key="app/src/main/res/drawable/avd_drawer_open.xml" value="0.2675925925925926" />
+        <entry key="app/src/main/res/drawable/ic_marker.xml" value="0.138" />
         <entry key="app/src/main/res/drawable/ic_round_bathtub_24.xml" value="0.227" />
         <entry key="app/src/main/res/drawable/ic_round_close_24.xml" value="0.2675925925925926" />
         <entry key="app/src/main/res/drawable/ic_round_favorite.xml" value="0.415" />
         <entry key="app/src/main/res/drawable/ic_round_favorite_border.xml" value="0.415" />
         <entry key="app/src/main/res/drawable/ic_round_fullscreen_exit_24.xml" value="0.227" />
         <entry key="app/src/main/res/drawable/ic_round_image_broken.xml" value="0.313" />
+        <entry key="app/src/main/res/drawable/ic_round_marker.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_round_marker_grey.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_round_menu_24.xml" value="0.2675925925925926" />
         <entry key="app/src/main/res/drawable/ic_round_single_bed_24.xml" value="0.227" />
         <entry key="app/src/main/res/drawable/round_filter_alt_24.xml" value="0.227" />
