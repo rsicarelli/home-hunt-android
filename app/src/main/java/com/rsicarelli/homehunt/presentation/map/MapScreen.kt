@@ -4,16 +4,15 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -25,6 +24,7 @@ import com.rsicarelli.homehunt.presentation.home.components.PropertyListItem
 import com.rsicarelli.homehunt.presentation.map.components.PropertiesMapView
 import com.rsicarelli.homehunt.ui.navigation.Screen
 import com.rsicarelli.homehunt.ui.theme.Size_Regular
+import com.rsicarelli.homehunt.ui.theme.Size_Small
 
 
 @Composable
@@ -46,7 +46,8 @@ fun MapScreen(
         onToggleFavourite = viewModel::toggleFavourite,
         onPropertyViewed = viewModel::onPropertyViewed,
         onMarkerSelected = viewModel::onMarkerSelected,
-        onMapClick = viewModel::onMapClicked
+        onMapClick = viewModel::onMapClicked,
+        onClusterClicked = viewModel::onClusterClicked
     )
 
     MapContent(
@@ -71,46 +72,107 @@ private fun MapContent(
         if (state.properties.isNotEmpty()) {
             PropertiesMapView(
                 onMarkerClick = actions.onMarkerSelected,
+                onClusterClick = actions.onClusterClicked,
                 locations = state.properties,
                 onMapClick = actions.onMapClick
             )
         }
 
-        AnimatedVisibility(
-            visible = state.showPreview,
-            enter = expandVertically(expandFrom = Alignment.Top),
-            exit = shrinkVertically(shrinkTowards = Alignment.Top)
-        ) {
-            state.propertySnippet?.let { property ->
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            end = Size_Regular,
-                            start = Size_Regular,
-                            bottom = Size_Regular
-                        )
-                ) {
-                    item {
-                        PropertyListItem(
-                            property = property,
-                            onSelectProperty = { actions.onNavigate("${Screen.PropertyDetail.route}/${property.reference}") },
-                            onFavouriteClick = {
-                                actions.onToggleFavourite(
-                                    property.reference,
-                                    !property.isFavourited
-                                )
-                            },
-                            onViewedGallery = { },
-                            gallerySize = 160.dp
-                        )
-                    }
-                }
-            }
-        }
+        SinglePropertyPreview(state, actions)
+
+        ClusteredPropertiesPreview(state, actions)
 
         FilterFab(false) {
             actions.onNavigate(Screen.Filter.route)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@Composable
+fun ClusteredPropertiesPreview(state: MapState, actions: MapActions) {
+    AnimatedVisibility(
+        visible = state.showClusteredPreview,
+        enter = expandVertically(expandFrom = Alignment.Top),
+        exit = shrinkVertically(shrinkTowards = Alignment.Top)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    end = Size_Small,
+                    start = Size_Small,
+                    bottom = Size_Small
+                )
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(260.dp)
+                    .background(
+                        Color.Black.copy(alpha = 0.2F),
+                        MaterialTheme.shapes.medium
+                    )
+                    .padding(
+                        end = Size_Small,
+                        start = Size_Small,
+                    )
+            ) {
+                items(state.propertySnippet) { property ->
+                    PropertyListItem(
+                        property = property,
+                        onSelectProperty = { actions.onNavigate("${Screen.PropertyDetail.route}/${property.reference}") },
+                        onFavouriteClick = {
+                            actions.onToggleFavourite(
+                                property.reference,
+                                !property.isFavourited
+                            )
+                        },
+                        onViewedGallery = { },
+                        gallerySize = 120.dp
+                    )
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+private fun SinglePropertyPreview(
+    state: MapState,
+    actions: MapActions,
+) {
+    AnimatedVisibility(
+        visible = state.showSinglePreview,
+        enter = expandVertically(expandFrom = Alignment.Top),
+        exit = shrinkVertically(shrinkTowards = Alignment.Top)
+    ) {
+        state.properties.firstOrNull()?.let { property ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        end = Size_Regular,
+                        start = Size_Regular,
+                        bottom = Size_Regular
+                    )
+            ) {
+                item {
+                    PropertyListItem(
+                        property = property,
+                        onSelectProperty = { actions.onNavigate("${Screen.PropertyDetail.route}/${property.reference}") },
+                        onFavouriteClick = {
+                            actions.onToggleFavourite(
+                                property.reference,
+                                !property.isFavourited
+                            )
+                        },
+                        onViewedGallery = { },
+                        gallerySize = 160.dp
+                    )
+                }
+            }
         }
     }
 }

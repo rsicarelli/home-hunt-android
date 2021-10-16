@@ -31,6 +31,7 @@ fun PropertiesMapView(
     onMarkerClick: (Property) -> Unit,
     onMapClick: () -> Unit,
     locations: List<Property>,
+    onClusterClick: (List<Property>) -> Unit,
 ) {
     val mapView = rememberMapViewWithLifecycle(false)
     var isCameraUpdated by remember { mutableStateOf(false) }
@@ -41,7 +42,7 @@ fun PropertiesMapView(
         CoroutineScope(Dispatchers.Main).launch {
             map.awaitMap().apply {
                 if (clusterManager == null) {
-                    clusterManager = initMap(context, onMarkerClick, onMapClick)
+                    clusterManager = initMap(context, onMarkerClick, onMapClick, onClusterClick)
                 }
 
                 clusterManager?.let { cluster ->
@@ -72,7 +73,8 @@ fun PropertiesMapView(
 private fun GoogleMap.initMap(
     context: Context,
     onMarkerClick: (Property) -> Unit,
-    onMapClick: () -> Unit
+    onMapClick: () -> Unit,
+    onClusterClick: (List<Property>) -> Unit
 ): ClusterManager<PropertyMapItem> {
     val clusterManager = ClusterManager<PropertyMapItem>(context, this)
 
@@ -84,6 +86,10 @@ private fun GoogleMap.initMap(
     setOnMarkerClickListener(clusterManager)
     clusterManager.setOnClusterItemClickListener { propertyMapItem ->
         onMarkerClick(propertyMapItem.property)
+        false
+    }
+    clusterManager.setOnClusterClickListener { cluster ->
+        onClusterClick(cluster.items.map { it.property })
         false
     }
     setOnMapClickListener { onMapClick() }

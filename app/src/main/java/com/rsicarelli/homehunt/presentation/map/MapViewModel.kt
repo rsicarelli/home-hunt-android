@@ -31,8 +31,8 @@ class MapViewModel @Inject constructor(
     private fun loadProperties() {
         getFilteredPropertiesUseCase.invoke(Unit)
             .onEach { outcome ->
-                val snippet = state.value.propertySnippet?.let { snippet ->
-                    outcome.properties.find { it.reference == snippet.reference }
+                val snippet = outcome.properties.filter {
+                    state.value.propertySnippet.contains(it)
                 }
 
                 state.value = state.value.copy(
@@ -64,15 +64,26 @@ class MapViewModel @Inject constructor(
 
     fun onMarkerSelected(property: Property) {
         onPropertyViewed(property)
-        state.value = state.value.copy(propertySnippet = property, showPreview = true)
+        state.value = state.value.copy(
+            propertySnippet = listOf(property),
+            showSinglePreview = true,
+            showClusteredPreview = false
+        )
+    }
+
+    fun onClusterClicked(properties: List<Property>) {
+        state.value = state.value.copy(
+            propertySnippet = properties,
+            showSinglePreview = false,
+            showClusteredPreview = true
+        )
     }
 
     fun onMapClicked() {
         viewModelScope.launch {
-            state.value = state.value.copy(showPreview = false)
+            state.value = state.value.copy(showSinglePreview = false, showClusteredPreview = false)
             delay(500) //delay to animate preview on UI
-            state.value = state.value.copy(propertySnippet = null)
+            state.value = state.value.copy(propertySnippet = emptyList())
         }
-
     }
 }

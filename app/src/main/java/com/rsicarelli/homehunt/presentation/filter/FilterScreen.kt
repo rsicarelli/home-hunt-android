@@ -61,7 +61,7 @@ private fun FilterContent(
     state: FilterState,
     actions: FilterActions,
 ) {
-    if (state.uiEvent is UiEvent.Navigate) actions.onNavigateSingleTop(state.uiEvent.route)
+    if (state.uiEvent is UiEvent.Navigate) actions.onNavigateUp()
 
     Column(
         modifier = Modifier

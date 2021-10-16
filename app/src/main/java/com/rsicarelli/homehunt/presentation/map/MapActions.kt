@@ -7,5 +7,6 @@ data class MapActions(
     val onNavigate: (String) -> Unit,
     val onPropertyViewed: (Property) -> Unit,
     val onMarkerSelected: (Property) -> Unit,
+    val onClusterClicked: (List<Property>) -> Unit,
     val onMapClick: () -> Unit
 )
